@@ -6,97 +6,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100%;
   margin: 0;
 }
-
-
-.container {
-  padding-top: 300px;
-  height: 64vh;
-  width: 100vw;
-  background-color: #fff;
-  text-align: center;
-}
-
-
-.otp-input{
-  margin-bottom: 400px;
-  width: 85%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ddd;
-  font-size: 12px;
-}
-
-
-button {
-  width: 90%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-@media only screen and (min-width: 1025px) {
-  .container {
-    height: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
-  }
-  .otp-input{
-    width: 93%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-
-  button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-}
-
-
-/* input[type="tel"],
-input[type="text"] {
-  width: 93%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
-} */
-
 
 
 form {
@@ -215,6 +127,14 @@ form {
 
 
 
+.container {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  text-align: center;
+}
 
 h1 {
   font-size: 24px;
@@ -235,8 +155,31 @@ h4{
   margin-top: 0px;
 }
 
+/* input[type="tel"],
+input[type="text"] {
+  width: 93%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+} */
 
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
+button:hover {
+  background-color: #0056b3;
+}
 
 
 

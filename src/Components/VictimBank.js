@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { FaLongArrowAltRight } from "react-icons/fa";
+
 
 const VictimBank = ({ onNext }) => {
   const [selectedOptions, setSelectedOptions] = useState({
@@ -43,7 +45,13 @@ const VictimBank = ({ onNext }) => {
 
   return (
     <div className="question">
-      <h3>Share the Victim (Deditors) bank Details? *</h3>
+            <div style={{ display: "flex" }}>
+        <div style={{ display: "flex" }}>
+          <h2 className='num'>8</h2>
+          <FaLongArrowAltRight className='num' />
+        </div>
+        <div style={{display:'flex', flexDirection:'column'}}>
+      <h2>Share the Victim (Deditors) bank Details? *</h2>
       <p className="bank-para">Category of account:</p>
       <div>
         {platformOptions.map((option) => (
@@ -62,7 +70,7 @@ const VictimBank = ({ onNext }) => {
               >
                 {option.id}
               </div>
-              <div>{option.label}</div>
+              <div className='option-label'>{option.label}</div>
             </div>
             {selectedOptions.platform === option.id && (
               <span className="checkmark">&#10003;</span>
@@ -116,7 +124,8 @@ const VictimBank = ({ onNext }) => {
         className="text-input"
       />
 
-      <button
+<div style={{ display: "flex", alignItems: "center" }}>
+<button
         type="button"
         className="ok-btn"
         onClick={handleOkClick}
@@ -124,6 +133,12 @@ const VictimBank = ({ onNext }) => {
       >
         OK
       </button>
+            <p className="enter-text">
+              press <strong>Enter ↵</strong>
+            </p>
+          </div>
+    </div>
+    </div>
     </div>
   );
 };

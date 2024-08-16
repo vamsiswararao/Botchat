@@ -1,28 +1,32 @@
-import React from 'react';
+import React from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-
 const Victim = ({ onNext }) => {
-  const handleSubmit = () => {
-    // Call the onNext function passed as a prop to move to the next step
-    onNext();
-  };
+  // const handleSubmit = () => {
+  //   // Call the onNext function passed as a prop to move to the next step
+  //   onNext();
+  // };
 
   return (
     <div className="question">
-            <div style={{display:'flex'}}>
-            <div style={{display:'flex'}}>
-            <h4 style={{marginTop:'0px'}}>6</h4>
-            <FaLongArrowAltRight style={{marginTop:'0px'}} />
-            </div>
-            <div>
-      <label htmlFor="lose-money">Your (Victim)?</label>
-      <p>Answer the set of questions about yourself.</p>
-      <button type="button" className="continue-btn" onClick={handleSubmit}>
-        Continue
-      </button>
-    </div>
-    </div>
+      <div style={{ display: "flex" }}>
+        <div style={{ display: "flex" }}>
+          <h2 className="num">6</h2>
+          <FaLongArrowAltRight className="num" />
+        </div>
+        <div>
+          <h2 htmlFor="lose-money">Your (Victim)?</h2>
+          <p>Answer the set of questions about yourself.</p>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <button type="button" className="continue-btn">
+              Continue
+            </button>
+            <p className="enter-text">
+              press <strong>Enter ↵</strong>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

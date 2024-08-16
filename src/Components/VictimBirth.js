@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { FaLongArrowAltRight } from "react-icons/fa";
+
 
 const VictimBirth = () => {
   const [day, setDay] = useState('');
@@ -26,10 +28,16 @@ const VictimBirth = () => {
 
   return (
     <div className="question">
-      <label htmlFor="lose-money">What is your (Victim) date of birth?</label>
+            <div style={{ display: "flex" }}>
+        <div style={{ display: "flex" }}>
+          <h2 className='num'>6 c</h2>
+          <FaLongArrowAltRight className='num' />
+        </div>
+        <div>
+      <h2 htmlFor="lose-money">What is your (Victim) date of birth?</h2>
       <div style={{ display: 'flex', marginRight: '20px' }}>
         <div>
-          <h5>Day</h5>
+          <h2>Day</h2>
           <input
             className="day-input"
             value={day}
@@ -39,7 +47,7 @@ const VictimBirth = () => {
           />
         </div>
         <div>
-          <h5>Month</h5>
+          <h2>Month</h2>
           <input
            className="day-input"
             value={month}
@@ -49,7 +57,7 @@ const VictimBirth = () => {
           />
         </div>
         <div>
-          <h5>Year</h5>
+          <h2>Year</h2>
           <input
            className="day-input"
             value={year}
@@ -59,9 +67,14 @@ const VictimBirth = () => {
           />
         </div>
       </div>
-      <button type="button" className="ok-btn" onClick={handleSubmit}>
-        Ok
-      </button>
+      <div style={{display:"flex",alignItems:'center'}}>
+              <button type="button" className="ok-btn" onSubmit={handleSubmit}>
+                ok
+              </button>
+              <p className="enter-text">press <strong>Enter ↵</strong></p>
+            </div>
+    </div>
+    </div>
     </div>
   );
 };

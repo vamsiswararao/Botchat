@@ -17,11 +17,11 @@ const VictimPhone=()=>{
         <div className="question">
                       <div style={{display:'flex'}}>
             <div style={{display:'flex'}}>
-            <h4 style={{marginTop:'0px'}}>6 b</h4>
-            <FaLongArrowAltRight style={{marginTop:'0px'}} />
+            <h2 className='num'>6b</h2>
+            <FaLongArrowAltRight className='num' />
             </div>
             <div style={{display:'flex',flexDirection:'column'}}>
-      <label htmlFor="victim-name">What is your (Victim) phone number? *</label>
+      <h2 htmlFor="victim-name">What is your (Victim) phone number? *</h2>
       <input
       className='text-input'
         value={victimPhone}
@@ -29,9 +29,14 @@ const VictimPhone=()=>{
         placeholder="Type your answer here..."
         id="victim-name"
       />
-      <button type="button" className="ok-btn" onClick={submit}>
-        ok
-      </button>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <button type="button" className="ok-btn">
+              ok
+            </button>
+            <p className="enter-text">
+              press <strong>Enter ↵</strong>
+            </p>
+          </div>
     </div>
     </div>
     </div>

@@ -45,12 +45,11 @@ const Number = () => {
         <div className="question">
            <div style={{display:'flex'}}>
             <div style={{display:'flex'}}>
-            <h4>1</h4>
-            <FaLongArrowAltRight />
+            <h2 className='num'>1</h2>
+            <FaLongArrowAltRight className='num'/>
             </div>
             <div>
-
-            <label htmlFor="phone-number">Please verify your phone number:</label>
+            <h2  htmlFor="phone-number">Please verify your phone number:</h2>
             <div className="phone-input-container">
             <PhoneInput
                 defaultCountry="in"

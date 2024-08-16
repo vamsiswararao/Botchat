@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import { FaLongArrowAltRight } from "react-icons/fa";
 
 const Suspect = ({ onNext }) => {
   const handleSubmit = () => {
@@ -8,11 +9,24 @@ const Suspect = ({ onNext }) => {
 
   return (
     <div className="question">
-      <label htmlFor="lose-money">Suspect Details</label>
-      <p>Answer the set of questions about Suspect/Fraudster.</p>
-      <button type="button" className="continue-btn" onClick={handleSubmit}>
-        Continue
-      </button>
+      <div style={{ display: "flex" }}>
+        <div style={{ display: "flex" }}>
+          <h2 className="num">7</h2>
+          <FaLongArrowAltRight className="num" />
+        </div>
+        <div>
+          <h2 htmlFor="lose-money">Suspect Details</h2>
+          <p>Answer the set of questions about Suspect/Fraudster.</p>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <button type="button" className="continue-btn" onClick={handleSubmit}>
+              Continue
+            </button>
+            <p className="enter-text">
+              press <strong>Enter ↵</strong>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

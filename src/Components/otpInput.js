@@ -31,6 +31,7 @@ const OtpInput = ({ phoneNumber, onOtpVerified }) => {
       <h1>Enter OTP</h1>
       <p>We have sent an OTP to your phone number. Please enter it below to verify.</p>
       <input
+      className="otp-input"
         type="text"
         placeholder="Enter OTP"
         value={otp}

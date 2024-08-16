@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { FaLongArrowAltRight } from "react-icons/fa";
+
 
 const VictimAddress = () => {
   const [address, setAddress] = useState({
@@ -24,9 +26,15 @@ const VictimAddress = () => {
 
   return (
     <div className="question">
-      <h5>Fill your (Victim) Full Address?</h5>
-      
-      <label htmlFor="address1">Address</label>
+      <div style={{ display: "flex" }}>
+        <div style={{ display: "flex" }}>
+          <h2 className='num'>6f</h2>
+          <FaLongArrowAltRight className='num' />
+        </div>
+        <div>
+          <div style={{display:'flex', flexDirection:'column'}}>
+      <h2>Fill your (Victim) Full Address?</h2>
+      <h2 htmlFor="address1">Address</h2>
       <input
         className="text-input"
         value={address.address1}
@@ -35,7 +43,7 @@ const VictimAddress = () => {
         id="address1"
       />
       
-      <label htmlFor="address2">Address 2</label>
+      <h2 htmlFor="address2">Address 2</h2>
       <input
         className="text-input"
         value={address.address2}
@@ -44,7 +52,7 @@ const VictimAddress = () => {
         id="address2"
       />
       
-      <label htmlFor="city">City/Town</label>
+      <h2 htmlFor="city">City/Town</h2>
       <input
         className="text-input"
         value={address.city}
@@ -53,7 +61,7 @@ const VictimAddress = () => {
         id="city"
       />
       
-      <label htmlFor="state">State/Region/Province</label>
+      <h2 htmlFor="state">State/Region/Province</h2>
       <input
         className="text-input"
         value={address.state}
@@ -62,7 +70,7 @@ const VictimAddress = () => {
         id="state"
       />
       
-      <label htmlFor="zip">Zip/Post code</label>
+      <h2 htmlFor="zip">Zip/Post code</h2>
       <input
         className="text-input"
         value={address.zip}
@@ -70,10 +78,15 @@ const VictimAddress = () => {
         placeholder="Type your answer here..."
         id="zip"
       />
-      
-      <button type="button" className="ok-btn" onClick={handleSubmit}>
-        OK
-      </button>
+        <div style={{display:"flex",alignItems:'center'}}>
+              <button type="button" className="ok-btn">
+                ok
+              </button>
+              <p className="enter-text">press <strong>Enter ↵</strong></p>
+            </div>
+    </div>
+    </div>
+    </div>
     </div>
   );
 };

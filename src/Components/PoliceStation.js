@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaLongArrowAltRight } from "react-icons/fa";
 import Select from 'react-select';
 
 const options = [
@@ -28,7 +29,13 @@ const PoliceStation = ({ onNext }) => {
 
   return (
     <div className="question">
-      <label htmlFor="police-station">What is your police station?</label>
+            <div style={{ display: "flex" }}>
+        <div style={{ display: "flex" }}>
+          <h2 className='num'>6 g</h2>
+          <FaLongArrowAltRight className='num' />
+        </div>
+        <div >
+      <h2 htmlFor="police-station">What is your police station?</h2>
       <Select
         id="police-station"
         value={selectedOption}
@@ -37,9 +44,16 @@ const PoliceStation = ({ onNext }) => {
         placeholder="Type to search..."
         aria-label="Police Station"
       />
-      <button type="button" className="ok-btn" onClick={submit}>
-        OK
-      </button>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <button type="button" className="ok-btn" onClick={submit}>
+              Ok
+            </button>
+            <p className="enter-text">
+              press <strong>Enter ↵</strong>
+            </p>
+          </div>
+    </div>
+    </div>
     </div>
   );
 };

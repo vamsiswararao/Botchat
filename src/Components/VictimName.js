@@ -19,11 +19,11 @@ const VictimName = ({onNext}) => {
     <div className="question">
                   <div style={{display:'flex'}}>
             <div style={{display:'flex'}}>
-            <h4 style={{marginTop:'0px'}}>6 a</h4>
-            <FaLongArrowAltRight style={{marginTop:'0px'}} />
+            <h2 className='num'>6a</h2>
+            <FaLongArrowAltRight className='num'/>
             </div>
             <div style={{display:"flex",flexDirection:'column'}}>
-      <label htmlFor="victim-name">What is your (Victim) name?</label>
+      <h2 htmlFor="victim-name">What is your (Victim) name?</h2>
       <input
       className='text-input'
         value={value}
@@ -31,9 +31,14 @@ const VictimName = ({onNext}) => {
         placeholder="Type your answer here..."
         id="victim-name"
       />
-      <button type="button" className="ok-btn" onClick={submit}>
-        ok
-      </button>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <button type="button" className="ok-btn">
+              ok
+            </button>
+            <p className="enter-text">
+              press <strong>Enter ↵</strong>
+            </p>
+          </div>
     </div>
     </div>
     </div>

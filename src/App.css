@@ -6,21 +6,215 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 100vh;
   margin: 0;
 }
 
 
-
-
 .container {
+  padding-top: 300px;
+  height: 64vh;
+  width: 100vw;
   background-color: #fff;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-  width: 300px;
   text-align: center;
 }
+
+
+.otp-input{
+  margin-bottom: 400px;
+  width: 85%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  font-size: 12px;
+}
+
+
+button {
+  width: 90%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+@media only screen and (min-width: 1025px) {
+  .container {
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+  }
+  .otp-input{
+    width: 93%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+}
+
+
+/* input[type="tel"],
+input[type="text"] {
+  width: 93%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+} */
+
+
+
+form {
+  padding: 20px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.navigation-buttons {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+}
+
+.navigation-buttons button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 0px;
+}
+
+.navigation-buttons button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.navigation-buttons button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+@media only screen and (max-width: 768px) {
+  /* Tablet and Mobile Styles */
+  form {
+    padding: 10px;
+  }
+
+  .page {
+    padding: 15px;
+  }
+
+  .navigation-buttons {
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .navigation-buttons button {
+    padding: 8px;
+    font-size: 18px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  /* Mobile Styles */
+  .page {
+    padding: 10px;
+    border-radius: 6px;
+  }
+
+  .navigation-buttons {
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .navigation-buttons button {
+    padding: 6px;
+    font-size: 16px;
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  /* Small Laptop and Large Tablet Styles */
+  form {
+    max-width: 90%;
+  }
+
+  .navigation-buttons {
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .navigation-buttons button {
+    padding: 10px;
+    font-size: 20px;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  /* Laptop and Desktop Styles */
+  form {
+    max-width: 80%;
+  }
+
+  .navigation-buttons {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .navigation-buttons button {
+    padding: 12px;
+    font-size: 22px;
+  }
+}
+
+
+
 
 h1 {
   font-size: 24px;
@@ -41,35 +235,15 @@ h4{
   margin-top: 0px;
 }
 
-/* input[type="tel"],
-input[type="text"] {
-  width: 93%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
-} */
 
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
 
-button:hover {
-  background-color: #0056b3;
-}
+
+
+
+
 
 .question {
   height: 100vh;
-  overflow-x: auto;
   font-size: 24px;
   display: flex;
   flex-direction: column;
@@ -77,30 +251,17 @@ button:hover {
   align-items: center;
 }
 
-.question-num{
-  display: flex;
-  flex-direction: column;
+
+
+.phone-label{
+  font-size: 16px;
 }
 
-.num{
-  display: flex;
-}
-
-.phone-verification-container {
-  height: 100vh;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
 .phone-input-container {
   display: flex;
   flex-direction: column;
   margin-top: 10px;
-  margin-right:90px;
 }
 
 .custom-dropdown {
@@ -108,17 +269,20 @@ button:hover {
 }
 
 .custom-input {
-  width: 200px;
+  width: 100px;
   font-size: 18px;
   padding: 5px;
 }
 
-.enter-text {
-  font-size: 14px;
-  color: #999;
-  margin-left: 10px;
-  margin-top: 30px;
+@media only screen and (min-width: 1025px) {
+  .phone-input-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-right:90px;
+  }
 }
+
 
 .error-message {
   color: red;
@@ -135,16 +299,7 @@ button:hover {
   cursor: not-allowed;
 }
 
-.ok-btn{
-  background-color: #0056D2;
-  color: #fff;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-right: 10px;
-  width: 50px;
-}
+
 
 .multiple-choice-container {
   font-family: Arial, sans-serif;
@@ -156,9 +311,10 @@ button:hover {
   margin-top: 10px;
 }
 
-.option-button {
+option-button {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 10px;
   margin: 5px 0;
   border: 1px solid #0066cc;
@@ -166,11 +322,60 @@ button:hover {
   cursor: pointer;
   background-color: #f0f8ff;
   transition: background-color 0.3s ease;
+  width:100px;
 }
+
+
+
 
 .option-button:hover {
   background-color: #e0f0ff;
 }
+
+.option-button.selected {
+  border: 3px solid #4556c1;
+  background-color: #bcc1e1;
+}
+
+
+.answer-container{
+  display: flex;
+  align-items: center;
+  gap:10px;
+}
+
+/* option{
+  border: 1px solid rgb(62, 87, 255);
+  margin-right: 5px;
+  background-color: #fff;
+  height: 20px;
+  width: 20px;
+  padding-top: 5px;
+} */
+
+
+.checkmark {
+  font-size: 20px;
+  margin-left: auto;
+  font-size: 18px;
+}
+
+
+.ok-btn{
+  background-color: #3e57ff;
+  color: #fff;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-right: 10px;
+  width: 50px;
+}
+
+.ok-btn:hover {
+  background-color: #4c63e0;
+}
+
 
 
 
@@ -186,10 +391,6 @@ button:hover {
   flex-grow: 1;
 }
 
-.checkmark {
-  margin-left: auto;
-  font-size: 18px;
-}
 
 .submit-button {
   display: block;
@@ -212,19 +413,7 @@ button:hover {
   width:80px;
 }
 
-.answer-container{
-  display: flex;
-  align-items: center;
-}
 
-.option{
-  border: 1px solid rgb(62, 87, 255);
-  margin-right: 5px;
-  background-color: #fff;
-  height: 20px;
-  width: 20px;
-  padding-top: 5px;
-}
 
 /* styles.css */
 .option-button {
@@ -236,18 +425,125 @@ button:hover {
   border-radius: 5px;
   cursor: pointer;
   position: relative;
-  width: 600px;
+  width: 300px;
   display: flex;
   transition: background-color 0.3s, color 0.3s; /* Transition effect */
 }
 
-.option-button:hover {
-  background-color: rgba(8, 23, 134, 0.2); /* Hover effect */
+h2{
+  font-size: 12px;
 }
 
-.selected {
-  border: 3px solid #4556c1;
-  background-color: #bcc1e1;
+.num{
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.enter-text {
+  font-size: 9px;
+  color: #999;
+  margin-left: 10px;
+  margin-top: 30px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border: 1px solid currentColor;
+  font-size: 9px;
+}
+
+.option-label{
+  font-size: 9px;
+}
+
+
+.text-input{
+  border: none;
+  outline: none;
+  border-bottom: 2px solid #3651ac; /* Adjust the color and width as needed */
+  padding: 8px;
+  margin-top: 10px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  background-color: #f4f4f4;
+  width: 280px;
+  height: 24px;
+}
+
+.option-list{
+overflow-X:auto;
+height:85vh;
+width:310px;
+}
+
+@media only screen and (min-width: 1025px) {
+  .option-button {
+    background-color: #fff;
+    color: #2239cc;
+    border: 1px solid #243394;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    width: 500px;
+    display: flex;
+    transition: background-color 0.3s, color 0.3s; /* Transition effect */
+    
+  }
+  .num{
+    margin-top: 20px;
+    font-size: 24px;
+  }
+h2{
+  font-size: 24px;
+}
+.enter-text {
+  font-size: 14px;
+  color: #999;
+  margin-left: 10px;
+  margin-top: 30px;
+}
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid currentColor;
+  font-size: 16px;
+}
+
+.option-label{
+  font-size: 16px;
+}
+
+.text-input{
+  border: none;
+  outline: none;
+  border-bottom: 2px solid #3651ac; /* Adjust the color and width as needed */
+  padding: 8px;
+  margin-top: 0px;
+  margin-right: 20px;
+  margin-bottom: 0px;
+  background-color: #f4f4f4;
+  width: 600px;
+  height: 24px;
+}
+.option-list{
+  overflow-X:auto;
+  height:85vh;
+  width:600px;
+  }
+
+}
+
+.option-button:hover {
+  background-color: rgba(8, 23, 134, 0.2); /* Hover effect */
 }
 
 .checkmark {
@@ -260,29 +556,7 @@ button:hover {
 }
 
 
-.navigation-buttons {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-}
 
-.navigation-buttons button {
-  background-color: #0c58a9;
-  color: white;
-  border: none;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  border-radius: 0px;
-}
-
-.navigation-buttons button:hover {
-  background-color: #0e6bce;
-}
 
 .day-input{
   border: none;
@@ -294,18 +568,7 @@ button:hover {
   margin-bottom: 10px;
 }
 
-.text-input{
-  border: none;
-  outline: none;
-  border-bottom: 2px solid #3651ac; /* Adjust the color and width as needed */
-  padding: 8px;
-  margin-top: 10px;
-  margin-right: 20px;
-  margin-bottom: 10px;
-  background-color: #f4f4f4;
-  width: 600px;
-  height: 24px;
-}
+
 
 .bank-para{
   color: #324bb8;
@@ -315,3 +578,5 @@ button:hover {
   color: #8b9ef4;
   font-size:18px; ;/* Change placeholder color to blue */
 }
+
+

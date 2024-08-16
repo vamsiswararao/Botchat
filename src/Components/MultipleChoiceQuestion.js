@@ -17,7 +17,7 @@ const MultipleChoiceQuestion = ({ question, options, onSelect, onNext }) => {
   return (
     <div className="question">
 
-      <h3>{question} *</h3>
+      <h2>{question} *</h2>
       <div>
         {options.map((option) => (
           <button

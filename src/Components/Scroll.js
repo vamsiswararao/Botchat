@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { FaLongArrowAltRight } from "react-icons/fa";
 import Number from './Number';
 import LossAmount from './LossAmount';
-import Third from './Third';
+import Time from './Time';
 import PaymentMethod from './PaymentMethod';
 import HowLoss from './HowLoss';
 import Victim from './Victim';
@@ -71,16 +70,16 @@ const Scroll = () => {
       <ProgressBar current={currentQuestion} total={questionCount} />
     <form>
 
-      <div id="question-0" className='page'>
+      <div id="question-0">
        <Number />
       </div>
 
-      <div id="question-1" className='page'>
+     <div id="question-1" className='page'>
         <LossAmount />
       </div>
-
+ 
       <div id="question-2" className='page'>
-        <Third />
+        <Time />
       </div>
 
       <div id="question-3" className='page'>
@@ -104,74 +103,50 @@ const Scroll = () => {
       </div>
 
       <div id="question-8" className='page'>
-        <h2>6 c</h2>
-        <FaLongArrowAltRight style={{ margin: "20px 5px" }} />
         <VictimBirth />
       </div>
 
       <div id="question-9" className='page'>
-        <h2>6 d</h2>
-        <FaLongArrowAltRight style={{ margin: "20px 5px" }} />
         <VictimGender />
       </div>
 
       <div id="question-10" className='page'>
-        <h2>6 e</h2>
-        <FaLongArrowAltRight style={{ margin: "20px 5px" }} />
         <VictimQualification />
       </div>
 
       <div id="question-11" className='page'>
-        <h2>6 f</h2>
-        <FaLongArrowAltRight style={{ margin: "20px 5px" }} />
         <VictimAddress />
       </div>
 
       <div id="question-12" className='page'>
-        <h2>6 g</h2>
-        <FaLongArrowAltRight style={{ margin: "20px 5px" }} />
         <PoliceStation />
       </div>
 
       <div id="question-13" className='page'>
-        <h2>7</h2>
-        <FaLongArrowAltRight style={{ margin: "20px 5px" }} />
         <Suspect />
       </div>
 
       <div id="question-14" className='page'>
-        <h2>7 a</h2>
-        <FaLongArrowAltRight style={{ margin: "20px 5px" }} />
         <SuspectCall />
       </div>
 
       <div id="question-15" className='page'>
-        <h2>7 b</h2>
-        <FaLongArrowAltRight style={{ margin: "20px 5px" }} />
         <SuspectSpeak />
       </div>
 
       <div id="question-16" className='page'>
-        <h2>7 c</h2>
-        <FaLongArrowAltRight style={{ margin: "20px 5px" }} />
         <SuspectContact />
       </div>
 
       <div id="question-17" className='page'>
-        <h2>8</h2>
-        <FaLongArrowAltRight style={{ margin: "20px 5px" }} />
         <VictimBank />
       </div>
 
       <div id="question-18" className='page'>
-        <h2>9</h2>
-        <FaLongArrowAltRight style={{ margin: "20px 5px" }} />
         <SuspectBank />
       </div>
 
       <div id="question-19" className='page'>
-        <h2>10</h2>
-        <FaLongArrowAltRight style={{ margin: "0px 5px" }} />
         <Support />
       </div>
 

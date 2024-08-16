@@ -1,46 +1,37 @@
 import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const VictimGender = ({ onNext }) => {
+const Time = () => {
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleOptionClick = (id) => {
-    setSelectedOption(id);
-    // Notify parent component about the selection
-  };
-
-  const handleOkClick = () => {
-    if (selectedOption) {
-      onNext(); // Notify parent component to move to the next question
-    }
+  const handleOptionClick = (option) => {
+    setSelectedOption(option.id);
   };
 
   const options = [
-    {
-      id: "A",
-      label: " Male",
-    },
-    { id: "B", label: "Female" },
-    { id: "C", label: "Others" },
+    { id: "A", label: "In less than 24 hours" },
+    { id: "B", label: "Between 24 hours to 48 hours" },
+    { id: "C", label: "Between 48 hours to 72 hours" },
+    { id: "D", label: "Above 72 hours" },
   ];
 
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
-        <div style={{ display: "flex"  }}>
-          <h2 className='num'>6 d</h2>
-          <FaLongArrowAltRight className='num' />
+        <div style={{ display: "flex" }}>
+          <h2 className="num">3</h2>
+          <FaLongArrowAltRight className="num" />
         </div>
         <div>
-          <h2>What is your (victim) gender? </h2>
-          <div>
+          <h2>How can we help you? </h2>
+          <div className="options-container">
             {options.map((option) => (
               <button
                 key={option.id}
                 className={`option-button ${
                   selectedOption === option.id ? "selected" : ""
                 }`}
-                onClick={() => handleOptionClick(option.id)}
+                onClick={() => handleOptionClick(option)}
               >
                 <div className="answer-container">
                   <div
@@ -55,7 +46,7 @@ const VictimGender = ({ onNext }) => {
                   >
                     {option.id}
                   </div>
-                  <div className='option-label'>{option.label}</div>
+                  <div className="option-label">{option.label}</div>
                 </div>
                 {selectedOption === option.id && (
                   <span className="checkmark">
@@ -64,20 +55,14 @@ const VictimGender = ({ onNext }) => {
                 )}
               </button>
             ))}
-          </div>
-
-          <div style={{ display: "flex", alignItems: "center" }}>
-          <button
-            type="button"
-            className="ok-btn"
-            onClick={handleOkClick}
-            disabled={!selectedOption} // Disable the button if no option is selected
-          >
-            OK
-          </button>
-            <p className="enter-text">
-              press <strong>Enter ↵</strong>
-            </p>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <button type="button" className="ok-btn">
+                ok
+              </button>
+              <p className="enter-text">
+                press <strong>Enter ↵</strong>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -85,4 +70,4 @@ const VictimGender = ({ onNext }) => {
   );
 };
 
-export default VictimGender;
+export default Time;

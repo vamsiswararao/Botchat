@@ -9,22 +9,25 @@ const options = [
   // Add more options as needed
 ];
 
-const PoliceStation = ({ onNext }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
+const PoliceStation = ({ onNext,onPoliceStationSelected }) => {
+  const [policeStation, setPoliceStation] = useState(null);
 
   const handleChange = (selectedOption) => {
-    setSelectedOption(selectedOption);
+    setPoliceStation(selectedOption);
   };
 
-  const submit = () => {
-    if (!selectedOption) {
-      alert('Please select a police station');
-      return;
-    }
-
-    // Handle submit action here
-    console.log('Selected police station:', selectedOption.label);
+  const handleOkClick= (e) => {
+    e.preventDefault();
+    onPoliceStationSelected(policeStation)
+    console.log('Selected police station:',policeStation);
     onNext();
+  };
+
+  const customSelectStyles = {
+    container: (provided) => ({
+      ...provided,
+      width: "100%", // Adjust the width as needed
+    }),
   };
 
   return (
@@ -36,16 +39,19 @@ const PoliceStation = ({ onNext }) => {
         </div>
         <div >
       <h2 htmlFor="police-station">What is your police station?</h2>
+      <div className="select-container">
       <Select
         id="police-station"
-        value={selectedOption}
+        value={policeStation}
         onChange={handleChange}
         options={options}
         placeholder="Type to search..."
         aria-label="Police Station"
+        styles={customSelectStyles}
       />
+      </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <button type="button" className="ok-btn" onClick={submit}>
+            <button type="button" className="ok-btn" onClick={handleOkClick}>
               Ok
             </button>
             <p className="enter-text">

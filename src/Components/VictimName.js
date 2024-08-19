@@ -2,18 +2,20 @@ import React, { useState } from 'react';
 import { FaLongArrowAltRight } from "react-icons/fa";
 
 
-const VictimName = ({onNext}) => {
-  const [value, setValue] = useState('');
+const VictimName = ({onNext,onVictimNameSelected}) => {
+  const [victimName, setVictimName] = useState('');
 
   const handleInputChange = (event) => {
-    setValue(event.target.value);
+    setVictimName(event.target.value);
   };
 
-  const submit = () => {
-    // Handle submit action here
-    console.log('Submitted name:', value);
+  const handleOkClick = (e) => {
+    e.preventDefault();
+    onVictimNameSelected(victimName)
+    console.log("Selected Option:", victimName);
     onNext();
-  };
+    };
+
 
   return (
     <div className="question">
@@ -26,13 +28,13 @@ const VictimName = ({onNext}) => {
       <h2 htmlFor="victim-name">What is your (Victim) name?</h2>
       <input
       className='text-input'
-        value={value}
+        value={victimName}
         onChange={handleInputChange}
         placeholder="Type your answer here..."
         id="victim-name"
       />
           <div style={{ display: "flex", alignItems: "center" }}>
-            <button type="button" className="ok-btn">
+            <button type="button" className="ok-btn" onClick={handleOkClick}>
               ok
             </button>
             <p className="enter-text">

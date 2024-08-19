@@ -1,12 +1,23 @@
 import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const Time = () => {
-  const [selectedOption, setSelectedOption] = useState(null);
+const Time = ({onNext,onTimeSelected}) => {
+  const [timeId, setTimeId] = useState(null);
+  const [time, setTime] = useState(null);
 
-  const handleOptionClick = (option) => {
-    setSelectedOption(option.id);
+  const handleOptionClick = (option,e) => {
+    e.preventDefault();
+    setTimeId(option.id);
+    setTime(option.label);
   };
+
+  const handleOkClick = (e) => {
+    e.preventDefault();
+    onTimeSelected(time)
+
+    console.log("Selected Option:", time);
+    onNext();
+    };
 
   const options = [
     { id: "A", label: "In less than 24 hours" },
@@ -23,32 +34,32 @@ const Time = () => {
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
-          <h2>How can we help you? </h2>
+          <h2>When did you lost the amount? </h2>
           <div className="options-container">
             {options.map((option) => (
               <button
                 key={option.id}
                 className={`option-button ${
-                  selectedOption === option.id ? "selected" : ""
+                  time === option.id ? "selected" : ""
                 }`}
-                onClick={() => handleOptionClick(option)}
+                onClick={(e) => handleOptionClick(option,e)}
               >
                 <div className="answer-container">
                   <div
                     className="option"
                     style={{
                       backgroundColor:
-                        selectedOption === option.id
+                        timeId === option.id
                           ? "rgb(62, 87, 255)"
                           : "#fff",
-                      color: selectedOption === option.id ? "#fff" : "#3E57FF",
+                      color: timeId === option.id ? "#fff" : "#3E57FF",
                     }}
                   >
                     {option.id}
                   </div>
                   <div className="option-label">{option.label}</div>
                 </div>
-                {selectedOption === option.id && (
+                {timeId === option.id && (
                   <span className="checkmark">
                     &#10003; {/* Unicode character for checkmark */}
                   </span>
@@ -56,7 +67,7 @@ const Time = () => {
               </button>
             ))}
             <div style={{ display: "flex", alignItems: "center" }}>
-              <button type="button" className="ok-btn">
+              <button type="button" className="ok-btn"  onClick={handleOkClick}>
                 ok
               </button>
               <p className="enter-text">

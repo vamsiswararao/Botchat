@@ -1,7 +1,7 @@
 import { useState } from "react";
 //import "./phoneNumber.css";
 
-const PhoneNumber = (onOtpSent) => {
+const Login = (onOtpSent) => {
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const handleSendOtp = () => {
@@ -41,4 +41,4 @@ const PhoneNumber = (onOtpSent) => {
   );
 };
 
-export default PhoneNumber;
+export default Login;

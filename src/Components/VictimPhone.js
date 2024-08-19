@@ -2,17 +2,20 @@ import { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
 
-const VictimPhone=()=>{
+const VictimPhone=({onNext,    onVictimPhoneSelected})=>{
     const [victimPhone, setVictimPhone] = useState('');
 
     const handleInputChange = (event) => {
       setVictimPhone(event.target.value);
     };
     
-  const submit = () => {
-    // Handle submit action here
-    console.log('Submitted name:', victimPhone);
-  };
+    const handleOkClick = (e) => {
+      e.preventDefault();
+      onVictimPhoneSelected(victimPhone)
+      console.log("Selected Option:", victimPhone);
+      onNext();
+      };
+      
     return(
         <div className="question">
                       <div style={{display:'flex'}}>
@@ -21,7 +24,7 @@ const VictimPhone=()=>{
             <FaLongArrowAltRight className='num' />
             </div>
             <div style={{display:'flex',flexDirection:'column'}}>
-      <h2 htmlFor="victim-name">What is your (Victim) phone number? *</h2>
+      <h2 htmlFor="victim-name">What is your (Victim) phone number? </h2>
       <input
       className='text-input'
         value={victimPhone}
@@ -30,7 +33,7 @@ const VictimPhone=()=>{
         id="victim-name"
       />
           <div style={{ display: "flex", alignItems: "center" }}>
-            <button type="button" className="ok-btn">
+            <button type="button" className="ok-btn" onClick={handleOkClick}>
               ok
             </button>
             <p className="enter-text">

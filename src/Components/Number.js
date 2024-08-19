@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const Number = () => {
+const Number = ({onPhoneValid,onNext}) => {
     const [phone, setPhone] = useState('');
     const [error, setError] = useState('');
   
@@ -16,16 +16,26 @@ const Number = () => {
       // Example validation: Ensure phone number is at least 10 digits long
       if (value.replace(/\D/g, '').length < 10) {
         setError('Please enter a valid phone number');
+        onPhoneValid(false, '');
       } else {
         setError('');
+        onPhoneValid(true,value)
       }
     };
   
     const handleKeyPress = (event) => {
       if (event.key === 'Enter' && !error) {
+        console.log('Enter key pressed' + event.key)
         handleSubmit();
       }
     };
+
+    useEffect(() => {
+      document.addEventListener('keydown', handleKeyPress);
+      return () => {
+        document.removeEventListener('keydown', handleKeyPress);
+      };
+    }, [phone]);
   
     const handleSubmit = () => {
       if (error) {
@@ -37,8 +47,10 @@ const Number = () => {
         setError('Phone number is required');
         return;
       }
-  
-      alert(`Phone number submitted: ${phone}`);
+      if (!error) {
+        onNext(); // Move to the next question
+      }
+
     };
 
     return (

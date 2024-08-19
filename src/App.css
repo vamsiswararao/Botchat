@@ -218,6 +218,7 @@ button:hover {
 }
 
 @media only screen and (min-width: 1025px) {
+  
   .phone-input-container {
     display: flex;
     flex-direction: column;
@@ -523,3 +524,100 @@ h2{
 }
 
 
+.dropdown-container{
+  margin-top: 20px;
+}
+
+
+
+.file-preview ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.file-preview li {
+  margin: 10px;
+  position: relative;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.preview-image {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.remove-button {
+  position: absolute;
+  top: 0px;
+  left: 160px;
+  background-color: rgba(192, 179, 178, 0.8); /* Semi-transparent red */
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  width: 20px;
+}
+
+.remove-button:hover {
+  background-color: rgba(255, 69, 58, 1); /* Fully opaque red on hover */
+}
+
+.file-name-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.remove-button-text {
+  background-color: rgba(255, 69, 58, 0.8);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.remove-button-text:hover {
+  background-color: rgba(255, 69, 58, 1);
+}
+
+.submit-button {
+  width: 120px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+
+.select-container {
+  width: 500px; /* Default width for laptops and larger screens */
+}
+
+/* Styles for mobile devices */
+@media (max-width: 767px) {
+  .select-container {
+    width: 100%; /* Full width for mobile devices */
+    max-width: 600px; /* Optional: maximum width to prevent stretching */
+  }
+}

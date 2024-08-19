@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaLongArrowAltRight } from "react-icons/fa";
 
 
-const VictimAddress = () => {
+const VictimAddress = ({onNext,onVictimAddressSelected}) => {
   const [address, setAddress] = useState({
     address1: '',
     address2: '',
@@ -19,9 +19,12 @@ const VictimAddress = () => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleOkClick = (e) => {
+    e.preventDefault()
     // Implement form submission logic here
+    onVictimAddressSelected(address)
     console.log(address);
+    onNext()
   };
 
   return (
@@ -79,7 +82,7 @@ const VictimAddress = () => {
         id="zip"
       />
         <div style={{display:"flex",alignItems:'center'}}>
-              <button type="button" className="ok-btn">
+              <button type="button" className="ok-btn"   onClick={handleOkClick}>
                 ok
               </button>
               <p className="enter-text">press <strong>Enter ↵</strong></p>

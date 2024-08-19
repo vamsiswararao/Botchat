@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const SuspectSpeak = ({ onNext }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
+const SuspectSpeak = ({ onNext,onSuspectSpeakSelected }) => {
+  const [suspectSpeak, setSuspectSpeck] = useState(null);
 
-  const handleOptionClick = (id) => {
-    setSelectedOption(id);
+  const handleOptionClick = (label,e) => {
+    e.preventDefault();
+    setSuspectSpeck(label);
     // Notify parent component about the selection
   };
 
-  const handleOkClick = () => {
-    if (selectedOption) {
+  const handleOkClick = (e) => {
+      e.preventDefault();
+      onSuspectSpeakSelected(suspectSpeak)
       onNext(); // Notify parent component to move to the next question
-    }
+
   };
 
   const options = [
@@ -54,26 +56,26 @@ const SuspectSpeak = ({ onNext }) => {
               <button
                 key={option.id}
                 className={`option-button ${
-                  selectedOption === option.id ? "selected" : ""
+                  suspectSpeak === option.id ? "selected" : ""
                 }`}
-                onClick={() => handleOptionClick(option.id)}
+                onClick={(e) => handleOptionClick(option.label,e)}
               >
                 <div className="answer-container">
                   <div
                     className="option"
                     style={{
                       backgroundColor:
-                        selectedOption === option.id
+                      suspectSpeak === option.label
                           ? "rgb(62, 87, 255)"
                           : "#fff",
-                      color: selectedOption === option.id ? "#fff" : "#3E57FF",
+                      color: suspectSpeak === option.label ? "#fff" : "#3E57FF",
                     }}
                   >
                     {option.id}
                   </div>
                   <div className="option-label">{option.label}</div>
                 </div>
-                {selectedOption === option.id && (
+                {suspectSpeak === option.label && (
                   <span className="checkmark">
                     &#10003; {/* Unicode character for checkmark */}
                   </span>
@@ -86,7 +88,6 @@ const SuspectSpeak = ({ onNext }) => {
               type="button"
               className="ok-btn"
               onClick={handleOkClick}
-              disabled={!selectedOption} // Disable the button if no option is selected
             >
               OK
             </button>

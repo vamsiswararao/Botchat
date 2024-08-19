@@ -1,46 +1,39 @@
 import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const SuspectBank = ({ onNext }) => {
-  const [selectedOptions, setSelectedOptions] = useState({
-    platform: null,
-    contactMethod: null,
-  });
-  const [textAnswers, setTextAnswers] = useState({
-    contactDetails: "",
-    suspectName: "",
+const SuspectBank = ({ onNext, onSuspectBankSelected }) => {
+  const [formData, setFormData] = useState({
+    CategoryOfAccount: null,
+    AccountNo: "",
+    TransactionNo: "",
   });
 
-  const handleOptionClick = (questionId, optionId) => {
-    setSelectedOptions((prev) => ({
+  const handleOptionClick = (optionId,e) => {
+    e.preventDefault();
+    setFormData((prev) => ({
       ...prev,
-      [questionId]: optionId,
+      CategoryOfAccount: optionId,
     }));
   };
 
-  const handleTextChange = (questionId, value) => {
-    setTextAnswers((prev) => ({
+  const handleTextChange = (field, value) => {
+    setFormData((prev) => ({
       ...prev,
-      [questionId]: value,
+      [field]: value,
     }));
   };
 
-  const handleOkClick = () => {
-    if (
-      selectedOptions.platform &&
-      selectedOptions.contactMethod &&
-      textAnswers.contactDetails &&
-      textAnswers.suspectName
-    ) {
-      onNext(); // Notify parent component to move to the next step
-    }
+  const handleOkClick = (e) => {
+    e.preventDefault()
+    onSuspectBankSelected(formData);
+    onNext(); // Notify parent component to move to the next step
   };
 
-  const platformOptions = [
+  const CategoryOptions = [
     { id: "A", label: "Bank Name" },
     { id: "B", label: "Google Pay" },
     { id: "C", label: "BHIM" },
-    { id: "C", label: "PhonePe" },
+    { id: "D", label: "PhonePe" },
   ];
 
   return (
@@ -54,24 +47,25 @@ const SuspectBank = ({ onNext }) => {
           <h2>Share the Suspect (creditor) bank Details? *</h2>
           <p className="bank-para">Category of account:</p>
           <div>
-            {platformOptions.map((option) => (
+            {CategoryOptions.map((option) => (
               <button
                 key={option.id}
                 className={`option-button ${
-                  selectedOptions.platform === option.id ? "selected" : ""
+                  formData.CategoryOfAccount === option.id ? "selected" : ""
                 }`}
-                onClick={() => handleOptionClick("platform", option.id)}
+                onClick={(e) => handleOptionClick(option.id,e)}
+                aria-label={`Select ${option.label}`}
               >
                 <div className="answer-container">
                   <div
                     className="option"
                     style={{
                       backgroundColor:
-                        selectedOptions.platform === option.id
+                        formData.CategoryOfAccount === option.id
                           ? "rgb(62, 87, 255)"
                           : "#fff",
                       color:
-                        selectedOptions.platform === option.id
+                        formData.CategoryOfAccount === option.id
                           ? "#fff"
                           : "#3E57FF",
                     }}
@@ -80,7 +74,7 @@ const SuspectBank = ({ onNext }) => {
                   </div>
                   <div className="option-label">{option.label}</div>
                 </div>
-                {selectedOptions.platform === option.id && (
+                {formData.CategoryOfAccount === option.id && (
                   <span className="checkmark">&#10003;</span>
                 )}
               </button>
@@ -89,16 +83,16 @@ const SuspectBank = ({ onNext }) => {
           <p className="bank-para">Account NO/ Wallet No/ UPI NO:</p>
           <input
             type="text"
-            value={textAnswers.contactDetails}
+            value={formData.AccountNo}
             onChange={(e) => handleTextChange("contactDetails", e.target.value)}
-            placeholder="Type tour answer here..."
+            placeholder="Type your answer here..."
             className="text-input"
           />
 
           <p className="bank-para">Transaction/ RRN number:</p>
           <input
             type="text"
-            value={textAnswers.suspectName}
+            value={formData.TransactionNo}
             onChange={(e) => handleTextChange("suspectName", e.target.value)}
             placeholder="Type your answer here..."
             className="text-input"
@@ -108,12 +102,6 @@ const SuspectBank = ({ onNext }) => {
               type="button"
               className="ok-btn"
               onClick={handleOkClick}
-              disabled={
-                !selectedOptions.platform ||
-                !selectedOptions.contactMethod ||
-                !textAnswers.contactDetails ||
-                !textAnswers.suspectName
-              }
             >
               OK
             </button>

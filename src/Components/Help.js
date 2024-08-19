@@ -1,34 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const LossAmount = () => {
-  const [selectedOption, setSelectedOption] = useState(null);
+const Help = ({ onNext, onHelpSelected}) => {
+  const [help, setHelp] = useState(null);
 
-  const handleOptionClick = (option, e) => {
+  const handleHelpOptionClick = (option, e) => {
     e.preventDefault();
-    setSelectedOption(option.id);
+    setHelp(option.id);
+    onHelpSelected(option.id)
   };
 
   const handleOkClick = (e) => {
     e.preventDefault();
-    console.log("Selected Option:", selectedOption);
-    // Additional logic to handle the selected option can be added here
-  };
-
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      handleOkClick(event);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyPress);
-    return () => {
-      document.removeEventListener('keydown', handleKeyPress);
+    console.log("Selected Option:", help);
+    onNext();
     };
-  }, []);
 
-  const options = [
+  // const handleKeyPress = (event) => {
+  //   if (event.key === 'Enter') {
+  //     handleOkClick(event);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   document.addEventListener('keydown', handleKeyPress);
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeyPress);
+  //   };
+  // }, [selectedOption]);
+
+  const helpOptions = [
     { id: "A", label: "Did you lose an amount in Cybercrimes?" },
     { id: "B", label: "Have you faced Cybercrime in Non-financial cyber fraud?" },
     { id: "C", label: "To know the status of the complaint?" },
@@ -44,25 +45,25 @@ const LossAmount = () => {
         <div>
           <h2>How can we help you? *</h2>
           <div className="options-container">
-            {options.map((option) => (
+            {helpOptions.map((option) => (
               <button
                 key={option.id}
-                className={`option-button ${selectedOption === option.id ? "selected" : ""}`}
-                onClick={(e) => handleOptionClick(option, e)}
+                className={`option-button ${help === option.id ? "selected" : ""}`}
+                onClick={(e) => handleHelpOptionClick(option, e)}
               >
                 <div className="answer-container">
                   <div
                     className="option"
                     style={{
-                      backgroundColor: selectedOption === option.id ? "rgb(62, 87, 255)" : "#fff",
-                      color: selectedOption === option.id ? "#fff" : "#3E57FF",
+                      backgroundColor: help === option.id ? "rgb(62, 87, 255)" : "#fff",
+                      color: help === option.id ? "#fff" : "#3E57FF",
                     }}
                   >
                     {option.id}
                   </div>
                   <div className='option-label'>{option.label}</div>
                 </div>
-                {selectedOption === option.id && (
+                {help === option.id && (
                   <span className="checkmark">
                     &#10003; {/* Unicode character for checkmark */}
                   </span>
@@ -82,4 +83,4 @@ const LossAmount = () => {
   );
 };
 
-export default LossAmount;
+export default Help;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaLongArrowAltRight } from "react-icons/fa";
 
 
-const VictimBirth = () => {
+const VictimBirth = ({onNext,onVictimBirthSelected}) => {
   const [day, setDay] = useState('');
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
@@ -19,11 +19,14 @@ const VictimBirth = () => {
     setYear(e.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleOkClick = (e) => {
+  e.preventDefault();
     // Combine the day, month, and year values into a full date
     const dateOfBirth = `${day}-${month}-${year}`;
+    onVictimBirthSelected(dateOfBirth)
     console.log('Date of Birth:', dateOfBirth);
-    // You can perform further actions here, such as validation or submitting the dateOfBirth
+    onNext()
+  
   };
 
   return (
@@ -68,7 +71,7 @@ const VictimBirth = () => {
         </div>
       </div>
       <div style={{display:"flex",alignItems:'center'}}>
-              <button type="button" className="ok-btn" onSubmit={handleSubmit}>
+              <button type="button" className="ok-btn" onClick={handleOkClick}>
                 ok
               </button>
               <p className="enter-text">press <strong>Enter ↵</strong></p>

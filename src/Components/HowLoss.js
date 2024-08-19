@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const HowLoss = () => {
-  const [value, setValue] = useState("");
+const HowLoss = ({onNext,onHowLossSelected}) => {
+  const [howLoss, setHowLoss] = useState("");
 
   const handleChange = (event) => {
-    setValue(event.target.value);
+    event.preventDefault();
+    setHowLoss(event.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleOkClick = (e) => {
+    e.preventDefault();
     // Add your submit logic here
-    console.log("Submitted value:", value);
+    onHowLossSelected(howLoss)
+    console.log("Submitted value:", howLoss);
+    onNext() 
   };
 
   return (
@@ -25,13 +29,13 @@ const HowLoss = () => {
           <p>Write in detail about how you lost the money.</p>
           <input
             className="text-input"
-            value={value}
+            value={howLoss}
             onChange={handleChange}
             placeholder="Type your answer here..."
             id="lose-money"
           />
           <div style={{ display: "flex", alignItems: "center" }}>
-            <button type="button" className="ok-btn">
+            <button type="button" className="ok-btn" onClick={handleOkClick}>
               ok
             </button>
             <p className="enter-text">

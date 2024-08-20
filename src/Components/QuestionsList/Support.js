@@ -3,7 +3,7 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 
 
-const Support = ({ submit, onNext }) => {
+const Support = ({ submitSupport, onNext }) => {
   const [files, setFiles] = useState([]);
 
   const handleFileChange = (event) => {
@@ -17,21 +17,19 @@ const Support = ({ submit, onNext }) => {
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
     if (files.length > 0) {
-      submit(e,files);  // Pass the selected files to the submit function
-      if (onNext) {
+      submitSupport(files);  // Pass the selected files to the submit function
         onNext(); // Navigate to the next step
-      }
-    } else {
-      alert("Please upload at least one file.");
     }
+      
   };
 
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">10</h2>
+          <h2 className="num">11</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -86,10 +84,10 @@ const Support = ({ submit, onNext }) => {
           </div>
           <button
             type="button"
-            className="submit-button"
+            className="ok-btn"
             onClick={handleSubmit}
           >
-            Submit
+            ok
           </button>
         </div>
       </div>

@@ -1,53 +1,46 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const SuspectCall = ({ onNext , onSuspectCallSelected}) => {
-  const [suspectCall, setSuspectCall] = useState(null);
+const VictimQualification = ({ onNext,onVictimQualificationSelected }) => {
+  const [qualification, setQualification] = useState(null);
 
   const handleOptionClick = (option,e) => {
     e.preventDefault();
-    setSuspectCall(option.label);
+    setQualification(option.label);
     // Notify parent component about the selection
   };
 
   const handleOkClick = (e) => {
-    e.preventDefault();
-    onSuspectCallSelected(suspectCall)
+  e.preventDefault()
+  onVictimQualificationSelected(qualification)
       onNext(); // Notify parent component to move to the next question
   };
 
   const options = [
     {
       id: "A",
-      label: " Normal Call-Number",
+      label: " 10th",
     },
-    { id: "B", label: "WhatsApp Call-Number" },
-    { id: "C", label: "Telegram Call-NUmber" },
-    { id: "D", label: "instagram Call-Number" },
-    { id: "E", label: "FaceBook Call-Number" },
-    { id: "F", label: "Skype Call-Number" },
-    { id: "G", label: "Zoom Call-Number" },
-    { id: "H", label: "Snap Call-Number" },
-    { id: "I", label: "Webex Call-Number" },
-    { id: "J", label: "Duos Call-Number" },
-    { id: "K", label: "Microsoft Call-Number" },
+    { id: "B", label: "intermediate" },
+    { id: "C", label: "Degree/Engineering/MBBS" },
+    { id: "D", label: "Post-Graduation" },
   ];
 
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">7 a</h2>
+          <h2 className="num">7e</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
-          <h2>How did the suspect call you? </h2>
+          <h2>What is your (victim) educational qualification?</h2>
           <div>
             {options.map((option) => (
               <button
                 key={option.id}
                 className={`option-button ${
-                  suspectCall === option.id ? "selected" : ""
+                  qualification === option.label ? "selected" : ""
                 }`}
                 onClick={(e) => handleOptionClick(option,e)}
               >
@@ -56,17 +49,17 @@ const SuspectCall = ({ onNext , onSuspectCallSelected}) => {
                     className="option"
                     style={{
                       backgroundColor:
-                      suspectCall === option.label
+                        qualification === option.label
                           ? "rgb(62, 87, 255)"
                           : "#fff",
-                      color: suspectCall === option.label ? "#fff" : "#3E57FF",
+                      color: qualification === option.label ? "#fff" : "#3E57FF",
                     }}
                   >
                     {option.id}
                   </div>
                   <div className="option-label">{option.label}</div>
                 </div>
-                {suspectCall === option.label && (
+                {qualification === option.label && (
                   <span className="checkmark">
                     &#10003; {/* Unicode character for checkmark */}
                   </span>
@@ -91,5 +84,4 @@ const SuspectCall = ({ onNext , onSuspectCallSelected}) => {
     </div>
   );
 };
-
-export default SuspectCall;
+export default VictimQualification;

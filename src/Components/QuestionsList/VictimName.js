@@ -21,7 +21,7 @@ const VictimName = ({onNext,onVictimNameSelected}) => {
     <div className="question">
                   <div style={{display:'flex'}}>
             <div style={{display:'flex'}}>
-            <h2 className='num'>6a</h2>
+            <h2 className='num'>7a</h2>
             <FaLongArrowAltRight className='num'/>
             </div>
             <div style={{display:"flex",flexDirection:'column'}}>

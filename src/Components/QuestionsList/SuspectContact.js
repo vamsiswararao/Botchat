@@ -1,81 +1,68 @@
 import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const SuspectSpeak = ({ onNext,onSuspectSpeakSelected }) => {
-  const [suspectSpeak, setSuspectSpeck] = useState(null);
+const SuspectContact = ({ onNext,onSuspectContactSelected }) => {
+  const [suspectContact, setSuspectContact] = useState(null);
 
-  const handleOptionClick = (label,e) => {
+  const handleOptionClick = (option,e) => {
     e.preventDefault();
-    setSuspectSpeck(label);
+    setSuspectContact(option.label);
     // Notify parent component about the selection
   };
 
   const handleOkClick = (e) => {
-      e.preventDefault();
-      onSuspectSpeakSelected(suspectSpeak)
+      e.preventDefault()
+      onSuspectContactSelected(suspectContact)
       onNext(); // Notify parent component to move to the next question
 
   };
 
   const options = [
-    { id: "A", label: "Assamese" },
-    { id: "B", label: "Bengali" },
-    { id: "C", label: "Bodo" },
-    { id: "D", label: "Dogri" },
-    { id: "E", label: "English" },
-    { id: "F", label: "Gujarati" },
-    { id: "G", label: "Hindi" },
-    { id: "H", label: "Kannada" },
-    { id: "I", label: "Jammu and Kashmir" },
-    { id: "J", label: "konkani" },
-    { id: "K", label: "Malayalam" },
-    { id: "L", label: "Manipuri" },
-    { id: "M", label: "Marathi" },
-    { id: "N", label: "Nepali" },
-    { id: "O", label: "Odia" },
-    { id: "P", label: "Punjabi" },
-    { id: "Q", label: "Sanskrit" },
-    { id: "R", label: "Santali" },
-    { id: "S", label: "Sindhi" },
-    { id: "T", label: "Tamil" },
-    { id: "U", label: "Telugu" },
-    { id: "V", label: "Urdu" },
+    {
+      id: "A",
+      label: "WhatsApp",
+    },
+    { id: "B", label: "Telegram" },
+    { id: "C", label: "Instagram" },
+    { id: "D", label: "Facebook" },
+    { id: "E", label: "Skype" },
+    { id: "F", label: "Snap Chat" },
   ];
 
   return (
     <div className="question">
-      <div style={{display:"flex"}}>
+      <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">7a</h2>
+          <h2 className="num">8c</h2>
           <FaLongArrowAltRight className="num" />
         </div>
-        <div >
-          <h2 >What language did the suspect speak? *</h2>
-          <div className="option-list">
+        <div>
+          <h2>Which platform did the Suspect use to contact you?</h2>
+          <div>
             {options.map((option) => (
               <button
                 key={option.id}
                 className={`option-button ${
-                  suspectSpeak === option.id ? "selected" : ""
+                  suspectContact === option.label ? "selected" : ""
                 }`}
-                onClick={(e) => handleOptionClick(option.label,e)}
+                onClick={(e) => handleOptionClick(option,e)}
               >
                 <div className="answer-container">
                   <div
                     className="option"
                     style={{
                       backgroundColor:
-                      suspectSpeak === option.label
+                      suspectContact === option.label
                           ? "rgb(62, 87, 255)"
                           : "#fff",
-                      color: suspectSpeak === option.label ? "#fff" : "#3E57FF",
+                      color: suspectContact === option.label ? "#fff" : "#3E57FF",
                     }}
                   >
                     {option.id}
                   </div>
                   <div className="option-label">{option.label}</div>
                 </div>
-                {suspectSpeak === option.label && (
+                {suspectContact === option.label && (
                   <span className="checkmark">
                     &#10003; {/* Unicode character for checkmark */}
                   </span>
@@ -101,4 +88,4 @@ const SuspectSpeak = ({ onNext,onSuspectSpeakSelected }) => {
   );
 };
 
-export default SuspectSpeak;
+export default SuspectContact;

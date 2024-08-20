@@ -20,7 +20,7 @@ const VictimPhone=({onNext,    onVictimPhoneSelected})=>{
         <div className="question">
                       <div style={{display:'flex'}}>
             <div style={{display:'flex'}}>
-            <h2 className='num'>6b</h2>
+            <h2 className='num'>7b</h2>
             <FaLongArrowAltRight className='num' />
             </div>
             <div style={{display:'flex',flexDirection:'column'}}>

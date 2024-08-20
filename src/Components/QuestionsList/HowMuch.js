@@ -41,7 +41,7 @@ const HowMuch = ({ onNext,onHowMuchSelected}) => {
     <div className="question">
       <div style={{display:'flex'}}>
         <div style={{display:'flex'}}>
-          <h2 className='num'>2</h2>
+          <h2 className='num'>3</h2>
           <FaLongArrowAltRight className='num' />
         </div>
         <div>
@@ -50,7 +50,7 @@ const HowMuch = ({ onNext,onHowMuchSelected}) => {
             {options.map((option) => (
               <button
                 key={option.id}
-                className={`option-button ${money === option.id ? "selected" : ""}`}
+                className={`option-button ${moneyId === option.id ? "selected" : ""}`}
                 onClick={(e) => handleOptionClick(option, e)}
               >
                 <div className="answer-container">

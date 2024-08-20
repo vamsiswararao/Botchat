@@ -30,7 +30,7 @@ const Time = ({onNext,onTimeSelected}) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">3</h2>
+          <h2 className="num">4</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
@@ -40,7 +40,7 @@ const Time = ({onNext,onTimeSelected}) => {
               <button
                 key={option.id}
                 className={`option-button ${
-                  time === option.id ? "selected" : ""
+                  timeId === option.id ? "selected" : ""
                 }`}
                 onClick={(e) => handleOptionClick(option,e)}
               >

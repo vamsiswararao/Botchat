@@ -5,10 +5,9 @@ import Select from "react-select";
 const PaymentMethod = ({ onNext,onPaymentMethodSelected }) => {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [selectedBank, setSelectedBank] = useState("");
-  const [selectedOption, setSelectedOption] = useState(null);
 
   const handleChange = (selectedOption) => {
-    setSelectedOption(selectedOption);
+    setSelectedBank(selectedOption);
   };
 
   const handleOptionClick = (option, e) => {
@@ -24,7 +23,7 @@ const PaymentMethod = ({ onNext,onPaymentMethodSelected }) => {
 
     const data = {
       paymentMethod,
-      selectedBank:selectedOption
+      selectedBank:selectedBank
     };
 
     onPaymentMethodSelected(data)
@@ -40,11 +39,11 @@ const PaymentMethod = ({ onNext,onPaymentMethodSelected }) => {
   };
 
   const banks = [
-    { id: "A", label: "SBI" },
-    { id: "B", label: "HDFC" },
-    { id: "C", label: "ICICI" },
-    { id: "D", label: "AXIS" },
-    { id: "E", label: "UNION" },
+    { value: 'Bank1' , label: "SBI" },
+    { value: 'Bank2', label: "HDFC" },
+    { value: 'Bank3',label: "ICICI" },
+    {value: 'Bank4', label: "AXIS" },
+    { value: 'Bank5', label: "UNION" },
   ]; // Replace with actual bank names
 
   const options = [
@@ -64,7 +63,7 @@ const PaymentMethod = ({ onNext,onPaymentMethodSelected }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">4</h2>
+          <h2 className="num">5</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
@@ -101,14 +100,14 @@ const PaymentMethod = ({ onNext,onPaymentMethodSelected }) => {
               </button>
             ))}
             {paymentMethod === "A" && (
-              <div className="dropdown-containe">
+              <div className="dropdown-container">
                 <p className="bank-para" htmlFor="bank-select">
                   Bank Name :
                 </p>
                 <div className="select-container">
                 <Select 
                   id="bank-select"
-                  value={selectedOption}
+                  value={selectedBank}
                   onChange={handleChange}
                   options={banks}
                   placeholder="Type to search..."

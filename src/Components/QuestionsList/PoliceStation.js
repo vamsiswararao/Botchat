@@ -34,7 +34,7 @@ const PoliceStation = ({ onNext,onPoliceStationSelected }) => {
     <div className="question">
             <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className='num'>6 g</h2>
+          <h2 className='num'>7 g</h2>
           <FaLongArrowAltRight className='num' />
         </div>
         <div >

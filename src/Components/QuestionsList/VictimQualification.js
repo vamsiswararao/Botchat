@@ -6,8 +6,8 @@ const VictimQualification = ({ onNext,onVictimQualificationSelected }) => {
 
   const handleOptionClick = (option,e) => {
     e.preventDefault();
-    setQualification(option.label);
-    // Notify parent component about the selection
+    setQualification(option.label); // Notify parent component about the selection
+    onNext() 
   };
 
   const handleOkClick = (e) => {

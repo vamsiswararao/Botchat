@@ -13,6 +13,7 @@ const PaymentMethod = ({ onNext,onPaymentMethodSelected }) => {
   const handleOptionClick = (option, e) => {
     e.preventDefault();
     setPaymentMethod(option.id);
+    onNext() 
   };
 
   const handleOkClick = () => {

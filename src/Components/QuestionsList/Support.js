@@ -9,7 +9,6 @@ const Support = ({ submitSupport, onNext }) => {
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
     setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
-    
   };
 
   const handleRemoveFile = (index) => {
@@ -82,13 +81,16 @@ const Support = ({ submitSupport, onNext }) => {
               </ul>
             )}
           </div>
+          { files.length > 0 &&(
           <button
             type="button"
             className="ok-btn"
             onClick={handleSubmit}
           >
-            ok
+            ok <span style={{fontSize:'15px'}}>({files.length})</span>
           </button>
+          )
+}
         </div>
       </div>
     </div>

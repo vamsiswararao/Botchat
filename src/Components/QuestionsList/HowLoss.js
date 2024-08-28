@@ -7,6 +7,7 @@ const HowLoss = ({onNext,onHowLossSelected}) => {
   const handleChange = (event) => {
     event.preventDefault();
     setHowLoss(event.target.value);
+    onNext() 
   };
 
   const handleOkClick = (e) => {

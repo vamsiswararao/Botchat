@@ -1,30 +1,34 @@
 import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const SuspectCall = ({ onNext , onSuspectCallSelected}) => {
-  const [suspectCall, setSuspectCall] = useState(null);
+const SuspectCall = ({ onNext, onSuspectCallSelected }) => {
+  const [selectedCalls, setSelectedCalls] = useState([]);
 
-  const handleOptionClick = (option,e) => {
+  const handleOptionClick = (option, e) => {
     e.preventDefault();
-    setSuspectCall(option.label);
-    // Notify parent component about the selection
+    setSelectedCalls((prevSelectedCalls) => {
+      if (prevSelectedCalls.includes(option.label)) {
+        // Remove the option if it's already selected
+        return prevSelectedCalls.filter((call) => call !== option.label);
+      } else {
+        // Add the option to the selected list
+        return [...prevSelectedCalls, option.label];
+      }
+    });
   };
 
   const handleOkClick = (e) => {
     e.preventDefault();
-    onSuspectCallSelected(suspectCall)
-      onNext(); // Notify parent component to move to the next question
+    onSuspectCallSelected(selectedCalls);
+    onNext(); // Notify parent component to move to the next question
   };
 
   const options = [
-    {
-      id: "A",
-      label: " Normal Call-Number",
-    },
+    { id: "A", label: "Normal Call-Number" },
     { id: "B", label: "WhatsApp Call-Number" },
-    { id: "C", label: "Telegram Call-NUmber" },
-    { id: "D", label: "instagram Call-Number" },
-    { id: "E", label: "FaceBook Call-Number" },
+    { id: "C", label: "Telegram Call-Number" },
+    { id: "D", label: "Instagram Call-Number" },
+    { id: "E", label: "Facebook Call-Number" },
     { id: "F", label: "Skype Call-Number" },
     { id: "G", label: "Zoom Call-Number" },
     { id: "H", label: "Snap Call-Number" },
@@ -47,26 +51,25 @@ const SuspectCall = ({ onNext , onSuspectCallSelected}) => {
               <button
                 key={option.id}
                 className={`option-button ${
-                  suspectCall === option.label ? "selected" : ""
+                  selectedCalls.includes(option.label) ? "selected" : ""
                 }`}
-                onClick={(e) => handleOptionClick(option,e)}
+                onClick={(e) => handleOptionClick(option, e)}
               >
                 <div className="answer-container">
                   <div
                     className="option"
                     style={{
-                      backgroundColor:
-                      suspectCall === option.label
-                          ? "rgb(62, 87, 255)"
-                          : "#fff",
-                      color: suspectCall === option.label ? "#fff" : "#3E57FF",
+                      backgroundColor: selectedCalls.includes(option.label)
+                        ? "rgb(62, 87, 255)"
+                        : "#fff",
+                      color: selectedCalls.includes(option.label) ? "#fff" : "#3E57FF",
                     }}
                   >
                     {option.id}
                   </div>
                   <div className="option-label">{option.label}</div>
                 </div>
-                {suspectCall === option.label && (
+                {selectedCalls.includes(option.label) && (
                   <span className="checkmark">
                     &#10003; {/* Unicode character for checkmark */}
                   </span>
@@ -75,11 +78,7 @@ const SuspectCall = ({ onNext , onSuspectCallSelected}) => {
             ))}
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <button
-              type="button"
-              className="ok-btn"
-              onClick={handleOkClick}
-            >
+            <button type="button" className="ok-btn" onClick={handleOkClick}>
               OK
             </button>
             <p className="enter-text">

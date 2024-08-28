@@ -9,6 +9,7 @@ const Time = ({onNext,onTimeSelected}) => {
     e.preventDefault();
     setTimeId(option.id);
     setTime(option.label);
+    onNext() 
   };
 
   const handleOkClick = (e) => {

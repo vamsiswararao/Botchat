@@ -4,9 +4,20 @@ import { useNavigate } from "react-router-dom";
 
 const Login = (onOtpSent) => {
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSendOtp = () => {
+    const phoneRegex = /^[0-9]{10}$/; // Adjust regex as needed for your format
+    if (!phoneNumber) {
+      setError("Phone number is required.");
+      return;
+    }
+    if (!phoneRegex.test(phoneNumber)) {
+      setError("Please enter a valid 10-digit phone number.");
+      return;
+    }
+    localStorage.setItem("phoneNumber", phoneNumber);
     // fetch("http://localhost:3001/send-otp", {
     //   method: "POST",
     //   headers: {
@@ -39,6 +50,7 @@ const Login = (onOtpSent) => {
         value={phoneNumber}
         onChange={(e) => setPhoneNumber(e.target.value)}
       />
+      {error && <p className="error-message">{error}</p>}
       <button className="phone_number_btn" onClick={handleSendOtp}>
         Send OTP
       </button>

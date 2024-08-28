@@ -1,27 +1,26 @@
 import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const SuspectContact = ({ onNext,onSuspectContactSelected }) => {
-  const [suspectContact, setSuspectContact] = useState(null);
+const SuspectContact = ({ onNext, onSuspectContactSelected }) => {
+  const [suspectContacts, setSuspectContacts] = useState([]);
 
-  const handleOptionClick = (option,e) => {
+  const handleOptionClick = (option, e) => {
     e.preventDefault();
-    setSuspectContact(option.label);
-    // Notify parent component about the selection
+    if (suspectContacts.includes(option.label)) {
+      setSuspectContacts(suspectContacts.filter((contact) => contact !== option.label));
+    } else {
+      setSuspectContacts([...suspectContacts, option.label]);
+    }
   };
 
   const handleOkClick = (e) => {
-      e.preventDefault()
-      onSuspectContactSelected(suspectContact)
-      onNext(); // Notify parent component to move to the next question
-
+    e.preventDefault();
+    onSuspectContactSelected(suspectContacts);
+    onNext(); // Notify parent component to move to the next question
   };
 
   const options = [
-    {
-      id: "A",
-      label: "WhatsApp",
-    },
+    { id: "A", label: "WhatsApp" },
     { id: "B", label: "Telegram" },
     { id: "C", label: "Instagram" },
     { id: "D", label: "Facebook" },
@@ -37,35 +36,32 @@ const SuspectContact = ({ onNext,onSuspectContactSelected }) => {
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
-          <h2>Which platform did the Suspect use to contact you?</h2>
+          <h2>Which platform(s) did the Suspect use to contact you?</h2>
           <div>
             {options.map((option) => (
               <button
                 key={option.id}
                 className={`option-button ${
-                  suspectContact === option.label ? "selected" : ""
+                  suspectContacts.includes(option.label) ? "selected" : ""
                 }`}
-                onClick={(e) => handleOptionClick(option,e)}
+                onClick={(e) => handleOptionClick(option, e)}
               >
                 <div className="answer-container">
                   <div
                     className="option"
                     style={{
-                      backgroundColor:
-                      suspectContact === option.label
-                          ? "rgb(62, 87, 255)"
-                          : "#fff",
-                      color: suspectContact === option.label ? "#fff" : "#3E57FF",
+                      backgroundColor: suspectContacts.includes(option.label)
+                        ? "rgb(62, 87, 255)"
+                        : "#fff",
+                      color: suspectContacts.includes(option.label) ? "#fff" : "#3E57FF",
                     }}
                   >
                     {option.id}
                   </div>
                   <div className="option-label">{option.label}</div>
                 </div>
-                {suspectContact === option.label && (
-                  <span className="checkmark">
-                    &#10003; {/* Unicode character for checkmark */}
-                  </span>
+                {suspectContacts.includes(option.label) && (
+                  <span className="checkmark">&#10003;</span>
                 )}
               </button>
             ))}

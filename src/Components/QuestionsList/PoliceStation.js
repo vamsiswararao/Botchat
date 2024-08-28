@@ -14,6 +14,7 @@ const PoliceStation = ({ onNext,onPoliceStationSelected }) => {
 
   const handleChange = (selectedOption) => {
     setPoliceStation(selectedOption);
+    onNext() 
   };
 
   const handleOkClick= (e) => {

@@ -50,7 +50,6 @@ const ProgressBar = ({ current, total }) => {
 
 const Questions = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [isPhoneValid, setIsPhoneValid] = useState(false);
   const questionCount = 22;
 
   const [formData, setFormData] = useState({
@@ -226,10 +225,10 @@ const Questions = () => {
   };
 
   const handleNextQuestion = (optionId) => {
-    if (currentQuestion === 0 && !isPhoneValid) {
-      alert("Please enter a valid phone number before proceeding.");
-      return;
-    }
+    // if (currentQuestion === 0 && !isPhoneValid) {
+    //   alert("Please enter a valid phone number before proceeding.");
+    //   return;
+    // }
 
     const nextQuestion = Math.min(currentQuestion + 1, questionCount - 1);
     const element = document.querySelector(`#question-${nextQuestion}`);
@@ -247,10 +246,7 @@ const Questions = () => {
       .scrollIntoView({ behavior: "smooth" });
   };
 
-  const handlePhoneValid = (valid, value) => {
-    setIsPhoneValid(valid);
-    handlePhoneData(value);
-  };
+
 
   const handleSubmit = async (e, support) => {
     console.log(support);
@@ -285,9 +281,9 @@ const Questions = () => {
       <ProgressBar current={currentQuestion} total={questionCount} />
       <form>
         <div id="question-0">
-          <Number onPhoneValid={handlePhoneValid} onNext={handleNextQuestion} />
+          <Number  onNext={handleNextQuestion} onPhone={(value) => handleDataUpdate("phone", value)}/>
         </div>
-        {isPhoneValid && (
+
           <>
             <div id="question-1" className="page">
               <Help
@@ -463,10 +459,10 @@ const Questions = () => {
               </>
             )}
           </>
-        )}
+          <div  className="navigation-buttons" style={{ display:'flex',justifyContent:'center',alignItems:'center', position: "fixed", bottom: "0px", right: "0px" }}>
         <div
-          className="navigation-buttons"
-          style={{ position: "fixed", bottom: "10px", right: "10px" }}
+         className="navigation-buttons"
+          style={{ position: "fixed", bottom: "20px", right: "180px" }}
         >
           <button
             type="button"
@@ -484,6 +480,8 @@ const Questions = () => {
           >
             <IoIosArrowDown />
           </button>
+        </div>
+        <p style={{background:'#007bff', fontSize:'14px',height:'30px',color:'#ccc',paddingRight:'5px',paddingTop:'10px'}}>Power By Krishanas Digital</p>
         </div>
       </form>
     </>

@@ -6,8 +6,8 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
 
   const handleOptionClick = (option,e) => {
     e.preventDefault();
-    setGender(option.label);
-    // Notify parent component about the selection
+    setGender(option.label);// Notify parent component about the selection
+    onNext() 
   };
 
   const handleOkClick = (e) => {

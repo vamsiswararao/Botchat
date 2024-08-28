@@ -9,6 +9,7 @@ const HowMuch = ({ onNext,onHowMuchSelected}) => {
     e.preventDefault();
     setMoneyId(option.id);
     setMoney(option.label);
+    onNext();
   };
 
   const handleOkClick = (e) => {

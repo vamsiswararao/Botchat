@@ -80,6 +80,19 @@ const SuspectBank = ({ onNext, onSuspectBankSelected }) => {
               </button>
             ))}
           </div>
+          {formData.CategoryOfAccount==="A" && (
+            <>
+          <p className="bank-para">Bank Name:</p>
+
+          <input
+            type="text"
+            value={formData.BankName}
+            onChange={(e) => handleTextChange("BankName", e.target.value)}
+            placeholder="Type tour answer here..."
+            className="text-input"
+          />
+          </>
+          )}
           <p className="bank-para">Account NO/ Wallet No/ UPI NO:</p>
           <input
             type="text"

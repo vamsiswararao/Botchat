@@ -3,17 +3,29 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 
 const Help = ({ onNext, onHelpSelected}) => {
   const [help, setHelp] = useState(null);
+  const [showOkButton, setShowOkButton] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleHelpOptionClick = (option, e) => {
     e.preventDefault();
     setHelp(option.id);
     onHelpSelected(option.id)
+    onNext();
+    setShowOkButton(true); // Hide the OK button after successful click
+    setError("");
   };
 
   const handleOkClick = (e) => {
     e.preventDefault();
     console.log("Selected Option:", help);
-    onNext();
+    if (help) {
+      console.log("Selected Option:", help);
+      // Proceed with the next steps
+    } else {
+      setError("Please select an option before proceeding.");
+      setShowOkButton(false); // Hide the OK button after successful click
+
+    }
     };
 
   // const handleKeyPress = (event) => {
@@ -71,9 +83,12 @@ const Help = ({ onNext, onHelpSelected}) => {
               </button>
             ))}
             <div style={{display:"flex",alignItems:'center'}}>
-              <button type="button" className="ok-btn" onClick={handleOkClick}>
-                ok
-              </button>
+            {showOkButton && (
+                <button type="button" className="ok-btn" onClick={handleOkClick}>
+                  OK
+                </button>
+              )}
+               {error && <p className="error-message">{error}</p>}
               <p className="enter-text">press <strong>Enter ↵</strong></p>
             </div>
           </div>

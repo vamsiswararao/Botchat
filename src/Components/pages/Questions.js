@@ -48,6 +48,27 @@ const ProgressBar = ({ current, total }) => {
   );
 };
 
+
+const Header = ({ visible, title }) => {
+  if (!visible) return null;
+  return (
+    <header
+      style={{
+        position: "fixed",
+        top: 10,
+        left: "10%",
+        width: "80%",
+        backgroundColor: "#f8f9fa",
+        padding: "20px",
+        borderBottom: "1px solid #dee2e6",
+        zIndex: 1000, // Ensure it stays above other content
+      }}
+    >
+      <h1 style={{ margin: 0, textAlign: "center" }}>{title}</h1>
+    </header>
+  );
+};
+
 const Questions = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const questionCount = 22;
@@ -229,13 +250,12 @@ const Questions = () => {
     //   alert("Please enter a valid phone number before proceeding.");
     //   return;
     // }
-
+    
     const nextQuestion = Math.min(currentQuestion + 1, questionCount - 1);
     const element = document.querySelector(`#question-${nextQuestion}`);
-    if (element) {
+    console.log(currentQuestion)
       setCurrentQuestion(nextQuestion);
       element.scrollIntoView({ behavior: "smooth" });
-    }
   };
 
   const handlePreviousQuestion = () => {
@@ -276,9 +296,32 @@ const Questions = () => {
     }
   };
 
+  const isHeaderVisible = (currentQuestion >= 7 || currentQuestion >= 12) && currentQuestion !== 14;
+  const headerTitle = (() => {
+    if ((currentQuestion >= 7 && currentQuestion <= 13) || currentQuestion === 18) return "Victim";
+    if ((currentQuestion >= 15 && currentQuestion <= 17) || currentQuestion === 19) return "Suspect";
+    return ""; // Default or empty title
+  })();
+
   return (
     <>
       <ProgressBar current={currentQuestion} total={questionCount} />
+    { isHeaderVisible && (
+    <header
+      style={{
+        position: "fixed",
+        top: 5,
+        left: "10%",
+        width: "80%",
+        backgroundColor: "#f8f9fa",
+        padding: "20px",
+        borderBottom: "1px solid #dee2e6",
+        zIndex: 1000, // Ensure it stays above other content
+      }}
+    >
+      {headerTitle &&(<h1 style={{ margin: 0, textAlign: "center" }}>{headerTitle}</h1>)}
+    </header>
+  )}
       <form>
         <div id="question-0">
           <Number  onNext={handleNextQuestion} onPhone={(value) => handleDataUpdate("phone", value)}/>
@@ -462,7 +505,6 @@ const Questions = () => {
           <div  className="navigation-buttons" style={{ display:'flex',justifyContent:'center',alignItems:'center', position: "fixed", bottom: "0px", right: "0px" }}>
         <div
          className="navigation-buttons"
-          style={{ position: "fixed", bottom: "20px", right: "180px" }}
         >
           <button
             type="button"
@@ -476,12 +518,12 @@ const Questions = () => {
             type="button"
             className="next-btn"
             onClick={handleNextQuestion}
-            disabled={currentQuestion === questionCount}
+            disabled={currentQuestion === 21}
           >
             <IoIosArrowDown />
           </button>
         </div>
-        <p style={{background:'#007bff', fontSize:'14px',height:'30px',color:'#ccc',paddingRight:'5px',paddingTop:'10px'}}>Power By Krishanas Digital</p>
+        <p className="company-name">Power By Krishanas Digital</p>
         </div>
       </form>
     </>

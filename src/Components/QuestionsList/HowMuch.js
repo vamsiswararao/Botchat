@@ -4,19 +4,31 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 const HowMuch = ({ onNext,onHowMuchSelected}) => {
   const [moneyId, setMoneyId] = useState(null);
   const [money, setMoney] = useState(null);
+  const [showOkButton, setShowOkButton] = useState(true);
+  const [error, setError] = useState(null);
+
 
   const handleOptionClick = (option, e) => {
     e.preventDefault();
     setMoneyId(option.id);
     setMoney(option.label);
     onNext();
+    setShowOkButton(true); // Hide the OK button after successful click
+    setError("");
   };
 
   const handleOkClick = (e) => {
     e.preventDefault();
-    onHowMuchSelected(money)
     console.log("Selected Option:", money);
-    onNext();
+    if (money) {
+      console.log("Selected Option:",money);
+      onNext();
+      // Proceed with the next steps
+    } else {
+      setError("Please select an option before proceeding.");
+      setShowOkButton(false); // Hide the OK button after successful click
+        
+    }
     };
 
   // const handleKeyPress = (event) => {
@@ -74,10 +86,15 @@ const HowMuch = ({ onNext,onHowMuchSelected}) => {
               </button>
             ))}
             <div style={{display:"flex",alignItems:'center'}}>
-              <button type="button" className="ok-btn" onClick={handleOkClick}>
-                ok
-              </button>
-              <p className="enter-text">press <strong>Enter ↵</strong></p>
+            {showOkButton && (
+              <>
+                <button type="button" className="ok-btn" onClick={handleOkClick}>
+                  OK
+                </button>
+                <p className="enter-text">press <strong>Enter ↵</strong></p>
+                </>
+              )}
+               {error && <div className="error-message">{error}</div>}
             </div>
           </div>
         </div>

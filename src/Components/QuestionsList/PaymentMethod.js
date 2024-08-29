@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import Select from "react-select";
 
-const PaymentMethod = ({ onNext,onPaymentMethodSelected }) => {
+const PaymentMethod = ({ onNext, onPaymentMethodSelected }) => {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [selectedBank, setSelectedBank] = useState("");
+  const [showOkButton, setShowOkButton] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleChange = (selectedOption) => {
     setSelectedBank(selectedOption);
@@ -13,7 +15,12 @@ const PaymentMethod = ({ onNext,onPaymentMethodSelected }) => {
   const handleOptionClick = (option, e) => {
     e.preventDefault();
     setPaymentMethod(option.id);
-    onNext() 
+    console.log(option.id)
+    if (option.id !== "A" && option.id !== "") {
+      onNext();
+    }
+    setShowOkButton(true); // Hide the OK button after successful click
+    setError("");
   };
 
   const handleOkClick = () => {
@@ -24,12 +31,21 @@ const PaymentMethod = ({ onNext,onPaymentMethodSelected }) => {
 
     const data = {
       paymentMethod,
-      selectedBank:selectedBank
+      selectedBank: selectedBank,
     };
 
-    onPaymentMethodSelected(data)
+    onPaymentMethodSelected(data);
     console.log("Data to be sent:", data);
-    onNext();
+
+    if (paymentMethod) {
+      console.log("Selected Option:", paymentMethod);
+      onNext();
+      // Proceed with the next steps
+    } else {
+      setError("Please select an option before proceeding.");
+      setShowOkButton(false); // Hide the OK button after successful click
+        
+    }
   };
 
   const customSelectStyles = {
@@ -40,11 +56,11 @@ const PaymentMethod = ({ onNext,onPaymentMethodSelected }) => {
   };
 
   const banks = [
-    { value: 'Bank1' , label: "SBI" },
-    { value: 'Bank2', label: "HDFC" },
-    { value: 'Bank3',label: "ICICI" },
-    {value: 'Bank4', label: "AXIS" },
-    { value: 'Bank5', label: "UNION" },
+    { value: "Bank1", label: "SBI" },
+    { value: "Bank2", label: "HDFC" },
+    { value: "Bank3", label: "ICICI" },
+    { value: "Bank4", label: "AXIS" },
+    { value: "Bank5", label: "UNION" },
   ]; // Replace with actual bank names
 
   const options = [
@@ -106,26 +122,35 @@ const PaymentMethod = ({ onNext,onPaymentMethodSelected }) => {
                   Bank Name :
                 </p>
                 <div className="select-container">
-                <Select 
-                  id="bank-select"
-                  value={selectedBank}
-                  onChange={handleChange}
-                  options={banks}
-                  placeholder="Type to search..."
-                  aria-label="Police Station"
-                  styles={customSelectStyles}
-                />
+                  <Select
+                    id="bank-select"
+                    value={selectedBank}
+                    onChange={handleChange}
+                    options={banks}
+                    placeholder="Type to search..."
+                    aria-label="Police Station"
+                    styles={customSelectStyles}
+                  />
                 </div>
               </div>
             )}
 
             <div style={{ display: "flex", alignItems: "center" }}>
-              <button type="button" className="ok-btn" onClick={handleOkClick}>
-                ok
-              </button>
-              <p className="enter-text">
-                press <strong>Enter ↵</strong>
-              </p>
+              {showOkButton && (
+                <>
+                  <button
+                    type="button"
+                    className="ok-btn"
+                    onClick={handleOkClick}
+                  >
+                    OK
+                  </button>
+                  <p className="enter-text">
+                    press <strong>Enter ↵</strong>
+                  </p>
+                </>
+              )}
+              {error && <div className="error-message">{error}</div>}
             </div>
           </div>
         </div>

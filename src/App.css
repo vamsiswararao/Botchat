@@ -52,7 +52,18 @@ form {
   background-color: #0056b3;
 }
 
+.company-name {
+  background-color: #007bff;
+  font-size: 8px;
+  height: 16px;
+  color: #ccc;
+  padding-right: 5px;
+  padding-top: 5px;
+  padding-left: 5px;
+}
+
 @media only screen and (max-width: 768px) {
+
   /* Tablet and Mobile Styles */
   form {
     padding: 10px;
@@ -63,17 +74,18 @@ form {
   }
 
   .navigation-buttons {
-    bottom: 15px;
-    right: 15px;
+    bottom: 20px;
+    right: 110px;
   }
 
   .navigation-buttons button {
-    padding: 8px;
-    font-size: 18px;
+    padding: 4px;
+    font-size: 14px;
   }
 }
 
 @media only screen and (max-width: 480px) {
+
   /* Mobile Styles */
   .page {
     padding: 10px;
@@ -81,17 +93,18 @@ form {
   }
 
   .navigation-buttons {
-    bottom: 10px;
-    right: 10px;
+    bottom: 20px;
+    right: 110px;
   }
 
   .navigation-buttons button {
-    padding: 6px;
-    font-size: 16px;
+    padding: 4px;
+    font-size: 14px;
   }
 }
 
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
+
   /* Small Laptop and Large Tablet Styles */
   form {
     max-width: 90%;
@@ -109,6 +122,7 @@ form {
 }
 
 @media only screen and (min-width: 1025px) {
+
   /* Laptop and Desktop Styles */
   form {
     max-width: 80%;
@@ -116,18 +130,30 @@ form {
 
   .navigation-buttons {
     bottom: 20px;
-    right: 20px;
+    right: 180px;
   }
 
   .navigation-buttons button {
     padding: 12px;
     font-size: 16px;
   }
+
+
+  .company-name {
+    background-color: #007bff;
+    font-size: 13px;
+    height: 30px;
+    color: #ccc;
+    padding-right: 5px;
+    padding-top: 10px;
+    padding-left: 10px;
+  }
 }
 
 
 /* Default styles for mobile view */
-.login-container ,.otp-container{
+.login-container,
+.otp-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -135,7 +161,7 @@ form {
   background-color: #ffffff;
 }
 
-.container  {
+.container {
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
@@ -155,7 +181,8 @@ p {
   color: #666;
 }
 
-.phone_number_input , .otp-input   {
+.phone_number_input,
+.otp-input {
   width: 95%;
   padding: 10px;
   font-size: 16px;
@@ -164,7 +191,8 @@ p {
   margin-bottom: 20px;
 }
 
-.phone_number_btn ,.otp-btn{
+.phone_number_btn,
+.otp-btn {
   width: 100%;
   padding: 10px;
   font-size: 16px;
@@ -175,13 +203,16 @@ p {
   cursor: pointer;
 }
 
-.phone_number_btn:hover , .otp-btn:hover{
+.phone_number_btn:hover,
+.otp-btn:hover {
   background-color: #0056b3;
 }
 
 /* Laptop view */
 @media (min-width: 768px) {
-  .login-container, .otp-container {
+
+  .login-container,
+  .otp-container {
     padding: 20px;
     background-color: #f7f7f7;
   }
@@ -200,21 +231,24 @@ p {
     font-size: 18px;
   }
 
-  .phone_number_input ,.otp-input {
+  .phone_number_input,
+  .otp-input {
     font-size: 18px;
     padding: 12px;
   }
 
-  .phone_number_btn , .otp-btn{
+  .phone_number_btn,
+  .otp-btn {
     font-size: 18px;
     padding: 12px;
   }
 }
 
-.page{
+.page {
   display: flex;
 }
-h4{
+
+h4 {
   margin-top: 0px;
 }
 
@@ -251,7 +285,7 @@ button:hover {
 
 
 
-.phone-label{
+.phone-label {
   font-size: 16px;
 }
 
@@ -273,12 +307,12 @@ button:hover {
 }
 
 @media only screen and (min-width: 1025px) {
-  
+
   .phone-input-container {
     display: flex;
     flex-direction: column;
     margin-top: 10px;
-    margin-right:90px;
+    margin-right: 90px;
   }
 }
 
@@ -287,6 +321,12 @@ button:hover {
   color: red;
   margin-top: 5px;
   font-size: 14px;
+  background-color: rgb(224, 197, 197);
+  height: 18px;
+  width: 280px;
+  padding-top: 5px;
+  margin-left: 10px;
+  padding-left: 10px;
 }
 
 .error-border {
@@ -321,7 +361,7 @@ option-button {
   cursor: pointer;
   background-color: #f0f8ff;
   transition: background-color 0.3s ease;
-  width:100px;
+  width: 100px;
 }
 
 
@@ -337,10 +377,10 @@ option-button {
 }
 
 
-.answer-container{
+.answer-container {
   display: flex;
   align-items: center;
-  gap:10px;
+  gap: 10px;
 }
 
 /* option{
@@ -360,7 +400,7 @@ option-button {
 }
 
 
-.ok-btn{
+.ok-btn {
   background-color: #3e57ff;
   color: #fff;
   border: none;
@@ -408,8 +448,8 @@ option-button {
   background-color: #004999;
 }
 
-.continue-btn{
-  width:80px;
+.continue-btn {
+  width: 80px;
 }
 
 
@@ -426,14 +466,15 @@ option-button {
   position: relative;
   width: 300px;
   display: flex;
-  transition: background-color 0.3s, color 0.3s; /* Transition effect */
+  transition: background-color 0.3s, color 0.3s;
+  /* Transition effect */
 }
 
-h2{
+h2 {
   font-size: 12px;
 }
 
-.num{
+.num {
   margin-top: 10px;
   font-size: 12px;
 }
@@ -455,15 +496,16 @@ h2{
   font-size: 9px;
 }
 
-.option-label{
+.option-label {
   font-size: 9px;
 }
 
 
-.text-input{
+.text-input {
   border: none;
   outline: none;
-  border-bottom: 2px solid #3651ac; /* Adjust the color and width as needed */
+  border-bottom: 2px solid #3651ac;
+  /* Adjust the color and width as needed */
   padding: 8px;
   margin-top: 10px;
   margin-right: 20px;
@@ -473,10 +515,10 @@ h2{
   height: 24px;
 }
 
-.option-list{
-overflow-X:auto;
-height:85vh;
-width:310px;
+.option-list {
+  overflow-X: auto;
+  height: 85vh;
+  width: 310px;
 }
 
 @media only screen and (min-width: 1025px) {
@@ -491,58 +533,66 @@ width:310px;
     position: relative;
     width: 500px;
     display: flex;
-    transition: background-color 0.3s, color 0.3s; /* Transition effect */
-    
+    transition: background-color 0.3s, color 0.3s;
+    /* Transition effect */
+
   }
-  .num{
+
+  .num {
     margin-top: 20px;
     font-size: 24px;
   }
-h2{
-  font-size: 24px;
-}
-.enter-text {
-  font-size: 14px;
-  color: #999;
-  margin-left: 10px;
-  margin-top: 30px;
-}
-.option {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border: 1px solid currentColor;
-  font-size: 16px;
-}
 
-.option-label{
-  font-size: 16px;
-}
+  h2 {
+    font-size: 24px;
+  }
 
-.text-input{
-  border: none;
-  outline: none;
-  border-bottom: 2px solid #3651ac; /* Adjust the color and width as needed */
-  padding: 8px;
-  margin-top: 0px;
-  margin-right: 20px;
-  margin-bottom: 0px;
-  background-color: #f4f4f4;
-  width: 600px;
-  height: 24px;
-}
-.option-list{
-  overflow-X:auto;
-  height:85vh;
-  width:600px;
+  .enter-text {
+    font-size: 14px;
+    color: #999;
+    margin-left: 10px;
+    margin-top: 30px;
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid currentColor;
+    font-size: 16px;
+  }
+
+  .option-label {
+    font-size: 16px;
+  }
+
+  .text-input {
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #3651ac;
+    /* Adjust the color and width as needed */
+    padding: 8px;
+    margin-top: 0px;
+    margin-right: 20px;
+    margin-bottom: 0px;
+    background-color: #f4f4f4;
+    width: 600px;
+    height: 24px;
+  }
+
+  .option-list {
+    overflow-X: auto;
+    height: 85vh;
+    width: 600px;
   }
 
 }
 
 .option-button:hover {
-  background-color: rgba(8, 23, 134, 0.2); /* Hover effect */
+  background-color: rgba(8, 23, 134, 0.2);
+  /* Hover effect */
 }
 
 .checkmark {
@@ -557,10 +607,11 @@ h2{
 
 
 
-.day-input{
+.day-input {
   border: none;
   outline: none;
-  border-bottom: 2px solid #ccc; /* Adjust the color and width as needed */
+  border-bottom: 2px solid #ccc;
+  /* Adjust the color and width as needed */
   padding: 8px;
   width: 50px;
   margin-right: 20px;
@@ -569,17 +620,19 @@ h2{
 
 
 
-.bank-para{
+.bank-para {
   color: #48494e;
 }
 
 .text-input::placeholder {
   color: #8b9ef4;
-  font-size:18px; ;/* Change placeholder color to blue */
+  font-size: 18px;
+  ;
+  /* Change placeholder color to blue */
 }
 
 
-.dropdown-container{
+.dropdown-container {
   margin-top: 20px;
 }
 
@@ -614,7 +667,8 @@ h2{
   position: absolute;
   top: 0px;
   left: 160px;
-  background-color: rgba(192, 179, 178, 0.8); /* Semi-transparent red */
+  background-color: rgba(192, 179, 178, 0.8);
+  /* Semi-transparent red */
   color: white;
   border: none;
   border-radius: 3px;
@@ -625,7 +679,8 @@ h2{
 }
 
 .remove-button:hover {
-  background-color: rgba(255, 69, 58, 1); /* Fully opaque red on hover */
+  background-color: rgba(255, 69, 58, 1);
+  /* Fully opaque red on hover */
 }
 
 .file-name-container {
@@ -666,13 +721,16 @@ h2{
 
 
 .select-container {
-  width: 500px; /* Default width for laptops and larger screens */
+  width: 500px;
+  /* Default width for laptops and larger screens */
 }
 
 /* Styles for mobile devices */
 @media (max-width: 767px) {
   .select-container {
-    width: 100%; /* Full width for mobile devices */
-    max-width: 600px; /* Optional: maximum width to prevent stretching */
+    width: 100%;
+    /* Full width for mobile devices */
+    max-width: 600px;
+    /* Optional: maximum width to prevent stretching */
   }
 }

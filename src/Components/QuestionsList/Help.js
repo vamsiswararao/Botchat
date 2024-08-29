@@ -6,13 +6,15 @@ const Help = ({ onNext, onHelpSelected}) => {
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
 
+  
+
   const handleHelpOptionClick = (option, e) => {
     e.preventDefault();
     setHelp(option.id);
     onHelpSelected(option.id)
-    onNext();
     setShowOkButton(true); // Hide the OK button after successful click
     setError("");
+    
   };
 
   const handleOkClick = (e) => {
@@ -20,11 +22,12 @@ const Help = ({ onNext, onHelpSelected}) => {
     console.log("Selected Option:", help);
     if (help) {
       console.log("Selected Option:", help);
+      onNext();
       // Proceed with the next steps
     } else {
       setError("Please select an option before proceeding.");
       setShowOkButton(false); // Hide the OK button after successful click
-
+        
     }
     };
 
@@ -84,12 +87,14 @@ const Help = ({ onNext, onHelpSelected}) => {
             ))}
             <div style={{display:"flex",alignItems:'center'}}>
             {showOkButton && (
+              <>
                 <button type="button" className="ok-btn" onClick={handleOkClick}>
                   OK
                 </button>
+                <p className="enter-text">press <strong>Enter ↵</strong></p>
+                </>
               )}
-               {error && <p className="error-message">{error}</p>}
-              <p className="enter-text">press <strong>Enter ↵</strong></p>
+               {error && <div className="error-message">{error}</div>}
             </div>
           </div>
         </div>

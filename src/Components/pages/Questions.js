@@ -71,7 +71,6 @@ const Header = ({ visible, title }) => {
 
 const Questions = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const questionCount = 22;
 
   const [formData, setFormData] = useState({
     phone: "",
@@ -94,7 +93,7 @@ const Questions = () => {
     suspect_bank: "",
     support: "",
   });
-
+const questionCount = formData.help? 22:2;
   const handlePhoneData = (phone) => {
     setFormData((prevData) => ({
       ...prevData,

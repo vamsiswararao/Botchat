@@ -13,7 +13,7 @@ const VictimPhone=({onNext,    onVictimPhoneSelected})=>{
       e.preventDefault();
       onVictimPhoneSelected(victimPhone)
       console.log("Selected Option:", victimPhone);
-      onNext();
+      onNext(9);
       };
       
     return(

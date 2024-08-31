@@ -20,7 +20,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected }) => {
   const handleOkClick = (e) => {
     e.preventDefault();
     onSuspectCallSelected(selectedCalls);
-    onNext(); // Notify parent component to move to the next question
+    onNext(16); // Notify parent component to move to the next question
   };
 
   const options = [
@@ -46,7 +46,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected }) => {
         </div>
         <div>
           <h2>How did the suspect call you? </h2>
-          <div>
+          <div className="option-list">
             {options.map((option) => (
               <button
                 key={option.id}

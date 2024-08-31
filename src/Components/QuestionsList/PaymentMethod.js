@@ -17,7 +17,7 @@ const PaymentMethod = ({ onNext, onPaymentMethodSelected }) => {
     setPaymentMethod(option.id);
     console.log(option.id)
     if (option.id !== "A" && option.id !== "") {
-      onNext();
+      handleOkClick()
     }
     setShowOkButton(true); // Hide the OK button after successful click
     setError("");
@@ -39,7 +39,7 @@ const PaymentMethod = ({ onNext, onPaymentMethodSelected }) => {
 
     if (paymentMethod) {
       console.log("Selected Option:", paymentMethod);
-      onNext();
+      onNext(5);
       // Proceed with the next steps
     } else {
       setError("Please select an option before proceeding.");
@@ -74,6 +74,7 @@ const PaymentMethod = ({ onNext, onPaymentMethodSelected }) => {
     { id: "E", label: "Demat / depository fraud" },
     { id: "F", label: "Business email compromise/email takeover" },
     { id: "G", label: "Aadhar enable payment system [AEPS]" },
+    { id: "H", label: "others" },
   ];
 
   return (

@@ -13,7 +13,7 @@ const VictimName = ({onNext,onVictimNameSelected}) => {
     e.preventDefault();
     onVictimNameSelected(victimName)
     console.log("Selected Option:", victimName);
-    onNext();
+    onNext(8);
     };
 
 

@@ -17,17 +17,17 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected }) => {
   const handleOkClick = (e) => {
     e.preventDefault();
     onSuspectSpeakSelected(selectedOptions);
-    onNext(); // Notify parent component to move to the next question
+    onNext(17); // Notify parent component to move to the next question
   };
 
   const options = [
-    { id: "A", label: "Assamese" },
-    { id: "B", label: "Bengali" },
-    { id: "C", label: "Bodo" },
-    { id: "D", label: "Dogri" },
-    { id: "E", label: "English" },
+    { id: "A", label: "Telugu" },
+    { id: "B", label: "English" },
+    { id: "C", label: "Hindi" },
+    { id: "D", label: "Tamil" },
+    { id: "E", label: "Bengali" },
     { id: "F", label: "Gujarati" },
-    { id: "G", label: "Hindi" },
+    { id: "G", label: "Bodo" },
     { id: "H", label: "Kannada" },
     { id: "I", label: "Jammu and Kashmir" },
     { id: "J", label: "Konkani" },
@@ -40,8 +40,8 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected }) => {
     { id: "Q", label: "Sanskrit" },
     { id: "R", label: "Santali" },
     { id: "S", label: "Sindhi" },
-    { id: "T", label: "Tamil" },
-    { id: "U", label: "Telugu" },
+    { id: "T", label: "Dogri" },
+    { id: "U", label: "Assamese" },
     { id: "V", label: "Urdu" },
   ];
 

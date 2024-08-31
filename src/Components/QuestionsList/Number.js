@@ -30,7 +30,7 @@ const Number = ({ onNext, onPhone }) => {
   }, [phone]);
 
   const handleSubmit = () => {
-    onNext(); // Move to the next question
+    onNext("0"); // Move to the next question
     onPhone(phone);
   };
 

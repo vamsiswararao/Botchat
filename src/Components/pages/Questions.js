@@ -21,6 +21,8 @@ import VictimBank from "../QuestionsList/VictimBank";
 import SuspectBank from "../QuestionsList/SuspectBank";
 import Support from "../QuestionsList/Support";
 import HowMuch from "../QuestionsList/HowMuch";
+import { useNavigate } from "react-router-dom";
+
 
 const ProgressBar = ({ current, total }) => {
   const progress = ((current + 1) / total) * 100;
@@ -71,6 +73,7 @@ const Header = ({ visible, title }) => {
 
 const Questions = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     phone: "",
@@ -244,6 +247,21 @@ const questionCount = formData.help? 22:2;
     }));
   };
 
+  const handleNextClickQuestion = (currentQuestion) => {
+    // if (currentQuestion === 0 && !isPhoneValid) {
+    //   alert("Please enter a valid phone number before proceeding.");
+    //   return;
+    // }
+    
+    const nextQuestion = Math.min(currentQuestion, questionCount - 1);
+    const element = document.querySelector(`#question-${nextQuestion}`);
+    console.log(currentQuestion)
+      setCurrentQuestion(nextQuestion);
+      element.scrollIntoView({ behavior: "smooth" });
+  };
+
+
+
   const handleNextQuestion = (optionId) => {
     // if (currentQuestion === 0 && !isPhoneValid) {
     //   alert("Please enter a valid phone number before proceeding.");
@@ -288,7 +306,7 @@ const questionCount = formData.help? 22:2;
 
       const result = await response.json();
       console.log("API response:", result);
-      alert("Form submitted successfully!");
+      navigate("/success");
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("An error occurred. Please try again.");
@@ -301,7 +319,7 @@ const questionCount = formData.help? 22:2;
     if ((currentQuestion >= 15 && currentQuestion <= 17) || currentQuestion === 19) return "Suspect";
     return ""; // Default or empty title
   })();
-
+console.log(currentQuestion)
   return (
     <>
       <ProgressBar current={currentQuestion} total={questionCount} />
@@ -329,7 +347,7 @@ const questionCount = formData.help? 22:2;
           <>
             <div id="question-1" className="page">
               <Help
-                onNext={handleNextQuestion}
+                onNext={handleNextClickQuestion}
                 onHelpSelected={(value) => handleDataUpdate("help", value)}
               />
             </div>
@@ -337,7 +355,7 @@ const questionCount = formData.help? 22:2;
               <>
                 <div id="question-2" className="page">
                   <HowMuch
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onHowMuchSelected={(value) =>
                       handleDataUpdate("how_much", value)
                     }
@@ -345,14 +363,14 @@ const questionCount = formData.help? 22:2;
                 </div>
                 <div id="question-3" className="page">
                   <Time
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onTimeSelected={(value) => handleDataUpdate("time", value)}
                   />
                 </div>
 
                 <div id="question-4" className="page">
                   <PaymentMethod
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onPaymentMethodSelected={(value) =>
                       handleDataUpdate("paymentMethod", value)
                     }
@@ -361,7 +379,7 @@ const questionCount = formData.help? 22:2;
 
                 <div id="question-5" className="page">
                   <HowLoss
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onHowLossSelected={(value) =>
                       handleDataUpdate("how_loss", value)
                     }
@@ -369,12 +387,12 @@ const questionCount = formData.help? 22:2;
                 </div>
 
                 <div id="question-6" className="page">
-                  <Victim onNext={handleNextQuestion} />
+                  <Victim onNext={handleNextClickQuestion} />
                 </div>
 
                 <div id="question-7" className="page">
                   <VictimName
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onVictimNameSelected={(value) =>
                       handleDataUpdate("victim_name", value)
                     }
@@ -383,7 +401,7 @@ const questionCount = formData.help? 22:2;
 
                 <div id="question-8" className="page">
                   <VictimPhone
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onVictimPhoneSelected={(value) =>
                       handleDataUpdate("victim_phone", value)
                     }
@@ -392,7 +410,7 @@ const questionCount = formData.help? 22:2;
 
                 <div id="question-9" className="page">
                   <VictimBirth
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onVictimBirthSelected={(value) =>
                       handleDataUpdate("victim_birth", value)
                     }
@@ -401,7 +419,7 @@ const questionCount = formData.help? 22:2;
 
                 <div id="question-10" className="page">
                   <VictimGender
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onVictimGenderSelected={(value) =>
                       handleDataUpdate("victim_gender", value)
                     }
@@ -410,7 +428,7 @@ const questionCount = formData.help? 22:2;
 
                 <div id="question-11" className="page">
                   <VictimQualification
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onVictimQualificationSelected={(value) =>
                       handleDataUpdate("victim_qualification", value)
                     }
@@ -419,7 +437,7 @@ const questionCount = formData.help? 22:2;
 
                 <div id="question-12" className="page">
                   <VictimAddress
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onVictimAddressSelected={(value) =>
                       handleDataUpdate("victim_address", value)
                     }
@@ -428,7 +446,7 @@ const questionCount = formData.help? 22:2;
 
                 <div id="question-13" className="page">
                   <PoliceStation
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onPoliceStationSelected={(value) =>
                       handleDataUpdate("police_station", value)
                     }
@@ -436,12 +454,12 @@ const questionCount = formData.help? 22:2;
                 </div>
 
                 <div id="question-14" className="page">
-                  <Suspect onNext={handleNextQuestion} />
+                  <Suspect onNext={handleNextClickQuestion} />
                 </div>
 
                 <div id="question-15" className="page">
                   <SuspectCall
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onSuspectCallSelected={(value) =>
                       handleDataUpdate("suspect_call", value)
                     }
@@ -450,7 +468,7 @@ const questionCount = formData.help? 22:2;
 
                 <div id="question-16" className="page">
                   <SuspectSpeak
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onSuspectSpeakSelected={(value) =>
                       handleDataUpdate("suspect_speak", value)
                     }
@@ -459,7 +477,7 @@ const questionCount = formData.help? 22:2;
 
                 <div id="question-17" className="page">
                   <SuspectContact
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onSuspectContactSelected={(value) =>
                       handleDataUpdate("suspect_contact", value)
                     }
@@ -468,7 +486,7 @@ const questionCount = formData.help? 22:2;
 
                 <div id="question-18" className="page">
                   <VictimBank
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onVictimBankSelected={(value) =>
                       handleDataUpdate("victim_bank", value)
                     }
@@ -477,7 +495,7 @@ const questionCount = formData.help? 22:2;
 
                 <div id="question-19" className="page">
                   <SuspectBank
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     onSuspectBankSelected={(value) =>
                       handleDataUpdate("suspect_bank", value)
                     }
@@ -486,13 +504,13 @@ const questionCount = formData.help? 22:2;
 
                 <div id="question-20" className="page">
                   <Support
-                    onNext={handleNextQuestion}
+                    onNext={handleNextClickQuestion}
                     submitSupport={handleSupportData}
                   />
                 </div>
                 <div id="question-21" className="page">
                   <div style={{display:'flex',flexDirection:'column', justifyContent:'center', alignItems:'center', height:'100vh'}}>
-                  <h1>click the below Submit button and save the details </h1>
+                  <h1 className="submit-title" >Click the below Submit button and save the details </h1>
                   <button className="submit-button" onClick={handleSubmit}>
                     Submit
                   </button>
@@ -517,7 +535,7 @@ const questionCount = formData.help? 22:2;
             type="button"
             className="next-btn"
             onClick={handleNextQuestion}
-            disabled={currentQuestion === 21}
+            disabled={currentQuestion > 21}
           >
             <IoIosArrowDown />
           </button>

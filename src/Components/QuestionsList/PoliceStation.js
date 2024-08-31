@@ -14,22 +14,21 @@ const PoliceStation = ({ onNext,onPoliceStationSelected }) => {
 
   const handleChange = (selectedOption) => {
     setPoliceStation(selectedOption);
-    onNext() 
+    handleOkClick() 
   };
 
   const handleOkClick= (e) => {
-    e.preventDefault();
     onPoliceStationSelected(policeStation)
     console.log('Selected police station:',policeStation);
-    onNext();
+    onNext(14);
   };
 
-  const customSelectStyles = {
-    container: (provided) => ({
-      ...provided,
-      width: "100%", // Adjust the width as needed
-    }),
-  };
+  // const customSelectStyles = {
+  //   container: (provided) => ({
+  //     ...provided,
+  //     width: "100%", // Adjust the width as needed
+  //   }),
+  // };
 
   return (
     <div className="question">
@@ -48,7 +47,8 @@ const PoliceStation = ({ onNext,onPoliceStationSelected }) => {
         options={options}
         placeholder="Type to search..."
         aria-label="Police Station"
-        styles={customSelectStyles}
+        
+        className="dropdown-input"
       />
       </div>
           <div style={{ display: "flex", alignItems: "center" }}>

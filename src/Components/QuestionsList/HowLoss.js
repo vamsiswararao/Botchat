@@ -23,7 +23,7 @@ const HowLoss = ({ onNext, onHowLossSelected }) => {
     e.preventDefault();
     onHowLossSelected(howLoss);
     console.log("Submitted value:", howLoss);
-    onNext();
+    onNext(6);
   };
 
   return (
@@ -37,14 +37,13 @@ const HowLoss = ({ onNext, onHowLossSelected }) => {
           <h2 htmlFor="lose-money">How did you lose money?</h2>
           <p>Write in detail about how you lost the money.</p>
           <textarea
-            className="text-input"
             value={howLoss}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             placeholder="Type your answer here..."
             id="lose-money"
-            rows="5"
-            cols="50"
+            rows="8"
+            cols="40"
           />
           <div style={{ display: "flex", alignItems: "center" }}>
             <button type="button" className="ok-btn" onClick={handleOkClick}>

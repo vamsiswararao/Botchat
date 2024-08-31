@@ -16,7 +16,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected }) => {
   const handleOkClick = (e) => {
     e.preventDefault();
     onSuspectContactSelected(suspectContacts);
-    onNext(); // Notify parent component to move to the next question
+    onNext(18); // Notify parent component to move to the next question
   };
 
   const options = [

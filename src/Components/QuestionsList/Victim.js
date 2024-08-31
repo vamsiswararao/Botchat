@@ -6,7 +6,7 @@ const Victim = ({ onNext }) => {
 
   const handleOkClick = (e) => {
     e.preventDefault();
-    onNext();
+    onNext(7);
     };
 
 

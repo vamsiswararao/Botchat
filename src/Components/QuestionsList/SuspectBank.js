@@ -1,18 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Select from "react-select";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
 const SuspectBank = ({ onNext, onSuspectBankSelected }) => {
   const [formData, setFormData] = useState({
-    CategoryOfAccount: null,
+    BankName: "",
     AccountNo: "",
     TransactionNo: "",
+    UpiId: "",
+    CardNo: "",
+    Date: "",
+    Amount: "",
   });
 
-  const handleOptionClick = (optionId,e) => {
-    e.preventDefault();
+  const [banks, setBanks] = useState([]);
+  const [upis, setUpis] = useState([]);
+  const [cards, setCards] = useState([]);
+
+  useEffect(() => {
+    // Dummy API calls to fetch Bank, UPI, and Card options
+    const fetchBanks = async () => {
+      // Replace this with an actual API call
+      const response = await new Promise((resolve) =>
+        setTimeout(() => resolve(["Bank A", "Bank B", "Bank C"]), 1000)
+      );
+      setBanks(response.map((bank) => ({ value: bank, label: bank })));
+    };
+
+    const fetchUpis = async () => {
+      // Replace this with an actual API call
+      const response = await new Promise((resolve) =>
+        setTimeout(() => resolve(["UPI A", "UPI B", "UPI C"]), 1000)
+      );
+      setUpis(response.map((upi) => ({ value: upi, label: upi })));
+    };
+
+    const fetchCards = async () => {
+      // Replace this with an actual API call
+      const response = await new Promise((resolve) =>
+        setTimeout(() => resolve(["Card A", "Card B", "Card C"]), 1000)
+      );
+      setCards(response.map((card) => ({ value: card, label: card })));
+    };
+
+    fetchBanks();
+    fetchUpis();
+    fetchCards();
+  }, []);
+
+  const handleSelectChange = (field, selectedOption) => {
     setFormData((prev) => ({
       ...prev,
-      CategoryOfAccount: optionId,
+      [field]: selectedOption ? selectedOption.value : "",
     }));
   };
 
@@ -24,17 +63,10 @@ const SuspectBank = ({ onNext, onSuspectBankSelected }) => {
   };
 
   const handleOkClick = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     onSuspectBankSelected(formData);
-    onNext(); // Notify parent component to move to the next step
+    onNext(19); // Notify parent component to move to the next step
   };
-
-  const CategoryOptions = [
-    { id: "A", label: "Bank Name" },
-    { id: "B", label: "Google Pay" },
-    { id: "C", label: "BHIM" },
-    { id: "D", label: "PhonePe" },
-  ];
 
   return (
     <div className="question">
@@ -45,77 +77,53 @@ const SuspectBank = ({ onNext, onSuspectBankSelected }) => {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <h2>Share the Suspect (creditor) bank Details? *</h2>
-          <p className="bank-para">Category of account:</p>
-          <div>
-            {CategoryOptions.map((option) => (
-              <button
-                key={option.id}
-                className={`option-button ${
-                  formData.CategoryOfAccount === option.id ? "selected" : ""
-                }`}
-                onClick={(e) => handleOptionClick(option.id,e)}
-                aria-label={`Select ${option.label}`}
-              >
-                <div className="answer-container">
-                  <div
-                    className="option"
-                    style={{
-                      backgroundColor:
-                        formData.CategoryOfAccount === option.id
-                          ? "rgb(62, 87, 255)"
-                          : "#fff",
-                      color:
-                        formData.CategoryOfAccount === option.id
-                          ? "#fff"
-                          : "#3E57FF",
-                    }}
-                  >
-                    {option.id}
-                  </div>
-                  <div className="option-label">{option.label}</div>
-                </div>
-                {formData.CategoryOfAccount === option.id && (
-                  <span className="checkmark">&#10003;</span>
-                )}
-              </button>
-            ))}
-          </div>
-          {formData.CategoryOfAccount==="A" && (
-            <>
+
           <p className="bank-para">Bank Name:</p>
-
-          <input
-            type="text"
-            value={formData.BankName}
-            onChange={(e) => handleTextChange("BankName", e.target.value)}
-            placeholder="Type tour answer here..."
-            className="text-input"
-          />
-          </>
-          )}
-          <p className="bank-para">Account NO/ Wallet No/ UPI NO:</p>
-          <input
-            type="text"
-            value={formData.AccountNo}
-            onChange={(e) => handleTextChange("contactDetails", e.target.value)}
-            placeholder="Type your answer here..."
-            className="text-input"
+          <Select
+            value={banks.find((bank) => bank.value === formData.BankName)}
+            onChange={(selectedOption) => handleSelectChange("BankName", selectedOption)}
+            options={banks}
+            className="dropdown-input"
+            placeholder="Select Bank"
           />
 
-          <p className="bank-para">Transaction/ RRN number:</p>
-          <input
-            type="text"
-            value={formData.TransactionNo}
-            onChange={(e) => handleTextChange("suspectName", e.target.value)}
-            placeholder="Type your answer here..."
-            className="text-input"
+          <p className="bank-para">UPI:</p>
+          <Select
+            value={upis.find((upi) => upi.value === formData.UpiId)}
+            onChange={(selectedOption) => handleSelectChange("UpiId", selectedOption)}
+            options={upis}
+            className="dropdown-input"
+            placeholder="Select UPI"
           />
+
+          <p className="bank-para">Card Number:</p>
+          <Select
+            value={cards.find((card) => card.value === formData.CardNo)}
+            onChange={(selectedOption) => handleSelectChange("CardNo", selectedOption)}
+            options={cards}
+            className="dropdown-input"
+            placeholder="Select Card"
+          />
+         <div className="date">
+          <p className="bank-para">Date:</p>
+          <input
+            type="date"
+            value={formData.Date}
+           style={{height:'25px'}}
+            onChange={(e) => handleTextChange("Date", e.target.value)}
+          />
+
+          <p  className="bank-para">Amount:</p>
+          <input
+            type="number"
+            value={formData.Amount}
+            onChange={(e) => handleTextChange("Amount", e.target.value)}
+            placeholder="Enter the amount"
+            style={{height:'30px',border:'none',   outline: "none",  backgroundColor: "#f4f4f4",width:'220px',
+              borderBottom: "2px solid #3651ac",}}   min="0"         />
+        </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <button
-              type="button"
-              className="ok-btn"
-              onClick={handleOkClick}
-            >
+            <button type="button" className="ok-btn" onClick={handleOkClick}>
               OK
             </button>
             <p className="enter-text">

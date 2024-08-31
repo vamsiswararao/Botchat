@@ -19,14 +19,14 @@ const Support = ({ submitSupport, onNext }) => {
     e.preventDefault();
     if (files.length > 0) {
       submitSupport(files);  // Pass the selected files to the submit function
-        onNext(); // Navigate to the next step
+        onNext(20); // Navigate to the next step
     }
       
   };
 
   return (
     <div className="question">
-      <div style={{ display: "flex" }}>
+      <div className="upload">
         <div style={{ display: "flex" }}>
           <h2 className="num">11</h2>
           <FaLongArrowAltRight className="num" />
@@ -40,10 +40,18 @@ const Support = ({ submitSupport, onNext }) => {
           </p>
           <input
             type="file"
+            id="file-upload"
             multiple
             onChange={handleFileChange}
             className="file-input"
+            style={{ display: 'none' }}
           />
+                <label
+        htmlFor="file-upload"
+        className="upload-file"
+      >
+        Choose File
+      </label>
           <div className="file-preview">
             {files.length > 0 && (
               <ul>

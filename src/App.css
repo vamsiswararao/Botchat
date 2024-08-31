@@ -62,6 +62,33 @@ form {
   padding-left: 5px;
 }
 
+
+.date {
+  display: flex;
+  flex-direction: column;
+}
+
+.submit-title{
+  font-size: 14px;
+}
+
+.upload{
+  display: flex ;
+  width:100%;
+}
+
+.upload-file{
+    background-color: blue;
+    width:80px;
+    font-size:14px;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius:5px;
+    cursor: pointer;
+    display: inline-block;
+}
+
 @media only screen and (max-width: 768px) {
 
   /* Tablet and Mobile Styles */
@@ -82,6 +109,24 @@ form {
     padding: 4px;
     font-size: 14px;
   }
+  .submit-title{
+    font-size: 14px;
+  }
+  .upload{
+    display: flex ;
+    width:90%;
+  }
+  .upload-file{
+    background-color: blue;
+    width:50px;
+    font-size:9px;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius:5px;
+    cursor: pointer;
+    display: inline-block;
+}
 }
 
 @media only screen and (max-width: 480px) {
@@ -119,6 +164,7 @@ form {
     padding: 10px;
     font-size: 20px;
   }
+
 }
 
 @media only screen and (min-width: 1025px) {
@@ -148,6 +194,28 @@ form {
     padding-top: 10px;
     padding-left: 10px;
   }
+
+  .option-button.disabled .disabled-icon {
+    visibility: visible;
+    /* Make the icon visible */
+  }
+
+  .option-button.disabled .option:hover .disabled-icon {
+    visibility: visible;
+    /* Ensure the icon is visible on hover */
+  }
+
+  .option-button.disabled .option:hover {
+    cursor: not-allowed;
+    /* Show the not-allowed cursor on hover */
+  }
+  .submit-title{
+    font-size: 24px;
+  }
+  .upload{
+    display: flex ;
+    width:50%;
+  }
 }
 
 
@@ -176,7 +244,7 @@ h1 {
 }
 
 p {
-  font-size: 16px;
+  font-size: 12px;
   margin-bottom: 20px;
   color: #666;
 }
@@ -383,14 +451,7 @@ option-button {
   gap: 10px;
 }
 
-/* option{
-  border: 1px solid rgb(62, 87, 255);
-  margin-right: 5px;
-  background-color: #fff;
-  height: 20px;
-  width: 20px;
-  padding-top: 5px;
-} */
+
 
 
 .checkmark {
@@ -521,6 +582,7 @@ h2 {
   width: 310px;
 }
 
+
 @media only screen and (min-width: 1025px) {
   .option-button {
     background-color: #fff;
@@ -578,15 +640,16 @@ h2 {
     margin-right: 20px;
     margin-bottom: 0px;
     background-color: #f4f4f4;
-    width: 600px;
+    width: 400px;
     height: 24px;
   }
 
   .option-list {
     overflow-X: auto;
-    height: 85vh;
+    height: 55vh;
     width: 600px;
   }
+
 
 }
 

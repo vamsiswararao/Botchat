@@ -7,13 +7,12 @@ const VictimQualification = ({ onNext,onVictimQualificationSelected }) => {
   const handleOptionClick = (option,e) => {
     e.preventDefault();
     setQualification(option.label); // Notify parent component about the selection
-    onNext() 
+    handleOkClick() 
   };
 
   const handleOkClick = (e) => {
-  e.preventDefault()
   onVictimQualificationSelected(qualification)
-      onNext(); // Notify parent component to move to the next question
+      onNext(12); // Notify parent component to move to the next question
   };
 
   const options = [
@@ -24,6 +23,8 @@ const VictimQualification = ({ onNext,onVictimQualificationSelected }) => {
     { id: "B", label: "intermediate" },
     { id: "C", label: "Degree/Engineering/MBBS" },
     { id: "D", label: "Post-Graduation" },
+    { id: "E", label: "Others" },
+
   ];
 
   return (

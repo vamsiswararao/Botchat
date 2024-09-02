@@ -85,7 +85,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
               id="address1"
             />
             
-            <h6 style={{margin:'10px'}}  htmlFor="city">City/Town</h6>
+            <h6 style={{margin:'10px'}}  htmlFor="city">City/Town/village</h6>
             <input
               className="text-input"
               value={address.city}

@@ -216,6 +216,20 @@ form {
     display: flex ;
     width:50%;
   }
+  .date {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .date-para{
+    padding-right: 10px;
+  }
+  amount-text-para{
+    padding-left: 20px;
+   padding-right: 10px;
+  }
 }
 
 
@@ -343,7 +357,7 @@ button:hover {
 
 
 .question {
-  height: 100vh;
+  height: 90vh;
   font-size: 24px;
   display: flex;
   flex-direction: column;
@@ -572,13 +586,13 @@ h2 {
   margin-right: 20px;
   margin-bottom: 10px;
   background-color: #f4f4f4;
-  width: 280px;
-  height: 24px;
+  width: 250px;
+  height: 18px;
 }
 
 .option-list {
   overflow-X: auto;
-  height: 85vh;
+  height: 55vh;
   width: 310px;
 }
 
@@ -640,7 +654,7 @@ h2 {
     margin-right: 20px;
     margin-bottom: 0px;
     background-color: #f4f4f4;
-    width: 400px;
+    width: 180px;
     height: 24px;
   }
 

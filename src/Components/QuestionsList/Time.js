@@ -12,7 +12,7 @@ const Time = ({onNext,onTimeSelected}) => {
     setTimeId(option.id);
     setTime(option.label);
     onTimeSelected(time)
-    handleOkClick() 
+    onNext(4);
     setShowOkButton(true); // Hide the OK button after successful click
     setError("")
     // try {
@@ -36,7 +36,6 @@ const Time = ({onNext,onTimeSelected}) => {
 
   const handleOkClick = (e) => {
     //e.preventDefault();
-    onNext(4);
     if (time) {
       console.log("Selected Option:", time);
       onNext(4);

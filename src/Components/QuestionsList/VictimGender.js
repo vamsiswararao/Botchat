@@ -18,6 +18,7 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
     onVictimGenderSelected(option.label);
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
+    onNext(11);
     try {
       const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
         method: "POST",
@@ -38,7 +39,6 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
   };
 
   const handleOkClick = (e) => {
-    onNext(11);
       if (gender) {
         onNext(11);
       } else {

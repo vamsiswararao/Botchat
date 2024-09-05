@@ -9,7 +9,6 @@ const VictimQualification = ({ onNext,onVictimQualificationSelected }) => {
   const handleOptionClick = async(option,e) => {
     e.preventDefault();
     setQualification(option.label); // Notify parent component about the selection
-    handleOkClick() 
     if (option.disabled) {
       return; // Ignore clicks on disabled options
     } 
@@ -17,7 +16,7 @@ const VictimQualification = ({ onNext,onVictimQualificationSelected }) => {
     onVictimQualificationSelected(option.label);
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
-    handleOkClick()
+    onNext(12);
     try {
       const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
         method: "POST",
@@ -39,7 +38,6 @@ const VictimQualification = ({ onNext,onVictimQualificationSelected }) => {
 
   const handleOkClick = (e) => {
   onVictimQualificationSelected(qualification)
-  onNext(12);
       if (qualification) {
         onNext(12);
       } else {

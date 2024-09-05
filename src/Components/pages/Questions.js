@@ -50,7 +50,7 @@ const ProgressBar = ({ current, total }) => {
 };
 
 const Questions = () => {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(1);
   const navigate = useNavigate();
   const [victimBanks, setVictimBanks] = useState([{}]);
 
@@ -72,7 +72,7 @@ const Questions = () => {
     suspect_speak: "",
     suspect_contact: "",
     victim_bank: [{ id: 1, data: {} }],
-    suspect_bank: "",
+    suspect_bank: [{ id: 1, data: {} }],
     support: "",
   });
   const addVictimBank = () => {
@@ -82,6 +82,18 @@ const Questions = () => {
         ...prevData.victim_bank,
         { id: prevData.victim_bank.length + 1, data: {} },
       ],
+      
+    }));
+  };
+
+  const addSuspectBank = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      suspect_bank: [
+        ...prevData.suspect_bank,
+        { id: prevData.suspect_bank.length + 1, data: {} },
+      ],
+      
     }));
   };
 
@@ -90,7 +102,7 @@ const Questions = () => {
     setVictimBanks(updatedVictimBanks);
   };
 
-  const questionCount = formData.help ? 22 : 2;
+  const questionCount = formData.help ? 22 : 1;
   // const handlePhoneData = (phone) => {
   //   setFormData((prevData) => ({
   //     ...prevData,
@@ -131,7 +143,7 @@ const Questions = () => {
   };
 
   const handlePreviousQuestion = () => {
-    const prevQuestion = Math.max(currentQuestion - 1, 0);
+    const prevQuestion = Math.max(currentQuestion, 0);
     setCurrentQuestion(prevQuestion);
     document
       .querySelector(`#question-${prevQuestion}`)
@@ -204,12 +216,12 @@ const Questions = () => {
         </header>
       )}
       <form>
-        <div id="question-0">
+        {/* <div id="question-0">
           <Number
             onNext={handleNextQuestion}
             onPhone={(value) => handleDataUpdate("phone", value)}
           />
-        </div>
+        </div> */}
 
         <>
           <div id="question-1" className="page">
@@ -354,7 +366,6 @@ const Questions = () => {
                 id="question-18"
                 style={{ display: "flex", flexDirection: "column" }}
               >
-                {" "}
                 {/* Render multiple VictimBank instances */}
                 {formData.victim_bank.map((item, index) => (
                   <div
@@ -363,6 +374,7 @@ const Questions = () => {
                     className="page"
                   >
                     <VictimBank
+                    index={index}
                       onNext={handleNextClickQuestion}
                       onVictimBankSelected={(value) =>
                         handleDataUpdate("victim_bank", value, index)
@@ -381,13 +393,31 @@ const Questions = () => {
                 ))}
               </div>
 
-              <div id="question-19" className="page">
-                <SuspectBank
-                  onNext={handleNextClickQuestion}
-                  onSuspectBankSelected={(value) =>
-                    handleDataUpdate("suspect_bank", value)
-                  }
-                />
+              <div id="question-19"   style={{ display: "flex", flexDirection: "column" }}>
+                {/* {formData.suspect_bank.map((item, index) => (
+                  <div
+                    key={item.id}
+                    id={`question-victim-bank-${index}`}
+                    className="page"
+                  > */}
+                    <SuspectBank
+                    //index={index}
+                      onNext={handleNextClickQuestion}
+                      onSuspectBankSelected={(value) =>
+                        handleDataUpdate("suspect_bank", value)
+                      }
+                      addSuspectBank={addSuspectBank}
+                    />
+                    {/* {victimBanks.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeVictimBank(index)}
+                      >
+                        Remove This Bank
+                      </button>
+                    )}
+                  </div>
+                ))} */}
               </div>
 
               <div id="question-20" className="page">
@@ -407,7 +437,7 @@ const Questions = () => {
                   }}
                 >
                   <h1 className="submit-title">
-                    Click the below Submit button and save the details{" "}
+                    Click the below Submit button and save the details
                   </h1>
                   <button className="submit-button" onClick={handleSubmit}>
                     Submit

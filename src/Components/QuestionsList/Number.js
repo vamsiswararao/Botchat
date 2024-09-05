@@ -38,7 +38,7 @@ const Number = ({ onNext, onPhone }) => {
     <div className="question">
       <div style={{ display: 'flex' }}>
         <div style={{ display: 'flex' }}>
-          <h2 className='num'>1</h2>
+          <h2 className='num'>2/10</h2>
           <FaLongArrowAltRight className='num' />
         </div>
         <div>

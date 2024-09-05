@@ -3,18 +3,50 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 
 const VictimGender = ({ onNext,onVictimGenderSelected }) => {
   const [gender, setGender] = useState(null);
+  const [showOkButton, setShowOkButton] = useState(true);
+  const [error, setError] = useState(null);
+  
 
-  const handleOptionClick = (option,e) => {
+  const handleOptionClick = async(option,e) => {
     e.preventDefault();
     setGender(option.label);// Notify parent component about the selection
-    handleOkClick(11) 
+    if (option.disabled) {
+      return; // Ignore clicks on disabled options
+    } 
+    setGender(option.label)
+    handleOkClick()
+    onVictimGenderSelected(option.label);
+    setShowOkButton(true); // Show the OK button after a successful click
+    setError("");
+    try {
+      const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ selectedOption: option.label }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to push data to API");
+      }
+
+      console.log("Data pushed to RequestBin:", option.id);
+    } catch (err) {
+      console.error("Error sending data to API:", err);
+    }
   };
 
   const handleOkClick = (e) => {
-    onVictimGenderSelected(gender)
-      onNext(11); // Notify parent component to move to the next question
+    onNext(11);
+      if (gender) {
+        onNext(11);
+      } else {
+        setError("Please select an option before proceeding.");
+        setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
+      }
   };
-
+ 
   const options = [
     {
       id: "A",
@@ -28,7 +60,7 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex"  }}>
-          <h2 className='num'>7 d</h2>
+          <h2 className='num'>6 d/10</h2>
           <FaLongArrowAltRight className='num' />
         </div>
         <div>
@@ -67,17 +99,22 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
           </div>
 
           <div style={{ display: "flex", alignItems: "center" }}>
-          <button
-            type="button"
-            className="ok-btn"
-            onClick={handleOkClick}
-          >
-            OK
-          </button>
-            <p className="enter-text">
-              press <strong>Enter ↵</strong>
-            </p>
-          </div>
+              {showOkButton && (
+                <>
+                  <button
+                    type="button"
+                    className="ok-btn"
+                    onClick={handleOkClick}
+                  >
+                    OK
+                  </button>
+                  <p className="enter-text">
+                    press <strong>Enter ↵</strong>
+                  </p>
+                </>
+              )}
+              {error && <div className="error-message">{error}</div>}
+            </div>
         </div>
       </div>
     </div>

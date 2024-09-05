@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const SuspectBank = ({ onNext, onSuspectBankSelected,addSuspectBank }) => {
+const SuspectBank = ({ onNext, onSuspectBankSelected,addSuspectBank,index }) => {
   const [formData, setFormData] = useState({
     BankName: "",
     AccountNo: "",
@@ -77,14 +77,14 @@ const SuspectBank = ({ onNext, onSuspectBankSelected,addSuspectBank }) => {
   const handleOkClick = (e) => {
     e.preventDefault();
     onSuspectBankSelected(formData);
-    onNext(19); // Notify parent component to move to the next step
+    onNext(20); // Notify parent component to move to the next step
   };
 
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">10</h2>
+          <h2 className="num">9/10  ({index+1})</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -97,10 +97,10 @@ const SuspectBank = ({ onNext, onSuspectBankSelected,addSuspectBank }) => {
           <h2>Share the Suspect (creditor) bank Details? *</h2>
           <button
               type="button"
-              style={{ width: "70px", fontSize: "14px", height: "50px" }}
+              style={{ marginLeft:"10px", width: "40px", fontSize: "20px", height: "40px" }}
               onClick={addSuspectBank}
             >
-              Add Bank
+              +
             </button>
             </div>
           <p className="bank-para">Bank Name:</p>

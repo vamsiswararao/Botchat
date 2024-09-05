@@ -40,6 +40,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
     state: { value: 'Telangana', label: 'Telangana' },
     zip: ''
   });
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -47,6 +48,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
       ...prevState,
       [id]: value
     }));
+    setError(''); // Clear error when user inputs data
   };
 
   const handleStateChange = (selectedOption) => {
@@ -54,15 +56,31 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
       ...prevState,
       state: selectedOption
     }));
+    setError(''); // Clear error when state is selected
   };
 
   const handleOkClick = (e) => {
     e.preventDefault();
+    
+    // Validation: Display only one error at a time
+    if (!address.address1) {
+      setError('Please fill in the address.');
+      return;
+    }
+    if (!address.city) {
+      setError('Please fill in the village/city/town.');
+      return;
+    }
+    if (!/^\d{6}$/.test(address.zip)) {
+      setError('Please enter a valid 6-digit Zip/Post code.');
+      return;
+    }
+
+    // Submit the address data
     onVictimAddressSelected({
       ...address,
       state: address.state.value
     });
-    console.log(address);
     onNext(13);
   };
 
@@ -70,13 +88,13 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className='num'>7f</h2>
+          <h2 className='num'>6f/10</h2>
           <FaLongArrowAltRight className='num' />
         </div>
         <div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <h2>Fill your (Victim) Full Address?</h2>
-            <h6 style={{margin:'10px'}}  htmlFor="address1">Address</h6>
+            <h6 style={{ margin: '10px' }} htmlFor="address1">Address</h6>
             <input
               className="text-input"
               value={address.address1}
@@ -85,7 +103,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
               id="address1"
             />
             
-            <h6 style={{margin:'10px'}}  htmlFor="city">City/Town/village</h6>
+            <h6 style={{ margin: '10px' }} htmlFor="city">Village/City/Town</h6>
             <input
               className="text-input"
               value={address.city}
@@ -94,7 +112,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
               id="city"
             />
             
-            <h6 style={{margin:'10px'}} htmlFor="state">State</h6>
+            <h6 style={{ margin: '10px' }} htmlFor="state">State</h6>
             <Select
               options={indianStates}
               value={address.state}
@@ -102,7 +120,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
               id="state"
             />
             
-            <h6 style={{margin:'10px'}} htmlFor="zip">Zip/Post code</h6>
+            <h6 style={{ margin: '10px' }} htmlFor="zip">Zip/Post code</h6>
             <input
               className="text-input"
               value={address.zip}
@@ -110,12 +128,16 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
               placeholder="Type your answer here..."
               id="zip"
             />
-            <div style={{ display: "flex", alignItems: 'center' }}>
+            
+            <div style={{ display: "flex", alignItems: 'center', marginTop: '10px' }}>
               <button type="button" className="ok-btn" onClick={handleOkClick}>
                 ok
               </button>
               <p className="enter-text">press <strong>Enter ↵</strong></p>
             </div>
+
+            {/* Display error message */}
+            {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
           </div>
         </div>
       </div>

@@ -3,9 +3,18 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 
 const SuspectSpeak = ({ onNext, onSuspectSpeakSelected }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [showOkButton, setShowOkButton] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleOptionClick = (label, e) => {
     e.preventDefault();
+    if (selectedOptions.disabled) {
+      return; // Ignore clicks on disabled options
+    } 
+    //setHelp(option.id);
+    //onHelpSelected(option.id);
+    setShowOkButton(true); // Show the OK button after a successful click
+    setError("");
     // Toggle selection
     setSelectedOptions((prevSelected) =>
       prevSelected.includes(label)
@@ -17,7 +26,12 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected }) => {
   const handleOkClick = (e) => {
     e.preventDefault();
     onSuspectSpeakSelected(selectedOptions);
-    onNext(17); // Notify parent component to move to the next question
+    if (selectedOptions.length > 0) {
+      onNext(17);
+    } else {
+      setError("Please select an option before proceeding.");
+      setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
+    }
   };
 
   const options = [
@@ -49,7 +63,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">8b</h2>
+          <h2 className="num">7b/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
@@ -88,13 +102,22 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected }) => {
             ))}
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <button type="button" className="ok-btn" onClick={handleOkClick}>
-              OK
-            </button>
-            <p className="enter-text">
-              press <strong>Enter ↵</strong>
-            </p>
-          </div>
+              {showOkButton && (
+                <>
+                  <button
+                    type="button"
+                    className="ok-btn"
+                    onClick={handleOkClick}
+                  >
+                    OK
+                  </button>
+                  <p className="enter-text">
+                    press <strong>Enter ↵</strong>
+                  </p>
+                </>
+              )}
+              {error && <div className="error-message">{error}</div>}
+            </div>
         </div>
       </div>
     </div>

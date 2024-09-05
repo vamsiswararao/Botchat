@@ -6,15 +6,33 @@ const Help = ({ onNext, onHelpSelected }) => {
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
 
-  const handleHelpOptionClick = (option, e) => {
+  const handleHelpOptionClick = async(option, e) => {
     e.preventDefault();
     if (option.disabled) {
       return; // Ignore clicks on disabled options
-    }
+    } 
     setHelp(option.id);
     onHelpSelected(option.id);
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
+
+    try {
+      const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ selectedOption: option.label }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to push data to API");
+      }
+
+      console.log("Data pushed to RequestBin:", option.id);
+    } catch (err) {
+      console.error("Error sending data to API:", err);
+    }
   };
 
   const handleOkClick = (e) => {
@@ -41,7 +59,7 @@ const Help = ({ onNext, onHelpSelected }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">2</h2>
+          <h2 className="num">1/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>

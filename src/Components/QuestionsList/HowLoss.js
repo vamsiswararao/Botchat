@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
 const HowLoss = ({ onNext, onHowLossSelected }) => {
+  const [showOkButton, setShowOkButton] = useState(true);
+  const [error, setError] = useState(null);
   const [howLoss, setHowLoss] = useState("");
 
   const handleKeyDown = (event) => {
@@ -17,20 +19,32 @@ const HowLoss = ({ onNext, onHowLossSelected }) => {
   const handleChange = (event) => {
     event.preventDefault();
     setHowLoss(event.target.value);
+    if (event.target.checked) {
+      return; // Ignore clicks on disabled options
+    }
+    setHowLoss(event.target.value);
+    onHowLossSelected(event.target.value);
+    setShowOkButton(true); // Show the OK button after a successful click
+    setError("");
   };
 
   const handleOkClick = (e) => {
     e.preventDefault();
     onHowLossSelected(howLoss);
     console.log("Submitted value:", howLoss);
-    onNext(6);
+    if (howLoss) {
+      onNext(6);
+    } else {
+      setError("Please answer before proceeding.");
+      setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
+    }
   };
 
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">6</h2>
+          <h2 className="num">5/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
@@ -43,17 +57,26 @@ const HowLoss = ({ onNext, onHowLossSelected }) => {
             placeholder="Type your answer here..."
             id="lose-money"
             rows="8"
-            cols="40"
+            cols="80"
+            className="responsive-textarea"
           />
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <button type="button" className="ok-btn" onClick={handleOkClick}>
-              ok
-            </button>
-            <p className="enter-text">
-              press <strong>Alt + Enter</strong> to add a new line, <br/>
-              or <strong>Enter ↵</strong> to Ok
-            </p>
-          </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {showOkButton && (
+                <>
+                  <button
+                    type="button"
+                    className="ok-btn"
+                    onClick={handleOkClick}
+                  >
+                    OK
+                  </button>
+                  <p className="enter-text">
+                    press <strong>Enter ↵</strong>
+                  </p>
+                </>
+              )}
+              {error && <div className="error-message">{error}</div>}
+            </div>
         </div>
       </div>
     </div>

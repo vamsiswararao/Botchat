@@ -2,13 +2,34 @@ import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 
-
 const Support = ({ submitSupport, onNext }) => {
   const [files, setFiles] = useState([]);
-
-  const handleFileChange = (event) => {
+  
+  // Upload files as soon as the user selects them
+  const handleFileChange = async (event) => {
     const selectedFiles = Array.from(event.target.files);
+    console.log(selectedFiles)
     setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+
+    const formData = new FormData();
+    selectedFiles.forEach((file) => {
+      formData.append("files", file);
+    });
+
+    try {
+      const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        console.log("Files uploaded successfully");
+      } else {
+        console.error("File upload failed");
+      }
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
   };
 
   const handleRemoveFile = (index) => {
@@ -18,20 +39,19 @@ const Support = ({ submitSupport, onNext }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (files.length > 0) {
-      submitSupport(files);  // Pass the selected files to the submit function
-        onNext(20); // Navigate to the next step
+      submitSupport(files); // Pass the selected files to the submit function
+      onNext(20); // Navigate to the next step
     }
-      
   };
 
   return (
     <div className="question">
       <div className="upload">
         <div style={{ display: "flex" }}>
-          <h2 className="num">11</h2>
+          <h2 className="num">10/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <h2>Upload supporting evidence?</h2>
           <p>
             Screenshots of all the fraudulent transactions, suspect websites,
@@ -44,14 +64,11 @@ const Support = ({ submitSupport, onNext }) => {
             multiple
             onChange={handleFileChange}
             className="file-input"
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
           />
-                <label
-        htmlFor="file-upload"
-        className="upload-file"
-      >
-        Choose File
-      </label>
+          <label htmlFor="file-upload" className="upload-file">
+            Choose File
+          </label>
           <div className="file-preview">
             {files.length > 0 && (
               <ul>
@@ -89,16 +106,11 @@ const Support = ({ submitSupport, onNext }) => {
               </ul>
             )}
           </div>
-          { files.length > 0 &&(
-          <button
-            type="button"
-            className="ok-btn"
-            onClick={handleSubmit}
-          >
-            ok <span style={{fontSize:'15px'}}>({files.length})</span>
-          </button>
-          )
-}
+          {files.length > 0 && (
+            <button type="button" className="ok-btn" onClick={handleSubmit}>
+              ok <span style={{ fontSize: "15px" }}>({files.length})</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

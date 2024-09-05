@@ -4,16 +4,31 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 
 const VictimName = ({onNext,onVictimNameSelected}) => {
   const [victimName, setVictimName] = useState('');
+  const [showOkButton, setShowOkButton] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleInputChange = (event) => {
     setVictimName(event.target.value);
+    if (event.target.checked) {
+      return; // Ignore clicks on disabled options
+    }
+    setVictimName(event.target.value);
+    onVictimNameSelected(event.target.value);
+    setShowOkButton(true); // Show the OK button after a successful click
+    setError("");
   };
 
   const handleOkClick = (e) => {
     e.preventDefault();
     onVictimNameSelected(victimName)
     console.log("Selected Option:", victimName);
-    onNext(8);
+   
+    if (victimName) {
+      onNext(8);
+    } else {
+      setError("Please Enter victim name before proceeding.");
+      setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
+    }
     };
 
 
@@ -21,7 +36,7 @@ const VictimName = ({onNext,onVictimNameSelected}) => {
     <div className="question">
                   <div style={{display:'flex'}}>
             <div style={{display:'flex'}}>
-            <h2 className='num'>7a</h2>
+            <h2 className='num'>6a/10</h2>
             <FaLongArrowAltRight className='num'/>
             </div>
             <div style={{display:"flex",flexDirection:'column'}}>
@@ -33,14 +48,23 @@ const VictimName = ({onNext,onVictimNameSelected}) => {
         placeholder="Type your answer here..."
         id="victim-name"
       />
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <button type="button" className="ok-btn" onClick={handleOkClick}>
-              ok
-            </button>
-            <p className="enter-text">
-              press <strong>Enter ↵</strong>
-            </p>
-          </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {showOkButton && (
+                <>
+                  <button
+                    type="button"
+                    className="ok-btn"
+                    onClick={handleOkClick}
+                  >
+                    OK
+                  </button>
+                  <p className="enter-text">
+                    press <strong>Enter ↵</strong>
+                  </p>
+                </>
+              )}
+              {error && <div className="error-message">{error}</div>}
+            </div>
     </div>
     </div>
     </div>

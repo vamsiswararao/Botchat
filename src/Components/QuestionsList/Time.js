@@ -7,19 +7,36 @@ const Time = ({onNext,onTimeSelected}) => {
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
 
-  const handleOptionClick = (option,e) => {
+  const handleOptionClick = async(option,e) => {
     e.preventDefault();
     setTimeId(option.id);
     setTime(option.label);
     onTimeSelected(time)
-    handleOkClick(4) 
+    handleOkClick() 
     setShowOkButton(true); // Hide the OK button after successful click
     setError("")
+    // try {
+    //   const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ selectedOption: option.label }),
+    //   });
+
+    //   if (!response.ok) {
+    //     throw new Error("Failed to push data to API");
+    //   }
+
+    //   console.log("Data pushed to RequestBin:", option.id);
+    // } catch (err) {
+    //   console.error("Error sending data to API:", err);
+    // }
   };
 
   const handleOkClick = (e) => {
     //e.preventDefault();
-    onTimeSelected(time)
+    onNext(4);
     if (time) {
       console.log("Selected Option:", time);
       onNext(4);
@@ -42,7 +59,7 @@ const Time = ({onNext,onTimeSelected}) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">4</h2>
+          <h2 className="num">3/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>

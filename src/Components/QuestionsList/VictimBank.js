@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const VictimBank = ({ onNext, onSuspectBankSelected, addVictimBank }) => {
+const VictimBank = ({ onNext, onSuspectBankSelected, addVictimBank,index }) => {
   const [victimBankData, setVictimBankData] = useState([]);
   const [formData, setFormData] = useState({
     BankName: "",
@@ -91,7 +91,7 @@ const VictimBank = ({ onNext, onSuspectBankSelected, addVictimBank }) => {
     <div className="question">
       <div style={{ display: "flex", marginTop: "50px" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">9</h2>
+          <h2 className="num">8 ({index+1})/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -104,10 +104,10 @@ const VictimBank = ({ onNext, onSuspectBankSelected, addVictimBank }) => {
             <h2>Share the Victim (Deditors) transition details? *</h2>
             <button
               type="button"
-              style={{ width: "70px", fontSize: "14px", height: "50px" }}
+              style={{ marginLeft:"10px", width: "40px", fontSize: "20px", height: "40px" }}
               onClick={addVictim}
             >
-              Add Bank
+              +
             </button>
           </div>
           <p className="bank-para">Bank Name:</p>

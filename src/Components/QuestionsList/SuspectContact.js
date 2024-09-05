@@ -32,7 +32,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">8c</h2>
+          <h2 className="num">7c/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>

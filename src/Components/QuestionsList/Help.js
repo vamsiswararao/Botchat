@@ -15,6 +15,7 @@ const Help = ({ onNext, onHelpSelected }) => {
     onHelpSelected(option.id);
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
+    
 
     try {
       const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
@@ -39,7 +40,9 @@ const Help = ({ onNext, onHelpSelected }) => {
     e.preventDefault();
     console.log("Selected Option:", help);
     if (help) {
-      onNext(2);
+      if(help==="A"){
+        onNext(2);
+      }
     } else {
       setError("Please select an option before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt

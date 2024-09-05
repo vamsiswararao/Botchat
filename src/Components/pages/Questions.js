@@ -102,7 +102,7 @@ const Questions = () => {
     setVictimBanks(updatedVictimBanks);
   };
 
-  const questionCount = formData.help ? 22 : 1;
+  const questionCount = formData.help==="A" ? 22 : 1;
   // const handlePhoneData = (phone) => {
   //   setFormData((prevData) => ({
   //     ...prevData,
@@ -143,7 +143,7 @@ const Questions = () => {
   };
 
   const handlePreviousQuestion = () => {
-    const prevQuestion = Math.max(currentQuestion, 0);
+    const prevQuestion = Math.max(currentQuestion-1, 0);
     setCurrentQuestion(prevQuestion);
     document
       .querySelector(`#question-${prevQuestion}`)
@@ -394,21 +394,21 @@ const Questions = () => {
               </div>
 
               <div id="question-19"   style={{ display: "flex", flexDirection: "column" }}>
-                {formData.suspect_bank.map((item, index) => (
+                {/* {formData.suspect_bank.map((item, index) => (
                   <div
                     key={item.id}
                     id={`question-victim-bank-${index}`}
                     className="page"
-                  >
+                  > */}
                     <SuspectBank
-                    index={index}
+                    //index={index}
                       onNext={handleNextClickQuestion}
                       onSuspectBankSelected={(value) =>
                         handleDataUpdate("suspect_bank", value)
                       }
                       addSuspectBank={addSuspectBank}
                     />
-                    {victimBanks.length > 1 && (
+                    {/* {victimBanks.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeVictimBank(index)}
@@ -417,7 +417,7 @@ const Questions = () => {
                       </button>
                     )}
                   </div>
-                ))}
+                ))} */}
               </div>
 
               <div id="question-20" className="page">

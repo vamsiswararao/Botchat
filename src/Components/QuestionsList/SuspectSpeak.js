@@ -27,7 +27,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected }) => {
     e.preventDefault();
     onSuspectSpeakSelected(selectedOptions);
     if (selectedOptions.length > 0) {
-      onNext(17);
+      onNext(15);
     } else {
       setError("Please select an option before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt

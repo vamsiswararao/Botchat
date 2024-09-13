@@ -7,6 +7,7 @@ const HowMuch = ({ onNext, onHowMuchSelected }) => {
 
   const [howMuch, setHowMuch] = useState("");
 
+
   const handleKeyDown = (event) => {
     if (event.altKey && event.key === "Enter") {
       event.preventDefault();
@@ -35,7 +36,7 @@ const HowMuch = ({ onNext, onHowMuchSelected }) => {
     e.preventDefault();
     
       if (howMuch) {
-        onNext(3);
+        onNext(2,howMuch);
       } else {
         setError("Please Enter the amount before proceeding.");
         setShowOkButton(false); // Hide the OK button after an unsuccessful attempt

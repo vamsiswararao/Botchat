@@ -29,7 +29,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected }) => {
     e.preventDefault();
     if (selectedCalls.length > 0) {
       onSuspectCallSelected(selectedCalls);
-      onNext(16);
+      onNext(14);
     } else {
       setError("Please select an option before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt

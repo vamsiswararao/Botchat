@@ -21,7 +21,7 @@ const PaymentMethod = ({ onNext, onPaymentMethodSelected }) => {
     }
     setShowOkButton(true); // Hide the OK button after successful click
     setError("");
-    onNext(5);
+    onNext(4);
   };
 
   const handleOkClick = () => {
@@ -39,7 +39,7 @@ const PaymentMethod = ({ onNext, onPaymentMethodSelected }) => {
     console.log("Data to be sent:", data);
     if (paymentMethod) {
       console.log("Selected Option:", paymentMethod);
-      onNext(5);
+      onNext(4);
       // Proceed with the next steps
     } else {
       setError("Please select an option before proceeding.");

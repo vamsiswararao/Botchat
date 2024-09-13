@@ -10,9 +10,9 @@ const Time = ({onNext,onTimeSelected}) => {
   const handleOptionClick = async(option,e) => {
     e.preventDefault();
     setTimeId(option.id);
-    setTime(option.label);
+    setTime(option.id);
     onTimeSelected(time)
-    onNext(4);
+    onNext(3);
     setShowOkButton(true); // Hide the OK button after successful click
     setError("")
     // try {
@@ -38,7 +38,7 @@ const Time = ({onNext,onTimeSelected}) => {
     //e.preventDefault();
     if (time) {
       console.log("Selected Option:", time);
-      onNext(4);
+      onNext(3);
       // Proceed with the next steps
     } else {
       setError("Please select an option before proceeding.");

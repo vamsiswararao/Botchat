@@ -24,7 +24,7 @@ const VictimName = ({onNext,onVictimNameSelected}) => {
     console.log("Selected Option:", victimName);
    
     if (victimName) {
-      onNext(8);
+      onNext(7);
     } else {
       setError("Please Enter victim name before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt

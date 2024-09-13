@@ -83,7 +83,7 @@ const VictimBank = ({ onNext, onSuspectBankSelected, addVictimBank,index }) => {
     e.preventDefault();
     setVictimBankData((prevData) => [...prevData, formData]);
     //onSuspectBankSelected(formData);
-    onNext(19); // Notify parent component to move to the next step
+    onNext(17); // Notify parent component to move to the next step
   };
   console.log(formData);
   return (

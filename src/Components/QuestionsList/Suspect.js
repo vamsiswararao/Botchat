@@ -4,7 +4,7 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 const Suspect = ({ onNext }) => {
   const handleContinue = () => {
     // Call the onNext function passed as a prop to move to the next step
-    onNext(15);
+    onNext(13);
   };
 
   return (

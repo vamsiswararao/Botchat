@@ -33,7 +33,7 @@ const HowLoss = ({ onNext, onHowLossSelected }) => {
     onHowLossSelected(howLoss);
     console.log("Submitted value:", howLoss);
     if (howLoss) {
-      onNext(6);
+      onNext(5);
     } else {
       setError("Please answer before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt

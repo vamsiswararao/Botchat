@@ -16,7 +16,7 @@ const VictimQualification = ({ onNext,onVictimQualificationSelected }) => {
     onVictimQualificationSelected(option.label);
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
-    onNext(12);
+    onNext(11);
     try {
       const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
         method: "POST",
@@ -49,12 +49,14 @@ const VictimQualification = ({ onNext,onVictimQualificationSelected }) => {
   const options = [
     {
       id: "A",
-      label: " 10th",
+      label: "Below SCC",
     },
-    { id: "B", label: "intermediate" },
-    { id: "C", label: "Degree/Engineering/MBBS" },
-    { id: "D", label: "Post-Graduation" },
-    { id: "E", label: "Others" },
+    { id: "B", label: "SSC" },
+    { id: "c", label: "Graduate" },
+    { id: "D", label: "under Graduate" },
+    { id: "E", label: "Post-Graduation" },
+    { id: "F", label: "Ph.D" },
+    { id: "G", label: "Un-Educated" },
 
   ];
 

@@ -8,6 +8,7 @@ body {
   align-items: center;
   height: 100%;
   margin: 0;
+  overflow: hidden;
 }
 
 
@@ -219,12 +220,7 @@ form {
   .date {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
-  }
-
-  .date-para{
-    padding-right: 10px;
   }
   amount-text-para{
     padding-left: 20px;
@@ -819,10 +815,54 @@ h2 {
   .responsive-textarea {
     width: 85%; /* Full width on mobile */
   }
+  header{
+    position: fixed;
+    top: 3px;
+    width: 100%;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-bottom: 1px solid #dee2e6;
+    z-index: 1000;
+  }
+  .header-title{
+    font-size: 12px;
+  }
+  .account{
+    height: 0px;
+    width: 220px;
+ }
+ .amount{
+  width: 180px;
+ }
 }
 
 @media (min-width: 769px) {
   .responsive-textarea {
     width: 90%; /* Adjust width for laptop */
   }
+  header{
+    position: fixed;
+    top: 3px;
+    left: 10%;
+    right: 10%;
+    width: 80%;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-bottom: 1px solid #dee2e6;
+    z-index: 1000;
+  }
+  .header-title{
+    font-size: 24px;
+  }
+
+  .account{
+     height: 10px;
+      width: 430px;
+  }
+  .amount{
+    margin-Right: 10px; 
+    width: 110px;
+   }
 }
+
+

@@ -6,6 +6,7 @@ const Help = ({ onNext, onHelpSelected }) => {
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
 
+
   const handleHelpOptionClick = async(option, e) => {
     e.preventDefault();
     if (option.disabled) {
@@ -15,7 +16,6 @@ const Help = ({ onNext, onHelpSelected }) => {
     onHelpSelected(option.id);
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
-    
 
     try {
       const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
@@ -30,7 +30,7 @@ const Help = ({ onNext, onHelpSelected }) => {
         throw new Error("Failed to push data to API");
       }
 
-      console.log("Data pushed to RequestBin:", option.id);
+      //console.log("Data pushed to RequestBin:", option.id);
     } catch (err) {
       console.error("Error sending data to API:", err);
     }
@@ -41,7 +41,7 @@ const Help = ({ onNext, onHelpSelected }) => {
     console.log("Selected Option:", help);
     if (help) {
       if(help==="A"){
-        onNext(2);
+        onNext(1);
       }
     } else {
       setError("Please select an option before proceeding.");

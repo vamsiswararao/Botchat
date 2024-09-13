@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
+import { useNavigate } from "react-router-dom";
 
 const Support = ({ submitSupport, onNext }) => {
   const [files, setFiles] = useState([]);
+  const navigate = useNavigate();
   
   // Upload files as soon as the user selects them
   const handleFileChange = async (event) => {
@@ -37,11 +39,7 @@ const Support = ({ submitSupport, onNext }) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (files.length > 0) {
-      submitSupport(files); // Pass the selected files to the submit function
-      onNext(20); // Navigate to the next step
-    }
+    navigate("/success");
   };
 
   return (
@@ -107,8 +105,8 @@ const Support = ({ submitSupport, onNext }) => {
             )}
           </div>
           {files.length > 0 && (
-            <button type="button" className="ok-btn" onClick={handleSubmit}>
-              ok <span style={{ fontSize: "15px" }}>({files.length})</span>
+            <button type="button" style={{ width: "95px" }} className="ok-btn" onClick={handleSubmit}>
+              Finish <span style={{ fontSize: "15px" }}>({files.length})</span>
             </button>
           )}
         </div>

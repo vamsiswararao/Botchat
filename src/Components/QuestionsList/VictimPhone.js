@@ -23,7 +23,7 @@ const VictimPhone=({onNext,    onVictimPhoneSelected})=>{
       onVictimPhoneSelected(victimPhone)
       console.log("Selected Option:", victimPhone);
       if (victimPhone) {
-        onNext(9);
+        onNext(8);
       } else {
         setError("Please Enter number before proceeding.");
         setShowOkButton(false); // Hide the OK button after an unsuccessful attempt

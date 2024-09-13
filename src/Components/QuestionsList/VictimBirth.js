@@ -24,7 +24,7 @@ const VictimBirth = ({onNext,onVictimBirthSelected}) => {
     console.log('Date of Birth:', victimAge);
 
     if (victimAge) {
-      onNext(10);
+      onNext(9);
     } else {
       setError("Please Enter age before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
@@ -40,7 +40,7 @@ const VictimBirth = ({onNext,onVictimBirthSelected}) => {
           <FaLongArrowAltRight className='num' />
         </div>
         <div>
-      <h2 htmlFor="lose-money">How much your(Victim) age?</h2>
+      <h2 htmlFor="lose-money">what is your (Victim) age?</h2>
       <div style={{ display: 'flex', marginRight: '20px' }}>
       <input
       className='text-input'
@@ -48,6 +48,7 @@ const VictimBirth = ({onNext,onVictimBirthSelected}) => {
         onChange={handleInputChange}
         placeholder="Type your age here..."
         id="victim-name"
+        type='number'
       />
       </div>
       <div style={{ display: "flex", alignItems: "center" }}>

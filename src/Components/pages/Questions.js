@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import Number from "../QuestionsList/Number";
+//import Number from "../QuestionsList/Number";
+//import axios from "axios";
 import Help from "../QuestionsList/Help";
 import Time from "../QuestionsList/Time";
 import PaymentMethod from "../QuestionsList/PaymentMethod";
@@ -12,7 +13,6 @@ import VictimBirth from "../QuestionsList/VictimBirth";
 import VictimGender from "../QuestionsList/VictimGender";
 import VictimQualification from "../QuestionsList/VictimQualification";
 import VictimAddress from "../QuestionsList/VictimAddress";
-import PoliceStation from "../QuestionsList/PoliceStation";
 import Suspect from "../QuestionsList/Suspect";
 import SuspectCall from "../QuestionsList/SuspectCall";
 import SuspectSpeak from "../QuestionsList/SuspectSpeak";
@@ -21,7 +21,28 @@ import VictimBank from "../QuestionsList/VictimBank";
 import SuspectBank from "../QuestionsList/SuspectBank";
 import Support from "../QuestionsList/Support";
 import HowMuch from "../QuestionsList/HowMuch";
-import { useNavigate } from "react-router-dom";
+import TranslateComponent from "../TranslateComponent";
+
+//import Translate from "../QuestionsList/Translate";
+// const API_KEY = 'YOUR_GOOGLE_TRANSLATE_API_KEY'; // Replace with your API key
+
+// const translateText = async (text, targetLang) => {
+//   try {
+//     const response = await axios.post(
+//       `https://translation.googleapis.com/language/translate/v2?key=${API_KEY}`,
+//       {
+//           q: "this is English translation",
+//           target: targetLang,
+//           source: "en",
+//       }
+//     );
+//     //return response.data.data.translations[0].translatedText;
+//     console.log(response.data.data.translations[0].translatedText)
+//   } catch (error) {
+//     console.error('Translation API error:', error);
+//     return text; // Fallback to original text in case of error
+//   }
+// };
 
 const ProgressBar = ({ current, total }) => {
   const progress = ((current + 1) / total) * 100;
@@ -50,8 +71,7 @@ const ProgressBar = ({ current, total }) => {
 };
 
 const Questions = () => {
-  const [currentQuestion, setCurrentQuestion] = useState(1);
-  const navigate = useNavigate();
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [victimBanks, setVictimBanks] = useState([{}]);
 
   const [formData, setFormData] = useState({
@@ -102,7 +122,7 @@ const Questions = () => {
     setVictimBanks(updatedVictimBanks);
   };
 
-  const questionCount = formData.help==="A" ? 22 : 1;
+  const questionCount = formData.help==="A" ? 20 : 0;
   // const handlePhoneData = (phone) => {
   //   setFormData((prevData) => ({
   //     ...prevData,
@@ -110,6 +130,83 @@ const Questions = () => {
   //   }));
   // };
 
+
+  // const translateQuestions = async () => {
+  //   const questions = [
+  //     "Help",
+  //     "How much",
+  //     "Time",
+  //     "Payment Method",
+  //     "How Loss",
+  //     "Victim",
+  //     "Victim Name",
+  //     "Victim Phone",
+  //     "Victim Birth",
+  //     "Victim Gender",
+  //     "Victim Qualification",
+  //     "Victim Address",
+  //     "Suspect",
+  //     "Suspect Call",
+  //     "Suspect Speak",
+  //     "Suspect Contact",
+  //     "Support"
+  //   ];
+
+  //   const translations = {};
+  //   for (const question of questions) {
+  //     translations[question] = await translateText(question, language);
+  //   }
+  //   setTranslatedTexts(translations);
+  // };
+
+  // React.useEffect(() => {
+  //   translateQuestions();
+  // }, [language]);
+
+  const isQuestionAnswered = (questionIndex) => {
+    console.log(questionIndex,formData.help)
+    switch (questionIndex) {
+      case 0:
+        return formData.help !== "";
+      case 1:
+        return formData.how_much !== "";
+      case 2:
+        return formData.time !== "";
+      case 3:
+        return formData.paymentMethod !== "";
+      case 4:
+        return formData.how_loss !== "";
+      case 5:
+          return true;
+      case 6:
+        return formData.victim_name !== "";
+      case 7:
+        return formData.victim_phone !== "";
+      case 8:
+        return formData.victim_birth !== "";
+      case 9:
+        return formData.victim_gender !== "";
+      case 10:
+        return formData.victim_qualification !== "";
+      case 11:
+        return formData.victim_address !== "";
+      case 12:
+        return true;
+      case 13:
+        return formData.suspect_call !== "";
+        case 14:
+          return formData.suspect_speak !== "";
+          case 15:
+            return formData.suspect_contact !== "";
+      // Add more cases as needed for other questions
+      default:
+        return true;
+    }
+  };
+  
+  // const handleLanguageChange = (e) => {
+  //   setLanguage(e.target.value);
+  // };
   const handleDataUpdate = (key, value) => {
     console.log(key, value);
     setFormData((prevData) => ({
@@ -129,17 +226,26 @@ const Questions = () => {
   const handleNextClickQuestion = (currentQuestion) => {
     const nextQuestion = Math.min(currentQuestion, questionCount - 1);
     const element = document.querySelector(`#question-${nextQuestion}`);
-    console.log(currentQuestion);
+   
     setCurrentQuestion(nextQuestion);
     element.scrollIntoView({ behavior: "smooth" });
+ 
   };
 
-  const handleNextQuestion = (optionId) => {
+  const handleNextQuestion = (optionId,result) => {
+    console.log(currentQuestion)
+    if (currentQuestion === 6 || currentQuestion === 13 ||isQuestionAnswered(currentQuestion)) {
+      console.log(true)
     const nextQuestion = Math.min(currentQuestion + 1, questionCount - 1);
     const element = document.querySelector(`#question-${nextQuestion}`);
-    console.log(currentQuestion);
     setCurrentQuestion(nextQuestion);
     element.scrollIntoView({ behavior: "smooth" });
+  } else {
+  
+    console.log(false)
+    alert("Please answer the current question before moving to the next.");
+  }
+
   };
 
   const handlePreviousQuestion = () => {
@@ -150,45 +256,45 @@ const Questions = () => {
       .scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSubmit = async (e, support) => {
-    console.log(support);
-    e.preventDefault();
-    console.log(formData);
-    const apiUrl = "https://enrbgth6q54c8.x.pipedream.net"; // Replace with your actual API endpoint
+  // const handleSubmit = async (e, support) => {
+  //   console.log(support);
+  //   e.preventDefault();
+  //   console.log(formData);
+  //   const apiUrl = "https://enrbgth6q54c8.x.pipedream.net"; // Replace with your actual API endpoint
 
-    try {
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+  //   try {
+  //     const response = await fetch(apiUrl, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok.");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok.");
+  //     }
 
-      const result = await response.json();
-      console.log("API response:", result);
-      navigate("/success");
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("An error occurred. Please try again.");
-    }
-  };
+  //     const result = await response.json();
+  //     console.log("API response:", result);
+  //     navigate("/success");
+  //   } catch (error) {
+  //     console.error("Error submitting form:", error);
+  //     alert("An error occurred. Please try again.");
+  //   }
+  // };
 
   const isHeaderVisible =
-    (currentQuestion >= 7 || currentQuestion >= 12) && currentQuestion !== 14;
+    (currentQuestion >= 6 || currentQuestion >= 11) && currentQuestion !== 13;
   const headerTitle = (() => {
     if (
-      (currentQuestion >= 7 && currentQuestion <= 13) ||
-      currentQuestion === 18
+      (currentQuestion >= 6 && currentQuestion <= 12) ||
+      currentQuestion === 17
     )
       return "Victim";
     if (
-      (currentQuestion >= 15 && currentQuestion <= 17) ||
-      currentQuestion === 19
+      (currentQuestion >= 14 && currentQuestion <= 16) ||
+      currentQuestion === 18
     )
       return "Suspect";
     return ""; // Default or empty title
@@ -198,23 +304,13 @@ const Questions = () => {
     <>
       <ProgressBar current={currentQuestion} total={questionCount} />
       {isHeaderVisible && (
-        <header
-          style={{
-            position: "fixed",
-            top: 5,
-            left: "10%",
-            width: "80%",
-            backgroundColor: "#f8f9fa",
-            padding: "20px",
-            borderBottom: "1px solid #dee2e6",
-            zIndex: 1000, // Ensure it stays above other content
-          }}
-        >
+        <header>
           {headerTitle && (
-            <h1 style={{ margin: 0, textAlign: "center" }}>{headerTitle}</h1>
+            <h1 className="header-title" style={{ margin: 0, textAlign: "center" }}>{headerTitle}</h1>
           )}
         </header>
       )}
+
       <form>
         {/* <div id="question-0">
           <Number
@@ -224,7 +320,7 @@ const Questions = () => {
         </div> */}
 
         <>
-          <div id="question-1" className="page">
+          <div id="question-0" className="page">
             <Help
               onNext={handleNextClickQuestion}
               onHelpSelected={(value) => handleDataUpdate("help", value)}
@@ -232,7 +328,7 @@ const Questions = () => {
           </div>
           {formData.help === "A" && (
             <>
-              <div id="question-2" className="page">
+              <div id="question-1" className="page">
                 <HowMuch
                   onNext={handleNextClickQuestion}
                   onHowMuchSelected={(value) =>
@@ -240,14 +336,14 @@ const Questions = () => {
                   }
                 />
               </div>
-              <div id="question-3" className="page">
+              <div id="question-2" className="page">
                 <Time
                   onNext={handleNextClickQuestion}
                   onTimeSelected={(value) => handleDataUpdate("time", value)}
                 />
               </div>
 
-              <div id="question-4" className="page">
+              <div id="question-3" className="page">
                 <PaymentMethod
                   onNext={handleNextClickQuestion}
                   onPaymentMethodSelected={(value) =>
@@ -256,7 +352,7 @@ const Questions = () => {
                 />
               </div>
 
-              <div id="question-5" className="page">
+              <div id="question-4" className="page">
                 <HowLoss
                   onNext={handleNextClickQuestion}
                   onHowLossSelected={(value) =>
@@ -265,11 +361,11 @@ const Questions = () => {
                 />
               </div>
 
-              <div id="question-6" className="page">
+              <div id="question-5" className="page">
                 <Victim onNext={handleNextClickQuestion} />
               </div>
 
-              <div id="question-7" className="page">
+              <div id="question-6" className="page">
                 <VictimName
                   onNext={handleNextClickQuestion}
                   onVictimNameSelected={(value) =>
@@ -278,7 +374,7 @@ const Questions = () => {
                 />
               </div>
 
-              <div id="question-8" className="page">
+              <div id="question-7" className="page">
                 <VictimPhone
                   onNext={handleNextClickQuestion}
                   onVictimPhoneSelected={(value) =>
@@ -287,7 +383,7 @@ const Questions = () => {
                 />
               </div>
 
-              <div id="question-9" className="page">
+              <div id="question-8" className="page">
                 <VictimBirth
                   onNext={handleNextClickQuestion}
                   onVictimBirthSelected={(value) =>
@@ -296,7 +392,7 @@ const Questions = () => {
                 />
               </div>
 
-              <div id="question-10" className="page">
+              <div id="question-9" className="page">
                 <VictimGender
                   onNext={handleNextClickQuestion}
                   onVictimGenderSelected={(value) =>
@@ -305,7 +401,7 @@ const Questions = () => {
                 />
               </div>
 
-              <div id="question-11" className="page">
+              <div id="question-10" className="page">
                 <VictimQualification
                   onNext={handleNextClickQuestion}
                   onVictimQualificationSelected={(value) =>
@@ -314,7 +410,7 @@ const Questions = () => {
                 />
               </div>
 
-              <div id="question-12" className="page">
+              <div id="question-11" className="page">
                 <VictimAddress
                   onNext={handleNextClickQuestion}
                   onVictimAddressSelected={(value) =>
@@ -323,20 +419,20 @@ const Questions = () => {
                 />
               </div>
 
-              <div id="question-13" className="page">
+              {/* <div id="question-12" className="page">
                 <PoliceStation
                   onNext={handleNextClickQuestion}
                   onPoliceStationSelected={(value) =>
                     handleDataUpdate("police_station", value)
                   }
                 />
-              </div>
+              </div> */}
 
-              <div id="question-14" className="page">
+              <div id="question-12" className="page">
                 <Suspect onNext={handleNextClickQuestion} />
               </div>
 
-              <div id="question-15" className="page">
+              <div id="question-13" className="page">
                 <SuspectCall
                   onNext={handleNextClickQuestion}
                   onSuspectCallSelected={(value) =>
@@ -345,7 +441,7 @@ const Questions = () => {
                 />
               </div>
 
-              <div id="question-16" className="page">
+              <div id="question-14" className="page">
                 <SuspectSpeak
                   onNext={handleNextClickQuestion}
                   onSuspectSpeakSelected={(value) =>
@@ -354,7 +450,7 @@ const Questions = () => {
                 />
               </div>
 
-              <div id="question-17" className="page">
+              <div id="question-15" className="page">
                 <SuspectContact
                   onNext={handleNextClickQuestion}
                   onSuspectContactSelected={(value) =>
@@ -363,7 +459,7 @@ const Questions = () => {
                 />
               </div>
               <div
-                id="question-18"
+                id="question-16"
                 style={{ display: "flex", flexDirection: "column" }}
               >
                 {/* Render multiple VictimBank instances */}
@@ -381,6 +477,25 @@ const Questions = () => {
                       }
                       addVictimBank={addVictimBank}
                     />
+                  </div>
+                ))}
+              </div>
+
+              <div id="question-17"   style={{ display: "flex", flexDirection: "column" }}>
+                {formData.suspect_bank.map((item, index) => (
+                  <div
+                    key={item.id}
+                    id={`question-suspect-bank-${index}`}
+                    className="page"
+                  >
+                    <SuspectBank
+                    index={index}
+                      onNext={handleNextClickQuestion}
+                      onSuspectBankSelected={(value) =>
+                        handleDataUpdate("suspect_bank", value,index)
+                      }
+                      addSuspectBank={addSuspectBank}
+                    />
                     {victimBanks.length > 1 && (
                       <button
                         type="button"
@@ -393,40 +508,13 @@ const Questions = () => {
                 ))}
               </div>
 
-              <div id="question-19"   style={{ display: "flex", flexDirection: "column" }}>
-                {/* {formData.suspect_bank.map((item, index) => (
-                  <div
-                    key={item.id}
-                    id={`question-victim-bank-${index}`}
-                    className="page"
-                  > */}
-                    <SuspectBank
-                    //index={index}
-                      onNext={handleNextClickQuestion}
-                      onSuspectBankSelected={(value) =>
-                        handleDataUpdate("suspect_bank", value)
-                      }
-                      addSuspectBank={addSuspectBank}
-                    />
-                    {/* {victimBanks.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeVictimBank(index)}
-                      >
-                        Remove This Bank
-                      </button>
-                    )}
-                  </div>
-                ))} */}
-              </div>
-
-              <div id="question-20" className="page">
+              <div id="question-18" className="page">
                 <Support
                   onNext={handleNextClickQuestion}
                   submitSupport={handleSupportData}
                 />
               </div>
-              <div id="question-21" className="page">
+              {/* <div id="question-19" className="page">
                 <div
                   style={{
                     display: "flex",
@@ -443,7 +531,7 @@ const Questions = () => {
                     Submit
                   </button>
                 </div>
-              </div>
+              </div> */}
             </>
           )}
         </>
@@ -471,7 +559,7 @@ const Questions = () => {
               type="button"
               className="next-btn"
               onClick={handleNextQuestion}
-              disabled={currentQuestion > 21}
+              disabled={questionCount===0? -1 : (!isQuestionAnswered(currentQuestion-1) || currentQuestion===19)}
             >
               <IoIosArrowDown />
             </button>

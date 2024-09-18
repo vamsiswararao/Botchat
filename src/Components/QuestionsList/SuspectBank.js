@@ -86,9 +86,10 @@ const SuspectBank = ({
   const [upis, setUpis] = useState([]);
   const [cards, setCards] = useState([]);
 
-  const parseDate = (formattedDate) => {
-    const [year, month, day] = formattedDate.split("-");
-    return `${day}-${month}-${year}`;
+  const parseDate = (formattedDateTime) => {
+    const [date, time] = formattedDateTime.split("T");
+    const [year, month, day] = date.split("-");
+    return `${day}-${month}-${year} ${time}`;
   };
   const handleDateChange = (event) => {
     const { name, value } = event.target;
@@ -146,14 +147,14 @@ const SuspectBank = ({
   const handleOkClick = (e) => {
     e.preventDefault();
     setSuspectBankData((prevData) => [...prevData, formData]);
-    onNext(18); // Notify parent component to move to the next step
+    onNext(17); // Notify parent component to move to the next step
   };
 
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">9/10 </h2>
+          <h2 className="num">8/10 </h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -163,7 +164,7 @@ const SuspectBank = ({
               alignItems: "center",
             }}
           >
-            <h2>Share the Suspect (creditor) bank Details? *</h2>
+            <h2>Please provide Creditor/ Fraudster’s bank account details(if you have)</h2>
             {/* <button
               type="button"
               style={{ marginLeft:"10px", width: "40px", fontSize: "20px", height: "40px" }}
@@ -223,13 +224,13 @@ const SuspectBank = ({
                   placeholder="DD-MM-YYYY"
                   style={{
                     height: "24px",
-                    width: "80px",
+                    width: "100px",
                     fontSize: "12px",
                   }}
                   value={formData.date ? parseDate(formData.date) : ""}
                 />
                 <input
-                  type="date"
+                  type="datetime-local"
                   name="date"
                   style={{ height: "26px", width: "18px" }}
                   value={formData.date ? parseDate(formData.date) : ""}

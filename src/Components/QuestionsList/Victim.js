@@ -6,7 +6,7 @@ const Victim = ({ onNext }) => {
 
   const handleOkClick = (e) => {
     e.preventDefault();
-    onNext(6);
+    onNext(4);
     };
 
 
@@ -14,7 +14,7 @@ const Victim = ({ onNext }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">6/10</h2>
+          <h2 className="num">4/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>

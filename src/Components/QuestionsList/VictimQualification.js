@@ -16,7 +16,7 @@ const VictimQualification = ({ onNext,onVictimQualificationSelected }) => {
     onVictimQualificationSelected(option.label);
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
-    onNext(11);
+    onNext(10);
     try {
       const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
         method: "POST",
@@ -39,7 +39,7 @@ const VictimQualification = ({ onNext,onVictimQualificationSelected }) => {
   const handleOkClick = (e) => {
   onVictimQualificationSelected(qualification)
       if (qualification) {
-        onNext(12);
+        onNext(10);
       } else {
         setError("Please select an option before proceeding.");
         setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
@@ -64,7 +64,7 @@ const VictimQualification = ({ onNext,onVictimQualificationSelected }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">6e/10</h2>
+          <h2 className="num">4f/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>

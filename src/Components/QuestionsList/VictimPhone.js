@@ -23,7 +23,7 @@ const VictimPhone=({onNext,    onVictimPhoneSelected})=>{
       onVictimPhoneSelected(victimPhone)
       console.log("Selected Option:", victimPhone);
       if (victimPhone) {
-        onNext(8);
+        onNext(6);
       } else {
         setError("Please Enter number before proceeding.");
         setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
@@ -34,7 +34,7 @@ const VictimPhone=({onNext,    onVictimPhoneSelected})=>{
         <div className="question">
                       <div style={{display:'flex'}}>
             <div style={{display:'flex'}}>
-            <h2 className='num'>6b/10</h2>
+            <h2 className='num'>4b/10</h2>
             <FaLongArrowAltRight className='num' />
             </div>
             <div style={{display:'flex',flexDirection:'column'}}>

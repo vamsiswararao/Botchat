@@ -8,54 +8,45 @@ const customStyles = {
     width: "340px",
     height: "24px",
     "@media (max-width: 768px)": {
-      // Mobile view adjustments
       width: "95%",
     },
   }),
-  // control: (base) => ({
-  //   ...base,
-  //   border: "1px solid #ccc",
-  //   borderRadius: "2px",
-  //   boxShadow: "none",
-  //   height: '100%', // Make sure control height matches container height
-  //   minHeight: '20px',
-  // }),
   menu: (provided) => ({
     ...provided,
-    zIndex: 9999, // Ensure dropdown is above other elements
-    maxHeight: "180px", // Adjust as needed
+    zIndex: 9999,
+    maxHeight: "180px",
   }),
   menuList: (provided) => ({
     ...provided,
-    maxHeight: "180px", // Adjust as needed
+    maxHeight: "180px",
     overflowY: "auto",
+    fontSize:'16px'
   }),
   control: (provided) => ({
     ...provided,
-    minHeight: "30px", // Decrease height of the select control
-    height: "30px", // Decrease height of the select control
+    minHeight: "30px",
+    height: "30px",
   }),
   indicatorSeparator: (provided) => ({
     ...provided,
-    height: "14px", // Adjust the height of the indicator separator line
+    height: "14px",
   }),
   dropdownIndicator: (provided) => ({
     ...provided,
-    padding: "8px", // Adjust padding around the dropdown indicator
+    padding: "8px",
     svg: {
-      width: "18px", // Adjust the size of the dropdown arrow
+      width: "18px",
       height: "18px",
     },
   }),
-
   placeholder: (provided) => ({
     ...provided,
-    fontSize: "16px", // Adjust placeholder font size
+    fontSize: "14px",
     marginBottom: "10px",
   }),
   singleValue: (provided) => ({
     ...provided,
-    fontSize: "16px", // Adjust selected value font size
+    fontSize: "16px",
     marginBottom: "10px",
   }),
   input: (base) => ({
@@ -95,6 +86,42 @@ const indianStates = [
   { value: "27", label: "West Bengal" },
 ];
 
+const telanganaDistricts = [
+  { value: "1", label: "Adilabad" },
+  { value: "2", label: "Bhadradri Kothagudem" },
+  { value: "3", label: "Hyderabad" },
+  { value: "4", label: "Jagtial" },
+  { value: "5", label: "Jangaon" },
+  { value: "6", label: "Jayashankar Bhupalpally" },
+  { value: "7", label: "Jogulamba Gadwal" },
+  { value: "8", label: "Kamareddy" },
+  { value: "9", label: "Karimnagar" },
+  { value: "10", label: "Khammam" },
+  { value: "11", label: "Mahabubabad" },
+  { value: "12", label: "Mahabubnagar" },
+  { value: "13", label: "Mancherial" },
+  { value: "14", label: "Medak" },
+  { value: "15", label: "Medchal-Malkajgiri" },
+  { value: "16", abel: "Nalgonda" },
+  { value: "17", label: "Narayanpet" },
+  { value: "18", label: "Nirmal" },
+  { value: "19", label: "Nizamabad" },
+  { value: "20", label: "Peddapalli" },
+  { value: "21", label: "Rajanna Sircilla" },
+  { value: "22", label: "Rangareddy" },
+  { value: "23", label: "Siddipet" },
+  { value: "24", label: " Suryapet" },
+  { value: "25", label: "Vikarabad" },
+  { value: "26", label: "Warangal (Rural)" },
+  { value: "27", label: "Warangal (Urban)" },
+  { value: "28", label: "Wanaparthy" },
+  { value: "29", label: "Yadadri Bhuvanagiri" },
+  { value: "30", label: "Kothagudem" },
+  { value: "31", label: "Kamareddy" },
+  { value: "32", label: "Jayashankar Bhupalpally" },
+  // Add more districts as needed
+];
+
 const options = [
   { value: "station1", label: "Hyderabad" },
   { value: "station2", label: "Cyberabad" },
@@ -107,6 +134,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
     address1: "",
     city: "",
     state: { value: "Telangana", label: "Telangana" },
+    district: null,
     zip: "",
     policeStation: "",
   });
@@ -114,20 +142,28 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    console.log(id, value);
     setAddress((prevState) => ({
       ...prevState,
       [id]: value,
     }));
-    setError(""); // Clear error when user inputs data
+    setError("");
   };
 
   const handleStateChange = (selectedOption) => {
     setAddress((prevState) => ({
       ...prevState,
       state: selectedOption,
+      district: null, // Reset district when state changes
     }));
-    setError(""); // Clear error when state is selected
+    setError("");
+  };
+
+  const handleDistrictChange = (selectedOption) => {
+    setAddress((prevState) => ({
+      ...prevState,
+      district: selectedOption,
+    }));
+    setError("");
   };
 
   const handlePoliceChange = (selectedOption) => {
@@ -135,13 +171,12 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
       ...prevState,
       policeStation: selectedOption,
     }));
-    setError(""); // Clear error when state is selected
+    setError("");
   };
 
   const handleOkClick = (e) => {
     e.preventDefault();
 
-    // Validation: Display only one error at a time
     if (!address.address1) {
       setError("Please fill in the address.");
       return;
@@ -155,25 +190,25 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
       return;
     }
 
-    // Submit the address data
     onVictimAddressSelected({
       ...address,
       state: address.state.value,
+      district: address.district ? address.district.value : null,
     });
-    onNext(12);
+    onNext(11);
   };
 
   return (
     <div className="question">
-      <div style={{ display: "flex" }}>
-        <div style={{ display: "flex" }}>
-          <h2 className="num">6f/10</h2>
+      <div style={{ display: "flex", height:'70%' }}>
+        <div style={{ display: "flex"}}>
+          <h2 className="num">4g/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <h2>Fill your (Victim) current Full Address?</h2>
-            <h6 style={{ margin: "5px",marginTop:'20px' }} htmlFor="address1">
+            <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="address1">
               Address
             </h6>
             <input
@@ -184,7 +219,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
               id="address1"
             />
 
-            <h6 style={{ margin: "5px",marginTop:'20px' }} htmlFor="city">
+            <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="city">
               Village/City/Town
             </h6>
             <input
@@ -195,7 +230,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
               id="city"
             />
 
-            <h6 style={{ margin: "5px",marginTop:'20px' }} htmlFor="state">
+            <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="state">
               State
             </h6>
             <Select
@@ -203,10 +238,28 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
               value={address.state}
               onChange={handleStateChange}
               id="state"
-              styles={customStyles} // Apply custom styles
+              styles={customStyles}
             />
 
-            <h6 style={{ margin: "5px",marginTop:'20px' }} htmlFor="zip">
+            {address.state.value === "Telangana" && (
+              <>
+                <h6
+                  style={{ margin: "5px", marginTop: "20px" }}
+                  htmlFor="district"
+                >
+                  District
+                </h6>
+                <Select
+                  options={telanganaDistricts}
+                  value={address.district}
+                  onChange={handleDistrictChange}
+                  id="district"
+                  styles={customStyles}
+                />
+              </>
+            )}
+
+            <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="zip">
               Zip/Post code
             </h6>
             <input
@@ -216,8 +269,12 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
               placeholder="Type your answer here..."
               id="zip"
             />
-            <h6 style={{ margin: "5px",marginTop:'20px' }} htmlFor="zip">
-            Nearest police station?
+
+            <h6
+              style={{ margin: "5px", marginTop: "20px" }}
+              htmlFor="policeStation"
+            >
+              Nearest police station?
             </h6>
             <div className="select-container">
               <Select
@@ -228,7 +285,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
                 placeholder="Type to search..."
                 aria-label="Police Station"
                 className="dropdown-input"
-                styles={customStyles} // Apply custom styles
+                styles={customStyles}
               />
             </div>
 
@@ -247,7 +304,6 @@ const VictimAddress = ({ onNext, onVictimAddressSelected }) => {
               </p>
             </div>
 
-            {/* Display error message */}
             {error && (
               <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
             )}

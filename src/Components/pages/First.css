@@ -12,12 +12,12 @@
   .main-container img {
     opacity: 0.9;
     width: 100vw;
-    height: 85vh; /* Maintain aspect ratio */
+    height: 75vh; /* Maintain aspect ratio */
   }
   
   .start_btn {
     position: absolute;
-    bottom: 20px; /* Adjust as needed */
+    bottom: 80px; /* Adjust as needed */
     background-color: #007bff; /* Example color, change as needed */
     color: white;
     border: none;

@@ -18,10 +18,11 @@ const PaymentMethod = ({ onNext, onPaymentMethodSelected }) => {
     console.log(option.id)
     if (option.id !== "A" && option.id !== "") {
       handleOkClick()
+      onNext(16);
     }
     setShowOkButton(true); // Hide the OK button after successful click
     setError("");
-    onNext(4);
+   
   };
 
   const handleOkClick = () => {
@@ -38,8 +39,9 @@ const PaymentMethod = ({ onNext, onPaymentMethodSelected }) => {
     onPaymentMethodSelected(data);
     console.log("Data to be sent:", data);
     if (paymentMethod) {
+      
       console.log("Selected Option:", paymentMethod);
-      onNext(4);
+      onNext(16);
       // Proceed with the next steps
     } else {
       setError("Please select an option before proceeding.");
@@ -81,11 +83,11 @@ const PaymentMethod = ({ onNext, onPaymentMethodSelected }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">4/10</h2>
+          <h2 className="num">6/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
-          <h2>How did you send the amount (Payment Method)? </h2>
+          <h2> What payment method did you use to transfer the money to the suspect?  </h2>
           <div className="options-container">
             {options.map((option) => (
               <button

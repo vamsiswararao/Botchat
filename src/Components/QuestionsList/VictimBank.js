@@ -2,7 +2,60 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const VictimBank = ({ onNext, onSuspectBankSelected, addVictimBank,index }) => {
+const customStyles = {
+  container: (provided) => ({
+    ...provided,
+    width: "450px",
+    height: "24px",
+    "@media (max-width: 768px)": {
+      width: "95%",
+    },
+  }),
+  menu: (provided) => ({
+    ...provided,
+    zIndex: 9999,
+    maxHeight: "180px",
+  }),
+  menuList: (provided) => ({
+    ...provided,
+    maxHeight: "180px",
+    overflowY: "auto",
+    fontSize:'16px'
+  }),
+  control: (provided) => ({
+    ...provided,
+    minHeight: "30px",
+    height: "30px",
+  }),
+  indicatorSeparator: (provided) => ({
+    ...provided,
+    height: "14px",
+  }),
+  dropdownIndicator: (provided) => ({
+    ...provided,
+    padding: "8px",
+    svg: {
+      width: "18px",
+      height: "18px",
+    },
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    fontSize: "14px",
+    marginBottom: "10px",
+  }),
+  singleValue: (provided) => ({
+    ...provided,
+    fontSize: "16px",
+    marginBottom: "10px",
+  }),
+  input: (base) => ({
+    ...base,
+    padding: "0px",
+  }),
+};
+
+const VictimBank = ({ onNext, onSuspectBankSelected, addVictimBank, index }) => {
   const [victimBankData, setVictimBankData] = useState([]);
   const [formData, setFormData] = useState({
     BankName: "",
@@ -10,7 +63,7 @@ const VictimBank = ({ onNext, onSuspectBankSelected, addVictimBank,index }) => {
     TransactionNo: "",
     UpiId: "",
     CardNo: "",
-    date: "",
+    datetime: "",
     Amount: "",
   });
 
@@ -18,22 +71,23 @@ const VictimBank = ({ onNext, onSuspectBankSelected, addVictimBank,index }) => {
   const [upis, setUpis] = useState([]);
   const [cards, setCards] = useState([]);
 
-  const parseDate = (formattedDate) => {
-    const [year, month, day] = formattedDate.split("-");
-    return `${day}-${month}-${year}`;
+  const parseDateTime = (formattedDateTime) => {
+    const [date, time] = formattedDateTime.split("T");
+    const [year, month, day] = date.split("-");
+    return `${day}-${month}-${year} ${time}`;
   };
-  const handleDateChange = (event) => {
+
+  const handleDateTimeChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
- 
+
   useEffect(() => {
     // Dummy API calls to fetch Bank, UPI, and Card options
     const fetchBanks = async () => {
-      // Replace this with an actual API call
       const response = await new Promise((resolve) =>
         setTimeout(() => resolve(["Bank A", "Bank B", "Bank C"]), 1000)
       );
@@ -41,7 +95,6 @@ const VictimBank = ({ onNext, onSuspectBankSelected, addVictimBank,index }) => {
     };
 
     const fetchUpis = async () => {
-      // Replace this with an actual API call
       const response = await new Promise((resolve) =>
         setTimeout(() => resolve(["UPI A", "UPI B", "UPI C"]), 1000)
       );
@@ -49,7 +102,6 @@ const VictimBank = ({ onNext, onSuspectBankSelected, addVictimBank,index }) => {
     };
 
     const fetchCards = async () => {
-      // Replace this with an actual API call
       const response = await new Promise((resolve) =>
         setTimeout(() => resolve(["Card A", "Card B", "Card C"]), 1000)
       );
@@ -82,108 +134,104 @@ const VictimBank = ({ onNext, onSuspectBankSelected, addVictimBank,index }) => {
   const handleOkClick = (e) => {
     e.preventDefault();
     setVictimBankData((prevData) => [...prevData, formData]);
-    //onSuspectBankSelected(formData);
-    onNext(17); // Notify parent component to move to the next step
+    onNext(16); // Notify parent component to move to the next step
   };
-  console.log(formData);
+
   return (
     <div>
-    <div className="question">
-      <div style={{ display: "flex", marginTop: "50px" }}>
-        <div style={{ display: "flex" }}>
-          <h2 className="num">8 ({index+1})/10</h2>
-          <FaLongArrowAltRight className="num" />
-        </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <h2>Share the Victim (Deditors) transition details? *</h2>
-            <button
-              type="button"
-              style={{ marginLeft:"10px", width: "40px", fontSize: "20px", height: "40px" }}
-              onClick={addVictim}
-            >
-              +
-            </button>
+      <div className="question">
+        <div style={{ display: "flex", marginTop: "50px" }}>
+          <div style={{ display: "flex" }}>
+            <h2 className="num">7 /10</h2>
+            <FaLongArrowAltRight className="num" />
           </div>
-          <p className="bank-para">Bank Name:</p>
-          <Select
-            value={banks.find((bank) => bank.value === formData.BankName)}
-            onChange={(selectedOption) =>
-              handleSelectChange("BankName", selectedOption)
-            }
-            options={banks}
-            className="dropdown-input"
-            placeholder="Select Bank"
-          />
-
-          <p className="bank-para">UPI:</p>
-          <Select
-            value={upis.find((upi) => upi.value === formData.UpiId)}
-            onChange={(selectedOption) =>
-              handleSelectChange("UpiId", selectedOption)
-            }
-            options={upis}
-            className="dropdown-input"
-            placeholder="Select UPI"
-          />
-
-          <p className="bank-para">Card Number:</p>
-          <Select
-            value={cards.find((card) => card.value === formData.CardNo)}
-            onChange={(selectedOption) =>
-              handleSelectChange("CardNo", selectedOption)
-            }
-            options={cards}
-            className="dropdown-input"
-            placeholder="Select Card"
-          />
-          <div className="date">
-          <div style={{display:'flex'}}>
-            <p className="date-para">Date :</p>
-            <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
-            <input
-              type="text"
-              placeholder="DD-MM-YYYY"
-              style={{height: "24px", width: "80px", fontSize: "12px",marginLeft:'20px'}}
-              value={formData.date ? parseDate(formData.date) : ""}
-            />
-            <input
-              type="date"
-              name="date"
-              style={{ height: "26px", width: "18px" }}
-              value={formData.date ? parseDate(formData.date) : ""}
-              onChange={(e) => handleDateChange(e)}
-            />
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <h2>Please provide Debtor/Victim bank account details.</h2>
             </div>
-            </div>
-            <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
-            <p className="amount-text-para">Amount:</p>
-            <input
-              type="number"
-              value={formData.Amount}
-              onChange={(e) => handleTextChange("Amount", e.target.value)}
-              placeholder="Enter the amount"
-              className="text-input"
-              min="0"
+            <p className="bank-para">Bank Name:</p>
+            <Select
+              value={banks.find((bank) => bank.value === formData.BankName)}
+              onChange={(selectedOption) =>
+                handleSelectChange("BankName", selectedOption)
+              }
+              options={banks}
+              className="dropdown-input"
+              placeholder="Select Bank"
+              styles={customStyles}
+
             />
-          </div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <button type="button" className="ok-btn" onClick={handleOkClick}>
-              OK
-            </button>
-            <p className="enter-text">
-              press <strong>Enter ↵</strong>
-            </p>
+
+            <p className="bank-para">UPI:</p>
+            <Select
+              value={upis.find((upi) => upi.value === formData.UpiId)}
+              onChange={(selectedOption) =>
+                handleSelectChange("UpiId", selectedOption)
+              }
+              options={upis}
+              className="dropdown-input"
+              placeholder="Select UPI"
+              styles={customStyles}
+
+            />
+
+            <p className="bank-para">Card Number:</p>
+            <Select
+              value={cards.find((card) => card.value === formData.CardNo)}
+              onChange={(selectedOption) =>
+                handleSelectChange("CardNo", selectedOption)
+              }
+              options={cards}
+              className="dropdown-input"
+              placeholder="Select Card"
+              styles={customStyles}
+
+            />
+
+            <div className="date">
+              <div style={{ display: 'flex' }}>
+                <p className="date-para">Transaction Date :</p>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <input
+                    type="text"
+                    placeholder="DD-MM-YYYY HH:MM"
+                    style={{ height: "24px", width: "100px", fontSize: "12px", marginLeft: '20px' }}
+                    value={formData.datetime ? parseDateTime(formData.datetime) : ""}
+                    readOnly
+                  />
+                  <input
+                    type="datetime-local"
+                    name="datetime"
+                    style={{ height: "26px", width: "18px" }}
+                    value={formData.datetime}
+                    onChange={(e) => handleDateTimeChange(e)}
+                  />
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <p className="amount-text-para">Amount:</p>
+                <input
+                  type="number"
+                  value={formData.Amount}
+                  onChange={(e) => handleTextChange("Amount", e.target.value)}
+                  placeholder="amount"
+                  className="text-input"
+                  min="0"
+                />
+              </div>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <button type="button" className="ok-btn" onClick={handleOkClick}>
+                OK
+              </button>
+              <p className="enter-text">
+                press <strong>Enter ↵</strong>
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };

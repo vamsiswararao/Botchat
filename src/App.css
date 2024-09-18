@@ -476,6 +476,7 @@ option-button {
   margin-top: 10px;
   margin-right: 10px;
   width: 70px;
+  
 }
 
 .ok-btn:hover {
@@ -516,7 +517,7 @@ option-button {
 }
 
 .continue-btn {
-  width: 80px;
+  width: 120px;
 }
 
 
@@ -646,7 +647,7 @@ h2 {
     margin-right: 20px;
     margin-bottom: 0px;
     background-color: #f4f4f4;
-    width: 320px;
+    width: 80px;
     height: 24px;
   }
 
@@ -861,7 +862,7 @@ h2 {
   }
   .amount{
     margin-Right: 10px; 
-    width: 110px;
+    width: 90px;
    }
 }
 

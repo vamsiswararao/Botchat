@@ -24,7 +24,7 @@ const VictimName = ({onNext,onVictimNameSelected}) => {
     console.log("Selected Option:", victimName);
    
     if (victimName) {
-      onNext(7);
+      onNext(5);
     } else {
       setError("Please Enter victim name before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
@@ -36,7 +36,7 @@ const VictimName = ({onNext,onVictimNameSelected}) => {
     <div className="question">
                   <div style={{display:'flex'}}>
             <div style={{display:'flex'}}>
-            <h2 className='num'>6a/10</h2>
+            <h2 className='num'>4a/10</h2>
             <FaLongArrowAltRight className='num'/>
             </div>
             <div style={{display:"flex",flexDirection:'column'}}>

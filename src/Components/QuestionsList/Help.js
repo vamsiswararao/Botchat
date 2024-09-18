@@ -55,7 +55,7 @@ const Help = ({ onNext, onHelpSelected }) => {
       id: "B",
       label: "Have you faced Cybercrime in Non-financial cyber fraud?",
     },
-    { id: "C", label: "To know the status of the complaint?", disabled: true }, // Option C is disabled
+    { id: "C", label: " Do you want to know the status of the complaint?", disabled: true }, // Option C is disabled
   ];
 
   return (
@@ -66,7 +66,7 @@ const Help = ({ onNext, onHelpSelected }) => {
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
-          <h2>How can we help you? *</h2>
+          <h2>How may I help you? *</h2>
           <div className="options-container">
             {helpOptions.map((option) => (
               <button

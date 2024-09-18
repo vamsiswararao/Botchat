@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
 
 const HowLoss = ({ onNext, onHowLossSelected }) => {
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const [howLoss, setHowLoss] = useState("");
+  const navigate = useNavigate()
+
+
 
   const handleKeyDown = (event) => {
     if (event.altKey && event.key === 'Enter') {
@@ -33,7 +38,7 @@ const HowLoss = ({ onNext, onHowLossSelected }) => {
     onHowLossSelected(howLoss);
     console.log("Submitted value:", howLoss);
     if (howLoss) {
-      onNext(5);
+      navigate("/success");
     } else {
       setError("Please answer before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
@@ -44,11 +49,11 @@ const HowLoss = ({ onNext, onHowLossSelected }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">5/10</h2>
+          <h2 className="num">10/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
-          <h2 htmlFor="lose-money">How did you lose money?</h2>
+          <h2 htmlFor="lose-money">can you explain  how you lose money?</h2>
           <p>Write in detail about how you lost the money.</p>
           <textarea
             value={howLoss}

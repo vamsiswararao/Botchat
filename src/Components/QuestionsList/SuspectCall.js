@@ -29,7 +29,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected }) => {
     e.preventDefault();
     if (selectedCalls.length > 0) {
       onSuspectCallSelected(selectedCalls);
-      onNext(14);
+      onNext(13);
     } else {
       setError("Please select an option before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
@@ -78,11 +78,11 @@ const SuspectCall = ({ onNext, onSuspectCallSelected }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">7 a/10</h2>
+          <h2 className="num">5 a/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
-          <h2>How did the suspect call you?</h2>
+          <h2>Fraudster`s calling methods or approaches </h2>
           <div className="option-list">
             {options.map((option) => (
               <button

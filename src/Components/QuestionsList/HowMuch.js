@@ -36,7 +36,7 @@ const HowMuch = ({ onNext, onHowMuchSelected }) => {
     e.preventDefault();
     
       if (howMuch) {
-        onNext(2,howMuch);
+        onNext(3,howMuch);
       } else {
         setError("Please Enter the amount before proceeding.");
         setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
@@ -62,11 +62,11 @@ const HowMuch = ({ onNext, onHowMuchSelected }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">2/10</h2>
+          <h2 className="num">3/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
-          <h2>How much amount Lost?</h2>
+          <h2>How much amount did you Lost?</h2>
           <div className="options-container">
             <input
               className="text-input"

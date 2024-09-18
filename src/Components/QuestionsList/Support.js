@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 const Support = ({ submitSupport, onNext }) => {
   const [files, setFiles] = useState([]);
   const navigate = useNavigate();
-  
+
   // Upload files as soon as the user selects them
   const handleFileChange = async (event) => {
     const selectedFiles = Array.from(event.target.files);
-    console.log(selectedFiles)
+    console.log(selectedFiles);
     setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
 
     const formData = new FormData();
@@ -39,22 +39,24 @@ const Support = ({ submitSupport, onNext }) => {
   };
 
   const handleSubmit = (e) => {
-    navigate("/success");
+    //navigate("/success");
+    onNext(19);
   };
 
   return (
     <div className="question">
       <div className="upload">
         <div style={{ display: "flex" }}>
-          <h2 className="num">10/10</h2>
+          <h2 className="num">9/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <h2>Upload supporting evidence?</h2>
+          <h2> Upload Supporting evidence</h2>
           <p>
-            Screenshots of all the fraudulent transactions, suspect websites,
-            suspect call logs, social media (Instagram, Facebook, Telegram, etc.),
-            chat logs (WhatsApp, etc.), and APK files.
+            Upload screenshots of all the fraudulent transactions, suspect
+            websites, suspect call log screenshots, screenshots of social media
+            (Instagram, Facebook, Telegram, etc.), screenshots of WhatsApp chat,
+            and APK files.
           </p>
           <input
             type="file"
@@ -105,8 +107,13 @@ const Support = ({ submitSupport, onNext }) => {
             )}
           </div>
           {files.length > 0 && (
-            <button type="button" style={{ width: "95px" }} className="ok-btn" onClick={handleSubmit}>
-              Finish <span style={{ fontSize: "15px" }}>({files.length})</span>
+            <button
+              type="button"
+              style={{ width: "95px" }}
+              className="ok-btn"
+              onClick={handleSubmit}
+            >
+              Ok <span style={{ fontSize: "15px" }}>({files.length})</span>
             </button>
           )}
         </div>

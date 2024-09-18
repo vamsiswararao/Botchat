@@ -12,7 +12,7 @@ const Time = ({onNext,onTimeSelected}) => {
     setTimeId(option.id);
     setTime(option.id);
     onTimeSelected(time)
-    onNext(3);
+    onNext(2);
     setShowOkButton(true); // Hide the OK button after successful click
     setError("")
     // try {
@@ -38,7 +38,7 @@ const Time = ({onNext,onTimeSelected}) => {
     //e.preventDefault();
     if (time) {
       console.log("Selected Option:", time);
-      onNext(3);
+      onNext(2);
       // Proceed with the next steps
     } else {
       setError("Please select an option before proceeding.");
@@ -58,7 +58,7 @@ const Time = ({onNext,onTimeSelected}) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">3/10</h2>
+          <h2 className="num">2/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>

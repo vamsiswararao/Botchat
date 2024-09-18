@@ -27,7 +27,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected }) => {
     e.preventDefault();
     onSuspectSpeakSelected(selectedOptions);
     if (selectedOptions.length > 0) {
-      onNext(15);
+      onNext(14);
     } else {
       setError("Please select an option before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
@@ -63,11 +63,11 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">7b/10</h2>
+          <h2 className="num">5b/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
-          <h2>What language did the suspect speak? *</h2>
+          <h2>Language used by the fraudster? *</h2>
           <div className="option-list">
             {options.map((option) => (
               <button

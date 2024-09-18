@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-const VictimGender = ({ onNext,onVictimGenderSelected }) => {
-  const [gender, setGender] = useState(null);
+const Profession = ({ onNext,onVictimProfessionSelected }) => {
+  const [Profession, setProfession] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   
 
   const handleOptionClick = async(option,e) => {
     e.preventDefault();
-    setGender(option.label);// Notify parent component about the selection
+    setProfession(option.label);// Notify parent component about the selection
     if (option.disabled) {
       return; // Ignore clicks on disabled options
     } 
-    setGender(option.label)
+    setProfession(option.label)
     handleOkClick()
-    onVictimGenderSelected(option.label);
+    onVictimProfessionSelected(option.label);
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
-    onNext(8);
+    onNext(9);
     try {
       const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
         method: "POST",
@@ -39,8 +39,8 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
   };
 
   const handleOkClick = (e) => {
-      if (gender) {
-        onNext(8);
+      if (Profession) {
+        onNext(9);
       } else {
         setError("Please select an option before proceeding.");
         setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
@@ -50,27 +50,39 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
   const options = [
     {
       id: "A",
-      label: " Male",
+      label: "Business",
     },
-    { id: "B", label: "Female" },
-    { id: "C", label: "Others" },
-  ];
+    { id: "B", label: "Farmer" },
+    { id: "C", label: "Govt Employee" },
+    {
+        id: "D",
+        label: "House Wife",
+      },
+      { id: "E", label: "Private Employee" },
+      { id: "F", label: "Self Employee" },
+      { id: "G", label: "Senior Citizen" },
+      { id: "H", label: "Software/IT Corporate Employee" },
+      { id: "I", label: "Student" },
+      { id: "I", label: "Un-Employee" },
+
+
+    ];
 
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex"  }}>
-          <h2 className='num'>4 d/10</h2>
+          <h2 className='num'>4 e/10</h2>
           <FaLongArrowAltRight className='num' />
         </div>
         <div>
-          <h2>What is your (victim) gender? </h2>
-          <div>
+          <h2>What is your (victim) Profession? </h2>
+          <div className="option-list">
             {options.map((option) => (
               <button
                 key={option.id}
                 className={`option-button ${
-                  gender === option.label ? "selected" : ""
+                    Profession === option.label ? "selected" : ""
                 }`}
                 onClick={(e) => handleOptionClick(option,e)}
               >
@@ -79,17 +91,17 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
                     className="option"
                     style={{
                       backgroundColor:
-                        gender === option.label
+                      Profession === option.label
                           ? "rgb(62, 87, 255)"
                           : "#fff",
-                      color: gender === option.label ? "#fff" : "#3E57FF",
+                      color: Profession === option.label ? "#fff" : "#3E57FF",
                     }}
                   >
                     {option.id}
                   </div>
                   <div className='option-label'>{option.label}</div>
                 </div>
-                {gender === option.label && (
+                {Profession === option.label && (
                   <span className="checkmark">
                     &#10003; {/* Unicode character for checkmark */}
                   </span>
@@ -121,4 +133,4 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
   );
 };
 
-export default VictimGender;
+export default Profession;

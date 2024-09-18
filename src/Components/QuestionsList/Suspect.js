@@ -4,14 +4,14 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 const Suspect = ({ onNext }) => {
   const handleContinue = () => {
     // Call the onNext function passed as a prop to move to the next step
-    onNext(13);
+    onNext(12);
   };
 
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">7/10</h2>
+          <h2 className="num">5/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>

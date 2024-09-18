@@ -16,7 +16,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected }) => {
   const handleOkClick = (e) => {
     e.preventDefault();
     onSuspectContactSelected(suspectContacts);
-    onNext(16); // Notify parent component to move to the next question
+    onNext(15); // Notify parent component to move to the next question
   };
 
   const options = [
@@ -32,11 +32,11 @@ const SuspectContact = ({ onNext, onSuspectContactSelected }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{ display: "flex" }}>
-          <h2 className="num">7c/10</h2>
+          <h2 className="num">5c/10</h2>
           <FaLongArrowAltRight className="num" />
         </div>
         <div>
-          <h2>Which platform(s) did the Suspect use to contact you?</h2>
+          <h2>Through Which platform(s) did the Suspect communicate with you?</h2>
           <div>
             {options.map((option) => (
               <button

@@ -3,7 +3,7 @@
 .main-container {
     position: relative;
     width: 100vw;
-    height: 100vh; /* Full viewport height for proper centering */
+    height: 90vh; /* Full viewport height for proper centering */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,13 +11,13 @@
   
   .main-container img {
     opacity: 0.9;
-    width: 100vw;
+    width: 90vw;
     height: 100vh; /* Maintain aspect ratio */
   }
   
   .start_btn {
     position: absolute;
-    bottom: 30px; /* Adjust as needed */
+    bottom: 60px; /* Adjust as needed */
     background-color: #007bff; /* Example color, change as needed */
     color: white;
     border: none;

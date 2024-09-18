@@ -17,7 +17,7 @@
   
   .start_btn {
     position: absolute;
-    bottom: 80px; /* Adjust as needed */
+    bottom: 20px; /* Adjust as needed */
     background-color: #007bff; /* Example color, change as needed */
     color: white;
     border: none;

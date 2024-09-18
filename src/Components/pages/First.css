@@ -11,8 +11,8 @@
   
   .main-container img {
     opacity: 0.9;
-    width: 90vw;
-    height: 100vh; /* Maintain aspect ratio */
+    width: 100vw;
+    height: 90vh; /* Maintain aspect ratio */
   }
   
   .start_btn {

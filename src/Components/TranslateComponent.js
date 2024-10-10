@@ -1,15 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import './TranslateComponent.css'
 
 const TranslateComponent = () => {
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const addGoogleTranslateScript = () => {
-      // Check if the script is already added to avoid adding it multiple times
-      if (!document.querySelector('script[src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"]')) {
+      if (!document.querySelector('script[src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"]')) {
         const script = document.createElement('script');
         script.type = 'text/javascript';
         script.async = true;
-        script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        script.onerror = () => {
+          console.error('Google Translate script failed to load');
+          setLoading(false);
+        };
         document.body.appendChild(script);
+      } else {
+        setLoading(false);
       }
     };
 
@@ -18,11 +26,13 @@ const TranslateComponent = () => {
         new window.google.translate.TranslateElement(
           {
             pageLanguage: 'en',
-            includedLanguages: 'en,te,hi', // English, Telugu, and Hindi
-            layout: window.google.translate.TranslateElement.InlineLayout.HORIZONTAL, // Horizontal layout
+            includedLanguages: 'en,te,hi',
+           
+            defaultLanguage: 'en', // Set default language to English
           },
           'google_translate_element'
         );
+        setLoading(false);
       }
     };
 
@@ -30,20 +40,21 @@ const TranslateComponent = () => {
 
     addGoogleTranslateScript();
 
-    // Check if the script is loaded and Google Translate is ready
     const scriptCheckInterval = setInterval(() => {
       if (window.google && window.google.translate) {
         initGoogleTranslate();
         clearInterval(scriptCheckInterval);
       }
-    }, 500); // Check every 500ms
+    }, 200);
 
-    // Cleanup interval on component unmount
     return () => clearInterval(scriptCheckInterval);
   }, []);
 
   return (
-    <div id="google_translate_element" />
+    <div>
+      {loading && <div>Loading translation options...</div>}
+      <div id="google_translate_element" />
+    </div>
   );
 };
 

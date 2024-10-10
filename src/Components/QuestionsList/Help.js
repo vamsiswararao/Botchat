@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { FaLongArrowAltRight } from "react-icons/fa";
+const apiUrl = process.env.REACT_APP_API_URL;
 
-const Help = ({ onNext, onHelpSelected }) => {
+const Help = ({ onNext, onHelpSelected,onQuestion,answer }) => {
   const [help, setHelp] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
 
-
+  const vist_id = sessionStorage.getItem("visitor_id");
   const handleHelpOptionClick = async(option, e) => {
     e.preventDefault();
     if (option.disabled) {
@@ -18,14 +18,22 @@ const Help = ({ onNext, onHelpSelected }) => {
     setError("");
 
     try {
-      const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
+      const response = await fetch(`${apiUrl}/ccrim_bot_help_request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ selectedOption: option.label }),
+        body: JSON.stringify({ 
+          "api_key":"1725993564",
+          "visitor_token":vist_id,
+          "qtion_id":"66f6524562171",
+          "qtion_num":"1",
+          "qtion_option":option.id,
+          "option_val":"1725993564"
+         }),
       });
-
+      const data = await response.json()
+      console.log(data)
       if (!response.ok) {
         throw new Error("Failed to push data to API");
       }
@@ -42,6 +50,7 @@ const Help = ({ onNext, onHelpSelected }) => {
     if (help) {
       if(help==="A"){
         onNext(1);
+        onQuestion(2)
       }
     } else {
       setError("Please select an option before proceeding.");
@@ -59,14 +68,10 @@ const Help = ({ onNext, onHelpSelected }) => {
   ];
 
   return (
-    <div className="question">
+    <div >
       <div style={{ display: "flex" }}>
-        <div style={{ display: "flex" }}>
-          <h2 className="num">1/10</h2>
-          <FaLongArrowAltRight className="num" />
-        </div>
         <div>
-          <h2>How may I help you? *</h2>
+          <h2>How may i help you?</h2>
           <div className="options-container">
             {helpOptions.map((option) => (
               <button
@@ -84,6 +89,11 @@ const Help = ({ onNext, onHelpSelected }) => {
                 <div className="answer-container">
                   <div
                     className="option"
+                    style={{
+                      backgroundColor:
+                      help === option.id ? "#000" : "#fff",
+                      color:help === option.id ? "#fff" : "#000",
+                    }}
 
                   >
                     {option.id}
@@ -117,8 +127,13 @@ const Help = ({ onNext, onHelpSelected }) => {
                   </p>
                 </>
               )}
-              {error && <div className="error-message">{error}</div>}
             </div>
+            {error && <div className="error-message">{error}</div>}
+              {answer[0] && (
+                <p className="alert-box">
+                  Please answer the current question before moving to the next.
+                </p>
+              )}
           </div>
         </div>
       </div>

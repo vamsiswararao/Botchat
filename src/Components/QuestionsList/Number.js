@@ -32,6 +32,7 @@ const Number = ({ onNext, onPhone }) => {
   const handleSubmit = () => {
     onNext("0"); // Move to the next question
     onPhone(phone);
+    setPhone(phone)
   };
 
   return (

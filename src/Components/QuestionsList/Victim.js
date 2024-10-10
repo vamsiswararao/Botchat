@@ -1,24 +1,20 @@
 import React from "react";
-import { FaLongArrowAltRight } from "react-icons/fa";
 
-const Victim = ({ onNext }) => {
+const Victim = ({ onNext,onQuestion }) => {
 
 
   const handleOkClick = (e) => {
     e.preventDefault();
     onNext(4);
+    onQuestion("5")
     };
 
 
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
-        <div style={{ display: "flex" }}>
-          <h2 className="num">4/10</h2>
-          <FaLongArrowAltRight className="num" />
-        </div>
         <div>
-          <h2 htmlFor="lose-money">Victim details</h2>
+          <h2 htmlFor="lose-money">Basic information of victim</h2>
           <p>Answer the set of questions about victim.</p>
           <div style={{ display: "flex", alignItems: "center" }}>
             <button type="button" className="continue-btn" onClick={handleOkClick}>

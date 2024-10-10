@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes,Navigate  } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./Components/pages/Login";
 import OtpInput from "./Components/pages/otpInput";
 import Questions from "./Components/pages/Questions";

@@ -1,21 +1,17 @@
 import React from "react";
-import { FaLongArrowAltRight } from "react-icons/fa";
 
-const Suspect = ({ onNext }) => {
+const Suspect = ({ onNext, onQuestion }) => {
   const handleContinue = () => {
     // Call the onNext function passed as a prop to move to the next step
-    onNext(12);
+    onNext(11);
+    onQuestion("12")
   };
 
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
-        <div style={{ display: "flex" }}>
-          <h2 className="num">5/10</h2>
-          <FaLongArrowAltRight className="num" />
-        </div>
         <div>
-          <h2 htmlFor="lose-money">Suspect Details</h2>
+          <h2 htmlFor="lose-money">Fraudster Information</h2>
           <p>Answer the set of questions about Suspect/Fraudster.</p>
           <div style={{ display: "flex", alignItems: "center" }}>
             <button type="button" className="continue-btn" onClick={handleContinue}>

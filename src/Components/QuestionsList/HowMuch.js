@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { FaLongArrowAltRight } from "react-icons/fa";
+const apiUrl = process.env.REACT_APP_API_URL;
 
-const HowMuch = ({ onNext, onHowMuchSelected }) => {
+const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer }) => {
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
 
   const [howMuch, setHowMuch] = useState("");
-
+  const vist_id = sessionStorage.getItem("visitor_id");
 
   const handleKeyDown = (event) => {
     if (event.altKey && event.key === "Enter") {
@@ -30,17 +30,43 @@ const HowMuch = ({ onNext, onHowMuchSelected }) => {
     setError("");
   };
 
-
-
-  const handleOkClick = (e) => {
+  const handleOkClick = async (e) => {
     e.preventDefault();
-    
-      if (howMuch) {
-        onNext(3,howMuch);
-      } else {
-        setError("Please Enter the amount before proceeding.");
-        setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
+
+    if (howMuch) {
+      setError("");
+      onNext(3, howMuch);
+      onQuestion(4);
+      console.log(howMuch)
+      try {
+        const response = await fetch(`${apiUrl}/ccrim_bot_add_text`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            "api_key": "1725993564",
+            "visitor_token": vist_id,
+            "qtion_id":"66f652b6e0c73",
+            "qtion_num": "3",
+            "option_val": howMuch,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to save address");
+        }
+
+        const result = await response.json();
+        console.log("Saved data:", result);
+      } catch (error) {
+        console.error("Error saving data:", error);
+        setError("Failed to save amount");
       }
+    } else {
+      setError("Please Enter the amount before proceeding.");
+      setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
+    }
   };
 
   // const handleKeyPress = (event) => {
@@ -56,18 +82,13 @@ const HowMuch = ({ onNext, onHowMuchSelected }) => {
   //   };
   // }, [selectedOption]);
 
-
-
   return (
     <div className="question">
-      <div style={{ display: "flex" }}>
-        <div style={{ display: "flex" }}>
-          <h2 className="num">3/10</h2>
-          <FaLongArrowAltRight className="num" />
-        </div>
+      <div >
         <div>
-          <h2>How much amount did you Lost?</h2>
+          <h2>How much amount did you lost?</h2>
           <div className="options-container">
+          <span className="rupee-symbol">₹</span>
             <input
               className="text-input"
               value={howMuch}
@@ -75,9 +96,9 @@ const HowMuch = ({ onNext, onHowMuchSelected }) => {
               onKeyDown={handleKeyDown}
               placeholder="Type your amount here..."
               id="lose-money"
-              rows="5"
-              cols="50"
               type="number"
+              min="1"
+              autoComplete="off"
             />
             <div style={{ display: "flex", alignItems: "center" }}>
               {showOkButton && (
@@ -94,8 +115,13 @@ const HowMuch = ({ onNext, onHowMuchSelected }) => {
                   </p>
                 </>
               )}
-              {error && <div className="error-message">{error}</div>}
             </div>
+            {error && <div className="error-message">{error}</div>}
+            {answer[2] && (
+              <p className="alert-box">
+                Please answer the current question before moving to the next.
+              </p>
+            )}
           </div>
         </div>
       </div>

@@ -1,11 +1,20 @@
 import React, { useState } from "react";
-import { FaLongArrowAltRight } from "react-icons/fa";
+const apiUrl = process.env.REACT_APP_API_URL;
 
-const VictimGender = ({ onNext,onVictimGenderSelected }) => {
+const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer }) => {
   const [gender, setGender] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
+  const vist_id = sessionStorage.getItem("visitor_id");
   
+  // const translateOptionIdToEnglish = (id) => {
+  //   const translations = {
+  //    "66d31c12457c3489795485": "A",
+  //   "66d31c2486272638130560": "B" ,
+  //   "66d31c42bd15f000864236": "C" }
+
+  //   return translations[id] || id; // Return the English equivalent, or the id if no match is found
+  // };
 
   const handleOptionClick = async(option,e) => {
     e.preventDefault();
@@ -18,19 +27,33 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
     onVictimGenderSelected(option.label);
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
-    onNext(8);
+    onNext(6);
+    onQuestion("7")
+    //const translatedId = translateOptionIdToEnglish(option.value);
+    console.log(option)
     try {
-      const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
+      const response = await fetch(`${apiUrl}/ccrim_bot_add_choice`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ selectedOption: option.label }),
+        body: JSON.stringify({
+          "api_key":"1725993564",
+         "visitor_token":vist_id,
+         "qtion_id":"66f65326d886a",
+         "qtion_num":"4b",
+         "qtion_option":option.id,
+         "option_val":option.value
+   } 
+   ),
       });
 
       if (!response.ok) {
         throw new Error("Failed to push data to API");
       }
+
+      const data = await response.json()
+      console.log(data)
 
       console.log("Data pushed to RequestBin:", option.id);
     } catch (err) {
@@ -40,7 +63,8 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
 
   const handleOkClick = (e) => {
       if (gender) {
-        onNext(8);
+        onNext(6);
+        onQuestion("7")
       } else {
         setError("Please select an option before proceeding.");
         setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
@@ -50,19 +74,15 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
   const options = [
     {
       id: "A",
-      label: " Male",
+      value :"66d31c12457c3489795485", label: " Male",
     },
-    { id: "B", label: "Female" },
-    { id: "C", label: "Others" },
+    { id: "B", value :"66d31c2486272638130560", label: "Female" },
+    { id: "C", value :"66d31c42bd15f000864236", label: "Others" },
   ];
 
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
-        <div style={{ display: "flex"  }}>
-          <h2 className='num'>4 d/10</h2>
-          <FaLongArrowAltRight className='num' />
-        </div>
         <div>
           <h2>What is your (victim) gender? </h2>
           <div>
@@ -80,9 +100,9 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
                     style={{
                       backgroundColor:
                         gender === option.label
-                          ? "rgb(62, 87, 255)"
+                          ? "#000"
                           : "#fff",
-                      color: gender === option.label ? "#fff" : "#3E57FF",
+                      color: gender === option.label ? "#fff" : "#000",
                     }}
                   >
                     {option.id}
@@ -115,6 +135,11 @@ const VictimGender = ({ onNext,onVictimGenderSelected }) => {
               )}
               {error && <div className="error-message">{error}</div>}
             </div>
+            {answer[5] && (
+                <p className="alert-box">
+                  Please answer the current question before moving to the next.
+                </p>
+              )}
         </div>
       </div>
     </div>

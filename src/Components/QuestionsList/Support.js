@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { FaLongArrowAltRight } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
-import { useNavigate } from "react-router-dom";
+const apiUrl = process.env.REACT_APP_API_URL;
 
-const Support = ({ submitSupport, onNext }) => {
+const Support = ({ submitSupport, onNext, onQuestion }) => {
   const [files, setFiles] = useState([]);
-  const navigate = useNavigate();
+  const [successfulUploads, setSuccessfulUploads] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const vist_id = sessionStorage.getItem("visitor_id");
 
   // Upload files as soon as the user selects them
   const handleFileChange = async (event) => {
@@ -14,23 +15,40 @@ const Support = ({ submitSupport, onNext }) => {
     setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
 
     const formData = new FormData();
-    selectedFiles.forEach((file) => {
-      formData.append("files", file);
-    });
+    formData.append("api_key", "1725993564");
+    formData.append("visitor_token", vist_id);
+    formData.append("qtion_id", "66f654783112a");
+    // for (let i = 0; i < selectedFiles.length; i++) {
+    //   formData.append('userImages', selectedFiles[i]);
+    // }
+
+    console.log(files);
+    formData.append("userimage", files[0]);
+
+    console.log(formData);
 
     try {
-      const response = await fetch("https://enrbgth6q54c8.x.pipedream.net", {
+      setIsUploading(true);
+      const response = await fetch(`${apiUrl}/ccrim_bot_add_doc`, {
         method: "POST",
         body: formData,
       });
 
-      if (response.ok) {
+      const fileData = await response.json();
+      console.log(fileData);
+      if (fileData.error_code === "0") {
         console.log("Files uploaded successfully");
+        setSuccessfulUploads((prevUploads) => [
+          ...prevUploads,
+          ...selectedFiles,
+        ]);
       } else {
         console.error("File upload failed");
       }
     } catch (error) {
       console.error("Error uploading files:", error);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -39,20 +57,16 @@ const Support = ({ submitSupport, onNext }) => {
   };
 
   const handleSubmit = (e) => {
-    //navigate("/success");
-    onNext(19);
+    onNext(17);
+    onQuestion(17);
   };
 
   return (
     <div className="question">
       <div className="upload">
-        <div style={{ display: "flex" }}>
-          <h2 className="num">9/10</h2>
-          <FaLongArrowAltRight className="num" />
-        </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <h2> Upload Supporting evidence</h2>
-          <p>
+          <h2> Upload supporting evidence</h2>
+          <p className="upload-de">
             Upload screenshots of all the fraudulent transactions, suspect
             websites, suspect call log screenshots, screenshots of social media
             (Instagram, Facebook, Telegram, etc.), screenshots of WhatsApp chat,
@@ -113,7 +127,13 @@ const Support = ({ submitSupport, onNext }) => {
               className="ok-btn"
               onClick={handleSubmit}
             >
-              Ok <span style={{ fontSize: "15px" }}>({files.length})</span>
+              {isUploading ? (
+                "Uploading..."
+              ) : (
+                <>
+                  OK <span style={{ fontSize: "15px" }}>({files.length})</span>
+                </>
+              )}
             </button>
           )}
         </div>

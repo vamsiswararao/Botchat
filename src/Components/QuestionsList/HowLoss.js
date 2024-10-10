@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { FaLongArrowAltRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+const apiUrl = process.env.REACT_APP_API_URL;
 
 
-const HowLoss = ({ onNext, onHowLossSelected }) => {
+const HowLoss = ({ onNext, onHowLossSelected,answer }) => {
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const [howLoss, setHowLoss] = useState("");
   const navigate = useNavigate()
-
-
-
+  const vist_id = sessionStorage.getItem("visitor_id");
+  
   const handleKeyDown = (event) => {
     if (event.altKey && event.key === 'Enter') {
       event.preventDefault();
@@ -33,10 +32,35 @@ const HowLoss = ({ onNext, onHowLossSelected }) => {
     setError("");
   };
 
-  const handleOkClick = (e) => {
-    e.preventDefault();
+  const handleOkClick = async(e) => {
+    e.preventDefault(); 
     onHowLossSelected(howLoss);
     console.log("Submitted value:", howLoss);
+    try {
+      const response = await fetch(`${apiUrl}/ccrim_bot_add_text`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "api_key": "1725993564",
+          "visitor_token": vist_id,
+          "qtion_id":"66f655a76d2d0",
+          "qtion_num": "3",
+          "option_val": howLoss,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save address");
+      }
+
+      const result = await response.json();
+      console.log("Saved data:", result);
+    } catch (error) {
+      console.error("Error saving data:", error);
+      setError("Failed to save amount");
+    }
     if (howLoss) {
       navigate("/success");
     } else {
@@ -48,12 +72,8 @@ const HowLoss = ({ onNext, onHowLossSelected }) => {
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
-        <div style={{ display: "flex" }}>
-          <h2 className="num">10/10</h2>
-          <FaLongArrowAltRight className="num" />
-        </div>
-        <div>
-          <h2 htmlFor="lose-money">can you explain  how you lose money?</h2>
+        <div >
+          <h2 htmlFor="lose-money">Can you explain  how you lose money?</h2>
           <p>Write in detail about how you lost the money.</p>
           <textarea
             value={howLoss}
@@ -81,6 +101,12 @@ const HowLoss = ({ onNext, onHowLossSelected }) => {
                 </>
               )}
               {error && <div className="error-message">{error}</div>}
+
+              {answer[16] && (
+                <p className="alert-box">
+                  Please answer the current question before moving to the next.
+                </p>
+              )}
             </div>
         </div>
       </div>

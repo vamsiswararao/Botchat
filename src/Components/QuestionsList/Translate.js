@@ -4,13 +4,16 @@ const Translate = () => {
   const [language, setLanguage] = useState('en'); // Default language is English
 
   useEffect(() => {
+    // Function to add Google Translate script
     const addGoogleTranslateScript = () => {
       const script = document.createElement('script');
       script.type = 'text/javascript';
       script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.async = true;
       document.body.appendChild(script);
     };
 
+    // Initialize Google Translate element
     window.googleTranslateElementInit = () => {
       new window.google.translate.TranslateElement(
         { pageLanguage: 'en', includedLanguages: 'en,te,hi', autoDisplay: false },
@@ -18,18 +21,23 @@ const Translate = () => {
       );
     };
 
+    // Add script to document
     addGoogleTranslateScript();
   }, []);
 
-  // Function to change language when dropdown value changes
+  // Function to handle language change
   const handleLanguageChange = (event) => {
     const languageCode = event.target.value;
     setLanguage(languageCode); // Update the selected language
-    const googleTranslateFrame = document.querySelector('.goog-te-combo');
-    if (googleTranslateFrame) {
-      googleTranslateFrame.value = languageCode;
-      googleTranslateFrame.dispatchEvent(new Event('change')); // Trigger change event
-    }
+
+    // Ensure Google Translate is applied
+    setTimeout(() => {
+      const googleTranslateFrame = document.querySelector('.goog-te-combo');
+      if (googleTranslateFrame) {
+        googleTranslateFrame.value = languageCode;
+        googleTranslateFrame.dispatchEvent(new Event('change')); // Trigger change event
+      }
+    }, 500); // Delay to ensure iframe is loaded
   };
 
   return (

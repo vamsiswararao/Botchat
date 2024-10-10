@@ -1,8 +1,8 @@
 /* src/styles.css */
 
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f4f4;
+  font-family:'Oxygen' , sans-serif, Arial, sans-serif;
+  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -128,6 +128,7 @@ form {
     cursor: pointer;
     display: inline-block;
 }
+
 }
 
 @media only screen and (max-width: 480px) {
@@ -215,7 +216,13 @@ form {
   }
   .upload{
     display: flex ;
-    width:50%;
+    width:100%;
+  }
+
+  upload-de {
+    padding-bottom: 30px;
+    font-size: 24px;
+    color: #000;
   }
   .date {
     display: flex;
@@ -292,7 +299,7 @@ p {
   .login-container,
   .otp-container {
     padding: 20px;
-    background-color: #f7f7f7;
+    background-color: #fff;
   }
 
   .container {
@@ -320,6 +327,34 @@ p {
     font-size: 18px;
     padding: 12px;
   }
+
+  .question {
+  height: 100vh;
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 210px;
+}
+
+.questions {
+  height: 100vh;
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 210px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 5px;
+  font-size: 14px;
+  background-color: rgb(224, 197, 197);
+  height: 20px;
+  width: 280px;
+  padding-top: 5px;
+  margin-left: 10px;
+  padding-left: 10px;
+}
 }
 
 .page {
@@ -348,14 +383,7 @@ button:hover {
   background-color: #0056b3;
 }
 
-.question {
-  height: 90vh;
-  font-size: 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+
 
 
 
@@ -364,11 +392,7 @@ button:hover {
 }
 
 
-.phone-input-container {
-  display: flex;
-  flex-direction: column;
-  margin-top: 10px;
-}
+
 
 .custom-dropdown {
   margin-right: 10px;
@@ -380,28 +404,6 @@ button:hover {
   padding: 5px;
 }
 
-@media only screen and (min-width: 1025px) {
-
-  .phone-input-container {
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    margin-right: 90px;
-  }
-}
-
-
-.error-message {
-  color: red;
-  margin-top: 5px;
-  font-size: 14px;
-  background-color: rgb(224, 197, 197);
-  height: 18px;
-  width: 280px;
-  padding-top: 5px;
-  margin-left: 10px;
-  padding-left: 10px;
-}
 
 .error-border {
   border-color: red !important;
@@ -415,7 +417,6 @@ button:hover {
 
 
 .multiple-choice-container {
-  font-family: Arial, sans-serif;
   margin: 20px;
 }
 
@@ -430,7 +431,7 @@ option-button {
   justify-content: space-between;
   padding: 10px;
   margin: 5px 0;
-  border: 1px solid #0066cc;
+  border: 1px solid #000000;
   border-radius: 5px;
   cursor: pointer;
   background-color: #f0f8ff;
@@ -442,12 +443,12 @@ option-button {
 
 
 .option-button:hover {
-  background-color: #e0f0ff;
+  background-color: #737373;
 }
 
 .option-button.selected {
-  border: 3px solid #4556c1;
-  background-color: #bcc1e1;
+  border: 2px solid #000000;
+  background-color: #dddee1;
 }
 
 
@@ -468,7 +469,6 @@ option-button {
 
 
 .ok-btn {
-  background-color: #3e57ff;
   color: #fff;
   border: none;
   font-size: 18px;
@@ -480,7 +480,7 @@ option-button {
 }
 
 .ok-btn:hover {
-  background-color: #4c63e0;
+  background-color: #4c7be0;
 }
 
 
@@ -578,15 +578,18 @@ h2 {
   margin-top: 10px;
   margin-right: 20px;
   margin-bottom: 10px;
-  background-color: #f4f4f4;
+  background-color: #fff;
   width: 250px;
   height: 18px;
+  font-size: 14px;
+  color: #004999;
 }
 
 .option-list {
   overflow-X: auto;
-  height: 55vh;
-  width: 310px;
+  min-height: 30vh;
+  max-width: 100vw;
+  max-height:40vh;
 }
 
 
@@ -614,6 +617,10 @@ h2 {
 
   h2 {
     font-size: 24px;
+    font-size: 2.4rem;
+    font-weight: 300;
+    letter-spacing: 0.75px;
+    color: #000000;
   }
 
   .enter-text {
@@ -629,12 +636,13 @@ h2 {
     justify-content: center;
     width: 30px;
     height: 30px;
-    border: 1px solid currentColor;
+    border: 1px solid #000000;
     font-size: 16px;
   }
 
   .option-label {
     font-size: 16px;
+    color: #000000;
   }
 
   .text-input {
@@ -646,18 +654,31 @@ h2 {
     margin-top: 0px;
     margin-right: 20px;
     margin-bottom: 0px;
-    background-color: #f4f4f4;
-    width: 80px;
+    background-color: #fff;
+    width: 480px;
     height: 24px;
+    font-size: 16px;
+    color: #000000;
   }
 
   .option-list {
     overflow-X: auto;
-    height: 55vh;
+    height: 40vh;
     width: 600px;
   }
-
-
+  .date-time-input{
+    height: 24px;
+    width: 130px;
+    font-size: 16px;
+    color:#004999;
+    border: 1px solid #004999;
+    margin-left: 10px;
+}
+.date-time-label{
+  height: 26px; 
+  width: 18px;
+ }
+ 
 }
 
 .option-button:hover {
@@ -671,7 +692,7 @@ h2 {
   top: 50%;
   transform: translateY(-50%);
   font-size: 16px;
-  color: blue;
+  color:#000;
 }
 
 
@@ -697,7 +718,6 @@ h2 {
 .text-input::placeholder {
   color: #8b9ef4;
   font-size: 18px;
-  ;
   /* Change placeholder color to blue */
 }
 
@@ -713,6 +733,8 @@ h2 {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
+  overflow-X: auto;
+  height: 150px;
 }
 
 .file-preview li {
@@ -795,6 +817,25 @@ h2 {
   /* Default width for laptops and larger screens */
 }
 
+.date-time-input{
+    height: 18px;
+    width: 100px;
+    font-size: 12px;
+    color:#004999;
+    border: 1px solid #004999;
+    margin-left: 10px;
+}
+
+.date-time-label{
+ height: 20px; 
+ width: 18px;
+}
+
+
+.date-time-input::placeholder{
+  color:#004999;
+}
+
 /* Styles for mobile devices */
 @media (max-width: 767px) {
   .select-container {
@@ -803,6 +844,22 @@ h2 {
     max-width: 600px;
     /* Optional: maximum width to prevent stretching */
   }
+  /* .question {
+  margin-top: 100px;
+  } */
+
+  .error-message {
+    color: red;
+    margin-top: 5px;
+    font-size: 9px;
+    background-color: rgb(224, 197, 197);
+    height: 18px;
+    width: 180px;
+    padding-top: 5px;
+    margin-left: 10px;
+    padding-left: 10px;
+  }
+  
 }
 
 .responsive-textarea {
@@ -810,6 +867,12 @@ h2 {
   max-width: 600px; /* Limit the width on larger screens */
   padding: 10px;
   font-size: 1rem;
+  color:#000;
+  border: 2px solid  #8b9ef4;
+}
+
+.responsive-textarea::placeholder{
+ color: #8b9ef4;
 }
 
 @media (max-width: 768px) {
@@ -818,12 +881,23 @@ h2 {
   }
   header{
     position: fixed;
-    top: 3px;
+    top: 0px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     width: 100%;
+    height: 60px;
     background-color: #f8f9fa;
-    padding: 20px;
     border-bottom: 1px solid #dee2e6;
-    z-index: 1000;
+    z-index: 999;
+  }
+  .victim-header{
+    position: fixed;
+    top: 120px;
+    height:20px;
+    width: 100%;
+    z-index:1000;
+    /* background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6; */
   }
   .header-title{
     font-size: 12px;
@@ -835,6 +909,42 @@ h2 {
  .amount{
   width: 180px;
  }
+ .add-page-btn{
+  height: 42px;
+  width: 70px;
+  margin-left: 10px;
+  font-size: 12px;
+}
+
+.next-page-btn{
+  width: 70px;
+  height: 45px;
+  font-size: 12px;
+}
+
+.cst-logo{
+  width:100px;
+  height:60px;
+  border-radius:80px
+}
+
+.csi-logo{
+  width:50px;
+  height:50px;
+  border-radius:50px;
+  margin-right:20px;
+}
+.translate{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 55px;
+    right: 80;
+    z-index: 1000;
+    width: 20%;
+}
+
 }
 
 @media (min-width: 769px) {
@@ -843,17 +953,29 @@ h2 {
   }
   header{
     position: fixed;
-    top: 3px;
-    left: 10%;
-    right: 10%;
-    width: 80%;
+    top: 0px;
+    width: 100%;
+    height:100px;
     background-color: #f8f9fa;
-    padding: 20px;
     border-bottom: 1px solid #dee2e6;
-    z-index: 1000;
+    z-index: 999;
+  }
+  .victim-header{
+    position: fixed;
+    top: 80px;
+    right:40%;
+    height:10px;
+    width: 20%;
+    /* background-color: #f8f9fa; */
+    padding: 20px;
+    /* border-bottom: 1px solid #dee2e6; */
+    margin-top: 5px;
   }
   .header-title{
-    font-size: 24px;
+    font-size: 36px;
+    font-size: 2.4rem;
+    font-weight: 300;
+    letter-spacing: 0.75px;
   }
 
   .account{
@@ -862,8 +984,88 @@ h2 {
   }
   .amount{
     margin-Right: 10px; 
-    width: 90px;
+    width: 360px;
    }
+.add-page-btn{
+  width: 240px;
+  margin-left: 20px;
+  height: 38px;
 }
+
+.next-page-btn{
+  width: 240px;
+  margin-left: 20px;
+  height: 38px;
+}
+.cst-logo{
+  width:160px;
+  height:90px;
+  border-radius:80px
+}
+.csi-logo{
+  width:90px;
+  height:90px;
+  border-radius:60px;
+  margin-right:50px;
+}
+.translate{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 55px;
+  right: 190px;
+  z-index: 1000
+}
+
+}
+
+.next-add-options{
+  display: flex;
+  margin-left:20px;
+  margin-top:15px;
+}
+
+
+/* Default (Laptop/Desktop view) */
+.alert-box {
+  color: red;
+  margin-top: 5px;
+  font-size: 14px;
+  background-color: rgb(224, 197, 197);
+  height: 18px;
+  width: 400px;
+  padding-top: 5px;
+  margin-left: 10px;
+  padding-left: 10px;
+}
+
+/* Mobile view */
+@media only screen and (max-width: 600px) {
+  .alert-box {
+    color: red;
+    margin-top: 5px;
+    font-size: 9px;
+    background-color: rgb(224, 197, 197);
+    height: 16px;
+    width: 280px;
+    padding-top: 5px;
+    margin-left: 10px;
+    padding-left: 10px;
+  }
+}
+
+.resend-btn{
+  background-color:transparent !important;
+  color: rgb(0, 106, 255);
+  margin-top: 20px;
+}
+
+
+
+
+
+
+
 
 

@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
-  const [selectedCalls, setSelectedCalls] = useState([]);
+  const [suspectContacts, setSuspectContacts] = useState({
+    contactValues: [],
+    contactIds: []
+  });
+  
+  //const [selectedCalls, setSelectedCalls] = useState([]);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const [options, setOptions] = useState([]);
@@ -53,28 +58,59 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
     if (option.disabled) {
       return; // Ignore clicks on disabled options
     }
+  
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
-
-    setSelectedCalls((prevSelectedCalls) => {
-      const updatedCalls = prevSelectedCalls.includes(option.value)
-        ? prevSelectedCalls.filter((call) => call !== option.value)
-        : [...prevSelectedCalls, option.value];
-
+  
+    // Update contactValues and contactIds
+    setSuspectContacts((prevSelectedCalls) => {
+      // Ensure prevSelectedCalls is always defined
+      const updatedCalls = prevSelectedCalls.contactValues.includes(option.value)
+        ? {
+            contactValues: prevSelectedCalls.contactValues.filter(
+              (call) => call !== option.value
+            ),
+            contactIds: prevSelectedCalls.contactIds.filter(
+              (id) => id !== option.id
+            ),
+          }
+        : {
+            contactValues: [...prevSelectedCalls.contactValues, option.value],
+            contactIds: [...prevSelectedCalls.contactIds, option.id],
+          };
+  
       // Save data after state update
       onSuspectCallSelected(updatedCalls);
-
       return updatedCalls;
     });
+  
+    // Double-check updating suspectContacts based on option.value and option.id
+    if (suspectContacts.contactValues.includes(option.value)) {
+      setSuspectContacts({
+        contactValues: suspectContacts.contactValues.filter(
+          (contact) => contact !== option.value
+        ),
+        contactIds: suspectContacts.contactIds.filter(
+          (id) => id !== option.id
+        ),
+      });
+    } else {
+      setSuspectContacts({
+        contactValues: [...suspectContacts.contactValues, option.value],
+        contactIds: [...suspectContacts.contactIds, option.id],
+      });
+    }
   };
+  
 
   const handleOkClick = async (e) => {
     e.preventDefault();
-    if (selectedCalls.length > 0) {
-      onSuspectCallSelected(selectedCalls);
+    console.log(suspectContacts.contactIds)
+    if (suspectContacts.contactIds.length > 0) {
+      onSuspectCallSelected(suspectContacts);
       onNext(12);
       onQuestion("13");
-      await saveDataToAPI(selectedCalls);
+      await saveDataToAPI(suspectContacts);
     } else {
       setError("Please select an option before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
@@ -83,6 +119,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
 
   // Function to save data to RequestBin API
   const saveDataToAPI = async (selectedContacts) => {
+    console.log(suspectContacts)
     try {
       const response = await fetch(`${apiUrl}/ccrim_bot_add_multichoice`, {
         method: "POST",
@@ -93,9 +130,9 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
           api_key: "1725993564",
           visitor_token: vist_id,
           qtion_id: "66f653ab73faa",
-          qtion_num: "5a",
-          qtion_option: ["a","b","c","d","e"],
-          option_val: selectedContacts,
+          qtion_num: "12",
+          qtion_option:suspectContacts.contactIds,
+          option_val:  suspectContacts.contactValues,
         }),
       });
 
@@ -136,7 +173,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
               <button
                 key={option.id}
                 className={`option-button ${
-                  selectedCalls.includes(option.value) ? "selected" : ""
+                  suspectContacts.contactValues.includes(option.value) ? "selected" : ""
                 }`}
                 onClick={(e) => handleOptionClick(option, e)}
               >
@@ -144,10 +181,10 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
                   <div
                     className="option"
                     style={{
-                      backgroundColor: selectedCalls.includes(option.value)
+                      backgroundColor: suspectContacts.contactValues.includes(option.value)
                         ? "#000"
                         : "#fff",
-                      color: selectedCalls.includes(option.value)
+                      color: suspectContacts.contactValues.includes(option.value)
                         ? "#fff"
                         : "#000",
                     }}
@@ -156,14 +193,14 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
                   </div>
                   <div className="option-label">{option.label}</div>
                 </div>
-                {selectedCalls.includes(option.value) && (
+                {suspectContacts.contactValues.includes(option.value) && (
                   <span className="checkmark">&#10003;</span> // Unicode character for checkmark
                 )}
               </button>
             ))}
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center" ,marginLeft:'90px'}}>
+        <div style={{ display: "flex", alignItems: "center"}} className="call-btn">
             {showOkButton && (
               <>
                 <button

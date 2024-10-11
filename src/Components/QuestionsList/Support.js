@@ -10,6 +10,7 @@ const Support = ({ submitSupport, onNext, onQuestion }) => {
 
   // Upload files as soon as the user selects them
   const handleFileChange = async (event) => {
+    console.log()
     const selectedFiles = Array.from(event.target.files);
     console.log(selectedFiles);
     setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
@@ -21,9 +22,15 @@ const Support = ({ submitSupport, onNext, onQuestion }) => {
     // for (let i = 0; i < selectedFiles.length; i++) {
     //   formData.append('userImages', selectedFiles[i]);
     // }
-
-    console.log(files);
-    formData.append("userimage", files[0]);
+    console.log(files)
+    if (selectedFiles.length > 0) {
+      Array.from(selectedFiles).forEach((file) => {
+        formData.append('userImage', file); // Append each file to the same key 'userImage'
+      });
+      //formData.append('userImage', selectedFiles);
+    } else {
+      console.log("No files selected!");
+    }
 
     console.log(formData);
 
@@ -36,7 +43,7 @@ const Support = ({ submitSupport, onNext, onQuestion }) => {
 
       const fileData = await response.json();
       console.log(fileData);
-      if (fileData.error_code === "0") {
+      if (fileData.resp.error_code === "0") {
         console.log("Files uploaded successfully");
         setSuccessfulUploads((prevUploads) => [
           ...prevUploads,
@@ -120,7 +127,7 @@ const Support = ({ submitSupport, onNext, onQuestion }) => {
               </ul>
             )}
           </div>
-          {files.length > 0 && (
+          {successfulUploads.length > 0 && (
             <button
               type="button"
               style={{ width: "95px" }}

@@ -95,7 +95,7 @@ const OtpInput = () => {
             alignItems: "center",
           }}
         >
-          <img src="\images\LOGO-TS.jpg" alt="csb-ts" className="cst-logo" />
+          <img src="\images\LOGO-TS2.jpg" alt="csb-ts" className="cst-logo" />
           <h1
             className="header-title"
             style={{ padding: 20, textAlign: "center" }}

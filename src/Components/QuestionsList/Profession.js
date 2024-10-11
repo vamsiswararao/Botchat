@@ -99,7 +99,7 @@ const Profession = ({
           api_key: "1725993564",
           visitor_token: vist_id,
           qtion_id: "66f65342db514",
-          qtion_num: "4c",
+          qtion_num: "7",
           qtion_option: option.id,
           option_val: option.value,
         }),

@@ -46,7 +46,7 @@ const HowLoss = ({ onNext, onHowLossSelected,answer }) => {
           "api_key": "1725993564",
           "visitor_token": vist_id,
           "qtion_id":"66f655a76d2d0",
-          "qtion_num": "3",
+          "qtion_num": "18",
           "option_val": howLoss,
         }),
       });
@@ -63,6 +63,8 @@ const HowLoss = ({ onNext, onHowLossSelected,answer }) => {
     }
     if (howLoss) {
       navigate("/success");
+      sessionStorage.removeItem("visitor_id");
+      sessionStorage.removeItem("otp_id");
     } else {
       setError("Please answer before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt

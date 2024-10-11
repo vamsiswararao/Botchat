@@ -247,7 +247,7 @@ const Questions = () => {
       if(currentQuestion===13 && formData.victim_bank.length > victimValue){
         console.log(1)
         setVictimValue(victimValue+1)
-        window.scrollBy({ top:768, behavior: 'smooth' });
+        window.scrollBy({ top:window.innerHeight*1.1 , behavior: 'smooth' });
         const nextQuestion = Math.min(currentQuestion + 1, questionCount - 1);
         console.log(nextQuestion);
         setQuestion(questionSequence[nextQuestion])
@@ -256,9 +256,10 @@ const Questions = () => {
       else if(currentQuestion===15 && formData.suspect_bank.length > suspectValue) {
         console.log(2)
         setSuspectValue(suspectValue+1)
-        window.scrollBy({ top: 768, behavior: 'smooth' });
+        window.scrollBy({ top: window.innerHeight*1.3, behavior: 'smooth' });
         const nextQuestion = Math.min(currentQuestion + 1, questionCount - 1);
         console.log(nextQuestion);
+        setCurrentQuestion(nextQuestion);
         setQuestion(questionSequence[nextQuestion]);
       }
       else{
@@ -368,8 +369,8 @@ const Questions = () => {
       )}
       <form>
         <header>
-          <div style={{display:'flex',flexDirection:'colum',justifyContent:'space-between',alignItems:'center'}}>
-          <img src="\images\LOGO-TS.jpg" alt="csb-ts" className="cst-logo"/>
+          <div style={{display:'flex',flexDirection:'colum',justifyContent:'space-between',alignItems:'center',marginTop:'10px'}}>
+          <img src="\images\LOGO-TS2.jpg" alt="csb-ts" className="cst-logo"/>
           <h1
             className="header-title"
             style={{ textAlign: "center" }}

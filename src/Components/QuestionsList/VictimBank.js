@@ -243,7 +243,7 @@ const VictimBank = ({
           api_key: "1725993564",
           visitor_token: vist_id,
           qtion_id: "66f6544451d1f",
-          qtion_num: "6",
+          qtion_num: "15",
           sub_cat: formData.sub_cat,
           mod_op: formData.mod_op,
           bank_mer: formData.bank_name,
@@ -280,7 +280,7 @@ const VictimBank = ({
     }
   };
 
-  // const handleOkClick = (e) => {
+ 
   //   e.preventDefault();
   //   if (!formData.sub_cate) {
   //     setError("Please select the sub_category.");
@@ -327,7 +327,6 @@ const VictimBank = ({
       Amount: "",
     });
 
-    console.log(window.innerHeight / 2, window.outerWidth / 2);
     const isMobile = window.innerWidth <= 768; // Adjust the width breakpoint as per your design
     const scrollAmount = isMobile ? window.innerHeight : window.innerHeight*1.2 ; // Adjust scrolling based on view
     // Perform smooth scroll
@@ -504,7 +503,7 @@ const VictimBank = ({
           </div>
 
         </div>
-        <div style={{ display: "flex", marginTop:'20px',marginLeft:'150px'}}>
+        <div style={{ display: "flex", marginTop:'20px'}} className="next-btns">
             <button type="button" className="next-page-btn" onClick={handleOkClick}>
             Go To Next Question
             </button>

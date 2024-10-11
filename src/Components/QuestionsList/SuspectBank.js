@@ -285,7 +285,7 @@ const SuspectBank = ({
           api_key: "1725993564",
           visitor_token: vist_id,
           qtion_id: "66f6545af3d6e",
-          qtion_num: "7",
+          qtion_num: "16",
           mtfr_uni: formData.transferType,
           bwpa_uni: formData.bank,
           acc_no: formData.account_no,
@@ -361,7 +361,7 @@ const SuspectBank = ({
               // width:'650px'
             }}
           >
-            <h2 style={{fontSize:'35px'}}>
+            <h2>
               Please provide creditor/ fraudster’s bank account details(if you
               have)
             </h2>
@@ -514,7 +514,7 @@ const SuspectBank = ({
           </div>
             
         </div>
-        <div style={{ display: "flex",  marginTop:'20px',marginLeft:'250px'}}>
+        <div style={{ display: "flex",  marginTop:'20px'}} className="suspect-btns">
               <button type="button" className="next-page-btn" onClick={handleOkClick}>
               Go To Next Question
               </button>

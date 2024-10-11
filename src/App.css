@@ -148,6 +148,38 @@ form {
     padding: 4px;
     font-size: 14px;
   }
+  .question {
+    height: 100vh;
+    font-size: 24px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 180px;
+    width: 80vw;
+  }
+
+  .help{
+    margin-bottom:320px;
+  }
+  .suspect_contact{
+    margin-left: 12px;
+  }
+
+.btns-ok{
+  margin-left: 0px;
+}
+
+.next-btns{
+  margin-left:30px;
+}
+
+.suspect-btns{
+  margin-left:30px;
+}
+
+.call-btn{
+  margin-left:12px;
+}
+
 }
 
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
@@ -166,6 +198,25 @@ form {
     padding: 5px;
     font-size: 12px;
   }
+  .question {
+    height: 100vh;
+    font-size: 24px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 180px;
+    width: 80vw;
+  }
+
+  .help{
+    margin-bottom:320px;
+  }
+
+  .suspect_contact{
+    margin-left: 0px;
+  }
+
+  
+
 
 }
 
@@ -296,6 +347,21 @@ p {
 /* Laptop view */
 @media (min-width: 768px) {
 
+  .next-btns{
+    margin-left:140px;
+  }
+
+  .suspect-btns{
+    margin-left:290px;
+  }
+
+  .call-btn{
+    margin-left:90px;
+  }
+
+  .btns-ok{
+    margin-left: 120px;
+  }
   .login-container,
   .otp-container {
     padding: 20px;
@@ -594,6 +660,9 @@ h2 {
 
 
 @media only screen and (min-width: 1025px) {
+  .suspect_contact{
+    margin-left: 300px;
+  }
   .option-button {
     background-color: #fff;
     color: #2239cc;
@@ -910,22 +979,23 @@ h2 {
   width: 180px;
  }
  .add-page-btn{
-  height: 42px;
-  width: 70px;
-  margin-left: 10px;
-  font-size: 12px;
+  height: 40px;
+  width: 120px;
+  font-size: 9px;
+  margin-left: 20px;
 }
 
 .next-page-btn{
-  width: 70px;
-  height: 45px;
-  font-size: 12px;
+  width: 120px;
+  height: 40px;
+  font-size: 9px;
 }
 
 .cst-logo{
-  width:100px;
+  width:60px;
   height:60px;
-  border-radius:80px
+  border-radius:80px;
+  margin-left:20px;
 }
 
 .csi-logo{
@@ -948,6 +1018,7 @@ h2 {
 }
 
 @media (min-width: 769px) {
+
   .responsive-textarea {
     width: 90%; /* Adjust width for laptop */
   }
@@ -998,15 +1069,18 @@ h2 {
   height: 38px;
 }
 .cst-logo{
-  width:160px;
-  height:90px;
-  border-radius:80px
+  width:80px;
+  height:80px;
+  border-radius:80px;
+  margin-left: 20px;
+  margin-bottom: 35px;
 }
 .csi-logo{
-  width:90px;
-  height:90px;
+  width:75px;
+  height:75px;
   border-radius:60px;
   margin-right:50px;
+  margin-bottom: 35px;
 }
 .translate{
   display: flex;
@@ -1060,6 +1134,9 @@ h2 {
   color: rgb(0, 106, 255);
   margin-top: 20px;
 }
+
+
+
 
 
 

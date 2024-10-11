@@ -89,7 +89,7 @@ const VictimQualification = ({
           api_key: "1725993564",
           visitor_token: vist_id,
           qtion_id: "66f6536277ea3",
-          qtion_num: "4d",
+          qtion_num: "8",
           qtion_option: option.id,
           option_val: option.value,
         }),
@@ -157,7 +157,7 @@ const VictimQualification = ({
             ))}
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center",marginLeft:'120px' }}>
+        <div style={{ display: "flex", alignItems: "center" }} className="btns-ok">
             {showOkButton && (
               <>
                 <button

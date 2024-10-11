@@ -129,20 +129,20 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion }) => {
   const handleOkClick = async (e) => {
     e.preventDefault();
 
-    // if (!address.district) {
-    //   setError("Please select the district.");
-    //   return;
-    // }
-    // if (!address.policeStation) {
-    //   setError("Please select the policeStation.");
-    //   return;
-    // }
+    if (!address.address1) {
+      setError("Please Enter the address.");
+      return;
+    }
+    if (!address.city) {
+      setError("Please Enter the city.");
+      return;
+    }
 
     const dataToSubmit = {
       api_key:"1725993564",
       visitor_token:vist_id,
       qtion_id:"66f65376898d6",
-      qtion_num:"4e",
+      qtion_num:"9",
       address: address.address1,
       village: address.city,
       post_cod: address.zip,

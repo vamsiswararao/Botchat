@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -5,6 +6,7 @@ const Help = ({ onNext, onHelpSelected,onQuestion,answer }) => {
   const [help, setHelp] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const vist_id = sessionStorage.getItem("visitor_id");
   const handleHelpOptionClick = async(option, e) => {
@@ -49,8 +51,9 @@ const Help = ({ onNext, onHelpSelected,onQuestion,answer }) => {
     console.log("Selected Option:", help);
     if (help) {
       if(help==="A"){
-        onNext(1);
-        onQuestion(2)
+        navigate("/login");
+      }else if (help === "B") {
+        window.location.href = "https://www.cybercrime.gov.in/"; // Redirect to external URL
       }
     } else {
       setError("Please select an option before proceeding.");
@@ -68,10 +71,10 @@ const Help = ({ onNext, onHelpSelected,onQuestion,answer }) => {
   ];
 
   return (
-    <div >
+    <div className="help">
       <div style={{ display: "flex" }}>
         <div>
-          <h2>How may i help you?</h2>
+          <h2>How may i help you? </h2>
           <div className="options-container">
             {helpOptions.map((option) => (
               <button

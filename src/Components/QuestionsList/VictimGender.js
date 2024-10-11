@@ -41,7 +41,7 @@ const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer }) => {
           "api_key":"1725993564",
          "visitor_token":vist_id,
          "qtion_id":"66f65326d886a",
-         "qtion_num":"4b",
+         "qtion_num":"6",
          "qtion_option":option.id,
          "option_val":option.value
    } 

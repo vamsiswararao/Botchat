@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './TranslateComponent.css'
+import './TranslateComponent.css';
 
 const TranslateComponent = () => {
   const [loading, setLoading] = useState(true);
@@ -17,18 +17,19 @@ const TranslateComponent = () => {
         };
         document.body.appendChild(script);
       } else {
-        setLoading(false);
+        // If the script is already added, call the initialization function directly
+        window.googleTranslateElementInit();
       }
     };
 
     const initGoogleTranslate = () => {
-      if (window.google && window.google.translate) {
+      if (window.google && window.google.translate && window.google.translate.TranslateElement) {
         new window.google.translate.TranslateElement(
           {
             pageLanguage: 'en',
-            includedLanguages: 'en,te,hi',
-           
-            defaultLanguage: 'en', // Set default language to English
+            includedLanguages: 'en,te,hi', // English, Telugu, Hindi
+            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false,
           },
           'google_translate_element'
         );
@@ -36,16 +37,18 @@ const TranslateComponent = () => {
       }
     };
 
+    // Assign the initialization function to a global function for the script callback
     window.googleTranslateElementInit = initGoogleTranslate;
 
+    // Load the script
     addGoogleTranslateScript();
 
     const scriptCheckInterval = setInterval(() => {
-      if (window.google && window.google.translate) {
+      if (window.google && window.google.translate && window.google.translate.TranslateElement) {
         initGoogleTranslate();
         clearInterval(scriptCheckInterval);
       }
-    }, 200);
+    }, 300); // Checking every 300ms
 
     return () => clearInterval(scriptCheckInterval);
   }, []);

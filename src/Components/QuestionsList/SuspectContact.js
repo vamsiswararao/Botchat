@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
-  const [suspectContacts, setSuspectContacts] = useState([]);
+  const [suspectContacts, setSuspectContacts] = useState({
+    contactValues: [],
+    contactIds: []
+  });
+  //const [suspectContacts, setSuspectContacts] = useState([]);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null)
   const [options, setOptions] = useState([]);
@@ -40,7 +44,6 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
             label: bank.splat_nm,
           })) || []
         );
-        //console.log(toData.resp.aud_data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -49,33 +52,6 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
     fetchPlatFormData();
   }, []);
   
-  const handleOptionClick = (option, e) => {
-    e.preventDefault();
-    if (option.disabled) {
-      return; // Ignore clicks on disabled options
-    }
-    setShowOkButton(true); // Show the OK button after a successful click
-    setError("");
-    setSuspectContacts((prevSelectedCalls) => {
-      const updatedCalls = prevSelectedCalls.includes(option.value)
-        ? prevSelectedCalls.filter((call) => call !== option.value)
-        : [...prevSelectedCalls, option.value];
-
-      // Save data after state update
-      onSuspectContactSelected(updatedCalls);
-      //saveDataToAPI(updatedCalls);
-      return updatedCalls;
-    });
-
-    if (suspectContacts.includes(option.value)) {
-      setSuspectContacts(suspectContacts.filter((contact) => contact !== option.value));
-    } else {
-      setSuspectContacts([...suspectContacts, option.value]);
-    }
-  };
-
-
-
   // const handleOptionClick = (option, e) => {
   //   e.preventDefault();
   //   if (option.disabled) {
@@ -83,18 +59,74 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
   //   }
   //   setShowOkButton(true); // Show the OK button after a successful click
   //   setError("");
-
-  //   setSelectedCalls((prevSelectedCalls) => {
-  //     const updatedCalls = prevSelectedCalls.includes(option.label)
-  //       ? prevSelectedCalls.filter((call) => call !== option.label)
-  //       : [...prevSelectedCalls, option.label];
+  //   setSuspectContacts((prevSelectedCalls) => {
+  //     const updatedCalls = prevSelectedCalls.includes(option.value)
+  //       ? prevSelectedCalls.filter((call) => call !== option.value)
+  //       : [...prevSelectedCalls, option.value];
 
   //     // Save data after state update
-  //     onSuspectCallSelected(updatedCalls);
-  //     saveDataToAPI(updatedCalls);
+  //     onSuspectContactSelected(updatedCalls);
+  //     //saveDataToAPI(updatedCalls);
   //     return updatedCalls;
   //   });
+
+  //   if (suspectContacts.includes(option.value)) {
+  //     setSuspectContacts(suspectContacts.filter((contact) => contact !== option.value));
+  //   } else {
+  //     setSuspectContacts([...suspectContacts, option.value]);
+  //   }
   // };
+
+
+  const handleOptionClick = (option, e) => {
+    e.preventDefault();
+    if (option.disabled) {
+      return; // Ignore clicks on disabled options
+    }
+  
+    setShowOkButton(true); // Show the OK button after a successful click
+    setError("");
+  
+    // Update contactValues and contactIds
+    setSuspectContacts((prevSelectedCalls) => {
+      // Ensure prevSelectedCalls is always defined
+      const updatedCalls = prevSelectedCalls.contactValues.includes(option.value)
+        ? {
+            contactValues: prevSelectedCalls.contactValues.filter(
+              (call) => call !== option.value
+            ),
+            contactIds: prevSelectedCalls.contactIds.filter(
+              (id) => id !== option.id
+            ),
+          }
+        : {
+            contactValues: [...prevSelectedCalls.contactValues, option.value],
+            contactIds: [...prevSelectedCalls.contactIds, option.id],
+          };
+  
+      // Save data after state update
+      onSuspectContactSelected(updatedCalls);
+      return updatedCalls;
+    });
+  
+    // Double-check updating suspectContacts based on option.value and option.id
+    if (suspectContacts.contactValues.includes(option.value)) {
+      setSuspectContacts({
+        contactValues: suspectContacts.contactValues.filter(
+          (contact) => contact !== option.value
+        ),
+        contactIds: suspectContacts.contactIds.filter(
+          (id) => id !== option.id
+        ),
+      });
+    } else {
+      setSuspectContacts({
+        contactValues: [...suspectContacts.contactValues, option.value],
+        contactIds: [...suspectContacts.contactIds, option.id],
+      });
+    }
+  };
+
 
   const saveDataToAPI = async (selectedContacts) => {
     try {
@@ -108,9 +140,9 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
             "api_key":"1725993564",
            "visitor_token":vist_id,
            "qtion_id":"66f653d914bc5",
-           "qtion_num":"5c",
-           "qtion_option": ["a","b","c","d","e"],
-           "option_val":selectedContacts,
+           "qtion_num":"14",
+           "qtion_option": suspectContacts.contactIds,
+           "option_val":suspectContacts.contactValues,
      }),
       });
 
@@ -129,7 +161,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
 
   const handleOkClick = async(e) => {
     e.preventDefault();
-    if (suspectContacts.length > 0) {
+    if (suspectContacts.contactValues.length > 0) {
       await saveDataToAPI(suspectContacts);
       onSuspectContactSelected(suspectContacts);
       onNext(14); // Notify parent component to move to the next question
@@ -159,7 +191,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
               <button
                 key={option.id}
                 className={`option-button ${
-                  suspectContacts.includes(option.value) ? "selected" : ""
+                  suspectContacts.contactValues.includes(option.value) ? "selected" : ""
                 }`}
                 onClick={(e) => handleOptionClick(option, e)}
               >
@@ -167,31 +199,30 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
                   <div
                     className="option"
                     style={{
-                      backgroundColor: suspectContacts.includes(option.value)
+                      backgroundColor: suspectContacts.contactValues.includes(option.value)
                         ? "#000"
                         : "#fff",
-                      color: suspectContacts.includes(option.value) ? "#fff" : "#000",
+                      color: suspectContacts.contactValues.includes(option.value) ? "#fff" : "#000",
                     }}
                   >
                     {option.id}
                   </div>
                   <div className="option-label">{option.label}</div>
                 </div>
-                {suspectContacts.includes(option.value) && (
+                {suspectContacts.contactValues.includes(option.value) && (
                   <span className="checkmark">&#10003;</span>
                 )}
               </button>
             ))}
           </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center" }} className="suspect_contact">
             {showOkButton && (
               <>
                 <button
                   type="button"
-                  className="ok-btn"
+                  className="ok-btn "
                   onClick={handleOkClick}
-                  style={{marginLeft:"300px"}}
                 >
                   OK
                 </button>

@@ -72,6 +72,7 @@ const VictimBank = ({
   addVictimBank,
   index,
   onQuestion,
+  apiKey
 }) => {
   const [victimBankData, setVictimBankData] = useState([]);
   const [formData, setFormData] = useState({
@@ -86,12 +87,11 @@ const VictimBank = ({
     first_six: "",
     last_four: "",
     card_len: "",
-    mod_op:'',
+    mod_op: "",
   });
 
   const [bankOption, setBankOptions] = useState([]);
   const [typeOptions, setTypeOptions] = useState([]);
-  const [showOptions, setShowOptions] = useState(false);
   const [pageCount, setPageCount] = useState(1);
   const [error, setError] = useState("");
   const vist_id = sessionStorage.getItem("visitor_id");
@@ -99,8 +99,10 @@ const VictimBank = ({
   const parseDate = (formattedDateTime) => {
     const [date, time] = formattedDateTime.split("T");
     const [year, month, day] = date.split("-");
-    return `${day}-${month}-${year} ${time}`;
+    const parsedDateTime = `${day}-${month}-${year} ${time}`; 
+    return parsedDateTime;
   };
+  
   const handleDateChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({
@@ -108,6 +110,15 @@ const VictimBank = ({
       [name]: value,
     }));
   };
+
+
+  useEffect(() => {
+    const storedDistrict = localStorage.getItem('formVictimData');
+    console.log(storedDistrict);
+    if (storedDistrict) {
+      setFormData((prev) => ({ ...prev, ...JSON.parse(storedDistrict) }));
+    }
+  }, []);
 
   useEffect(() => {
     const fetchBankData = async () => {
@@ -120,7 +131,7 @@ const VictimBank = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              api_key: "1725993564",
+              api_key: apiKey,
               visitor_token: vist_id,
               qtion_id: "66f6544451d1f",
             }),
@@ -157,7 +168,7 @@ const VictimBank = ({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            api_key: "1725993564",
+            api_key: apiKey,
             visitor_token: vist_id,
             qtion_id: "66f6544451d1f",
           }),
@@ -185,25 +196,140 @@ const VictimBank = ({
   }, []);
 
   const handleSelectChange = (field, selectedOption) => {
-    if (field === "sub_cate") {
-      setFormData((prev) => ({
-        ...prev,
-        payment: "",
-      }));
+    console.log(selectedOption);
+    
+    if (field === "sub_cat") {
+      if (selectedOption.value === "66d300879af61335355481") {
+        console.log("A");
+        setFormData((prev) => {
+          const updatedFormData = {
+            ...prev,
+            [field]: selectedOption ? selectedOption.value : "",
+          };
+          localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+          return updatedFormData;
+        });
+      } else {
+        setFormData((prev) => {
+          const updatedFormData = {
+            ...prev,
+            [field]: selectedOption ? selectedOption.value : "",
+            mod_op: "",
+          };
+          localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+          return updatedFormData;
+        });
+      }
     }
-    setFormData((prev) => ({
-      ...prev,
-      [field]: selectedOption ? selectedOption.value : "",
-    }));
+  
+    setFormData((prev) => {
+      const updatedFormData = {
+        ...prev,
+        [field]: selectedOption ? selectedOption.value : "",
+      };
+      localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+      return updatedFormData;
+    });
   };
+  
 
-  const handleTextChange = (field, value) => {
-    console.log(field, value);
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+
+  const handleTextChange = (id, value) => {
+    let updatedFormData;
+  
+    if (id === 'acc_no') {
+      // Regex to allow alphanumeric characters and spaces, max 50 characters
+      if (/^[a-zA-Z0-9\s]*$/.test(value) && value.length <= 50) {
+        updatedFormData = {
+          ...formData,
+          [id]: value,
+        };
+        setFormData(updatedFormData);
+        localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+  
+        if (value.length < 10) {
+          setError("Account number must be at least 10 characters long.");
+        } else {
+          setError(""); // Reset error if input is valid
+        }
+      } else {
+        if (value.length > 50) {
+          setError("Account number must be less than 50 characters.");
+        } else {
+          setError("Account number can only contain letters, numbers, and spaces.");
+        }
+      }
+    } else if (id === 'transaction_no') {
+      // Regex to allow alphanumeric characters and spaces, max 100 characters
+      if (/^[a-zA-Z0-9\s]*$/.test(value) && value.length <= 50) {
+        updatedFormData = {
+          ...formData,
+          [id]: value,
+        };
+        setFormData(updatedFormData);
+        localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+  
+        if (value.length < 10) {
+          setError("Transaction number must be at least 10 characters long.");
+        } else {
+          setError(""); // Reset error if input is valid
+        }
+      } else {
+        if (value.length > 50) {
+          setError("Transaction number must be less than 50 characters.");
+        } else {
+          setError("Transaction number can only contain letters, numbers, and spaces.");
+        }
+      }
+    } else if (id === 'amt') {
+      // Allow only numbers and dot (for decimal), validate input before updating state
+      if (/^\d*\.?\d*$/.test(value)) {
+        updatedFormData = {
+          ...formData,
+          [id]: value,
+        };
+        setFormData(updatedFormData);
+        localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+        setError(""); // Reset error if input is valid
+      } else {
+        setError("Amount can only contain numbers and a decimal point.");
+      }
+    } else if (id === 'ref_num') {
+      // Regex to allow alphanumeric characters and spaces, max 100 characters
+      if (/^[a-zA-Z0-9\s]*$/.test(value) && value.length <= 100) {
+        updatedFormData = {
+          ...formData,
+          [id]: value,
+        };
+        setFormData(updatedFormData);
+        localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+  
+        if (value.length < 10) {
+          setError("Reference number must be at least 10 characters long.");
+        } else {
+          setError(""); // Reset error if input is valid
+        }
+      } else {
+        if (value.length > 50) {
+          setError("Reference number must be less than 50 characters.");
+        } else {
+          setError("Reference number can only contain letters, numbers, and spaces.");
+        }
+      }
+    } else {
+      // Handle other fields if necessary
+      updatedFormData = {
+        ...formData,
+        [id]: value,
+      };
+      setFormData(updatedFormData);
+      localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+      setError(""); // Reset error for other fields
+    }
   };
+  
+  
+  
 
   const handleOkClick = async (e) => {
     e.preventDefault();
@@ -217,7 +343,7 @@ const VictimBank = ({
       setError("Please select in the Bank.");
       return;
     }
-    if (!formData.account_no) {
+    if (!formData.acc_no) {
       setError("Please fill in the AccountNo.");
       return;
     }
@@ -240,22 +366,22 @@ const VictimBank = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          api_key: "1725993564",
+          api_key: apiKey,
           visitor_token: vist_id,
           qtion_id: "66f6544451d1f",
-          qtion_num: "15",
+          qtion_num: "14",
           sub_cat: formData.sub_cat,
           mod_op: formData.mod_op,
           bank_mer: formData.bank_name,
           wallet_list: "15a877d76abf11ef8bf01a4da71d0804",
           acc_no: formData.acc_no,
-          trans_id:formData.transaction_no,
-          first_six:   formData.first_six,
+          trans_id: formData.transaction_no,
+          first_six: formData.first_six,
           last_four: formData.last_four,
           card_len: formData.card_len,
           amt: formData.amt,
           ref_num: formData.ref_num,
-          trans_dtm: parseDate(formData.date) ,
+          trans_dtm: parseDate(formData.date),
         }),
       });
 
@@ -264,15 +390,13 @@ const VictimBank = ({
       }
 
       const responseData = await response.json();
-      console.log("Form data submitted successfully:", responseData);
-      if(responseData.resp.error_code==="0"){
+
+      if (responseData.resp.error_code === "0") {
         onNext(15); // Move to the next step
         onQuestion(16);
-      console.log("Form data submitted successfully:", responseData);
 
-      // If successful, add the data to the victimBankData list and show options
-      setVictimBankData((prevData) => [...prevData, formData]);
-      setShowOptions(true);
+        // If successful, add the data to the victimBankData list and show options
+        setVictimBankData((prevData) => [...prevData, formData]);
       }
     } catch (error) {
       console.error("Error submitting form data:", error);
@@ -280,70 +404,50 @@ const VictimBank = ({
     }
   };
 
- 
-  //   e.preventDefault();
-  //   if (!formData.sub_cate) {
-  //     setError("Please select the sub_category.");
-  //     return;
-  //   }
-  //   if (!formData.bank_name) {
-  //     setError("Please select in the Bank.");
-  //     return;
-  //   }
-  //   if (!formData.account_no) {
-  //     setError("Please fill in the AccountNo.");
-  //     return;
-  //   }
-  //   if (!formData.Amount) {
-  //     setError("Please fill in the Amount.");
-  //     return;
-  //   }
-  //   if (!formData.date) {
-  //     setError("Please select in the date.");
-  //     return;
-  //   }
-  //   setError("");
-  //   setVictimBankData((prevData) => [...prevData, formData]);
-  //   setShowOptions(true);
-  // };
-
-  // const handleNextPageClick = () => {
-  //   onNext(15); // Move to the next step
-  //   setShowOptions(false);
-  //   onQuestion(16);
-  // };
-
   const handleAddPageClick = (e) => {
     e.preventDefault();
     addVictimBank(pageCount);
     setPageCount((prevCount) => prevCount + 1); // Add another form
     setFormData({
-      transferType: "",
-      AccountNo: "",
-      TransactionNo: "",
-      UpiId: "",
-      CardNo: "",
-      date: "",
-      Amount: "",
+      sub_cat: "",
+      bank_name: "",
+      acc_no: "",
+      trans_id: "",
+      payment: "",
+      ref_num: "",
+      trans_dtm: "",
+      amt: "",
+      first_six: "",
+      last_four: "",
+      card_len: "",
+      mod_op: "",
     });
 
     const isMobile = window.innerWidth <= 768; // Adjust the width breakpoint as per your design
-    const scrollAmount = isMobile ? window.innerHeight : window.innerHeight*1.2 ; // Adjust scrolling based on view
+    const scrollAmount = isMobile
+      ? window.innerHeight
+      : window.innerHeight * 1.3; // Adjust scrolling based on view
     // Perform smooth scroll
     window.scrollBy({ top: scrollAmount, behavior: "smooth" });
     // const newPageIndex = index + 1;
     // onNextPage(newPageIndex);
-    setShowOptions(false); // Hide options after adding
   };
 
   return (
     <div className="question">
-      <div style={{ display: "flex", flexDirection:'column'}}>
-        <div style={{ display: "flex", flexDirection: "column",justifyContent:'center',alignItems:"center" }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <div style={{ display: "flex" }}>
             <h2>Please provide debtor/victim bank account details.</h2>
           </div>
-          <div className="option-list" >
+          <div className="option-list">
             <p className="bank-para">
               Sub Category:<span style={{ color: "red" }}>*</span>
             </p>
@@ -376,51 +480,6 @@ const VictimBank = ({
               placeholder="Select..."
               styles={customStyles} // Apply custom styles
             />
-
-            <p className="bank-para" style={{ marginTop: "20px" }}>
-              Account No./(Wallet/PG/PA)id/Merchant id:
-              <span style={{ color: "red" }}>*</span>
-            </p>
-            <input
-              type="text"
-              className="text-input account"
-              name="account_no"
-              onChange={(e) => handleTextChange("account_no", e.target.value)}
-              autoComplete="off"
-            />
-            <p className="bank-para">Transaction id/UTR Number:</p>
-            <input
-              type="text"
-              className="text-input account"
-              name="transaction_no"
-              autoComplete="off"
-              onChange={(e) =>
-                handleTextChange("transaction_no", e.target.value)
-              }
-            />
-            {/* <div
-                style={{
-                  display: "flex"
-                }}
-              > */}
-            <p>
-              Amount:<span style={{ color: "red" }}>*</span>
-            </p>
-            <span className="rupee-symbol">₹</span>
-            <input
-              type="number"
-              value={formData.Amount}
-              onChange={(e) => handleTextChange("amt", e.target.value)}
-              //placeholder="Amount"
-              className="text-input account"
-              min="0"
-              autoComplete="off"
-            />
-            {/* </div> */}
-            <p className="bank-para">Reference No:</p>
-            <input type="text" className="text-input account" onChange={(e) =>
-                    handleTextChange("ref_num", e.target.value)
-                  }/>
             {formData.sub_cat === "66d300879af61335355481" && (
               <>
                 <p className="bank-para" style={{ marginTop: "20px" }}>
@@ -440,6 +499,63 @@ const VictimBank = ({
                 />
               </>
             )}
+            {!(formData.mod_op === "66d31e6e8b6cb953390002") && (
+              <>
+                <p className="bank-para" style={{ marginTop: "20px" }}>
+                  Account No./(Wallet/PG/PA)id/Merchant id:
+                  <span style={{ color: "red" }}>*</span>
+                </p>
+                <input
+                  type="text"
+                  className="text-input account"
+                  name="acc_no"
+                  onChange={(e) =>
+                    handleTextChange("acc_no", e.target.value)
+                  }
+                  value={formData.acc_no}
+                  autoComplete="off"
+                />
+              </>
+            )}
+            <p className="bank-para">Transaction id/UTR Number:</p>
+            <input
+              type="text"
+              className="text-input account"
+              name="transaction_no"
+              value={formData.transaction_no}
+              autoComplete="off"
+              onChange={(e) =>
+                handleTextChange("transaction_no", e.target.value)
+              }
+            />
+            {/* <div
+                style={{
+                  display: "flex"
+                }}
+              > */}
+            {/* </div> */}
+            <p className="bank-para">Reference No:</p>
+            <input
+              type="text"
+              className="text-input account"
+              value={formData.ref_num}
+              // onChange={handleRefChange}
+              onChange={(e) => handleTextChange("ref_num", e.target.value)}
+            />
+            <p>
+              Amount:<span style={{ color: "red" }}>*</span>
+            </p>
+            <span className="rupee-symbol">₹</span>
+            <input
+              type="text"
+              value={formData.amt}
+              //onChange={handleAmtChange}
+              onChange={(e) => handleTextChange("amt", e.target.value)}
+              //placeholder="Amount"
+              className="text-input amount"
+              min="0"
+              autoComplete="off"
+            />
             {formData.mod_op === "66d31e6e8b6cb953390002" && (
               <>
                 <p className="bank-para">
@@ -450,10 +566,8 @@ const VictimBank = ({
                   className="text-input account"
                   onChange={(e) =>
                     handleTextChange("first_six", e.target.value)
-                    
                   }
                   autoComplete="off"
-
                 />
                 <p className="bank-para">Last Four Digit:</p>
                 <input
@@ -463,7 +577,6 @@ const VictimBank = ({
                     handleTextChange("last_four", e.target.value)
                   }
                   autoComplete="off"
-
                 />
                 <p className="bank-para">Card Length:</p>
                 <input
@@ -501,25 +614,24 @@ const VictimBank = ({
               </div>
             </div>
           </div>
-
         </div>
-        <div style={{ display: "flex", marginTop:'20px'}} className="next-btns">
-            <button type="button" className="next-page-btn" onClick={handleOkClick}>
+        <div
+          style={{ display: "flex", marginTop: "20px" }}
+          className="next-btns"
+        >
+          <button
+            type="button"
+            className="next-page-btn"
+            onClick={handleOkClick}
+          >
             Go To Next Question
-            </button>
-            {/* <p className="enter-text">
-              press <strong>Enter ↵</strong>
-            </p> */}
-              {/* <div className="next-add-options"> */}
-                {/* <button onClick={handleNextPageClick} className="next-page-btn">
-                 Go To Next Page
-                </button> */}
-                <button onClick={handleAddPageClick} className="add-page-btn">
-                  Add Another Transaction
-                </button>
-              {/* </div> */}
-          </div>
-          {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+          </button>
+          <button onClick={handleAddPageClick} className="add-page-btn">
+            Add Another Transaction
+          </button>
+          {/* </div> */}
+        </div>
+        {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
       </div>
     </div>
   );

@@ -6,23 +6,22 @@ const VictimQualification = ({
   onNext,
   onVictimQualificationSelected,
   onQuestion,
+  answer,apiKey
 }) => {
   const [qualification, setQualification] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const [options, setOptions] = useState([]);
   const vist_id = sessionStorage.getItem("visitor_id");
+  useEffect(() => {
+    const storedData = localStorage.getItem('qualification');
+    if (storedData) {
+      setQualification(JSON.parse(storedData));
+      onVictimQualificationSelected(JSON.parse(storedData));
+    }
+  }, []);
 
-  //  const options =[
 
-  //   {id: "A",value: '66d6ccc4e6961933219940', label: 'Below SCC'},
-  //   {id: "B",value: '66d6ccce6e54a847694706', label: 'Graduate'},
-  //   {id: "C",value: '66d6ccda11170737124484', label: 'Ph.D'},
-  //   {id: "D",value: '66d6ccecddbb9019941567', label: 'Post' },
-  //   {id: "E",value: '66d6ccf1aba5f827154769', label: 'SSC'},
-  //   {id: "F",value: '66d6ccfc60298363262200', label: 'Un-Educated'},
-  //   {id: "G",value: '66d6cd0590d81293768518', label: 'Under Graduate'}
-  // ]
 
   useEffect(() => {
     const fetchQulificationData = async () => {
@@ -35,7 +34,7 @@ const VictimQualification = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              api_key: "1725993564",
+              api_key: apiKey,
               visitor_token: vist_id,
               qtion_id: "66f6536277ea3",
             }),
@@ -47,7 +46,7 @@ const VictimQualification = ({
         }
 
         const qulificationData = await qulificationResponse.json();
-        console.log(qulificationData);
+
         if (qulificationData.resp.error_code === "0") {
           setOptions(
             qulificationData.resp.edu_qulfs_list.map((qulification, index) => ({
@@ -57,7 +56,6 @@ const VictimQualification = ({
             })) || []
           );
         }
-        //console.log(toData.resp.aud_data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -72,13 +70,7 @@ const VictimQualification = ({
     if (option.disabled) {
       return; // Ignore clicks on disabled options
     }
-    setQualification(option.label);
-    onVictimQualificationSelected(option.label);
-    setShowOkButton(true); // Show the OK button after a successful click
-    setError("");
-    onNext(8);
-    onQuestion("9");
-    console.log(option);
+ 
     try {
       const response = await fetch(`${apiUrl}/ccrim_bot_add_choice`, {
         method: "POST",
@@ -86,22 +78,33 @@ const VictimQualification = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          api_key: "1725993564",
+          api_key: apiKey,
           visitor_token: vist_id,
           qtion_id: "66f6536277ea3",
-          qtion_num: "8",
+          qtion_num: "7",
           qtion_option: option.id,
           option_val: option.value,
         }),
       });
       const data = await response.json();
-      console.log(data);
+
 
       if (!response.ok) {
         throw new Error("Failed to push data to API");
       }
 
-      console.log("Data pushed to RequestBin:", option.id);
+      if(data.resp.error_code ==="0"){
+        setQualification(option.label);
+        onVictimQualificationSelected(option.label);
+        setShowOkButton(true); // Show the OK button after a successful click
+        onNext(8);
+        onQuestion("9");
+        localStorage.setItem('qualification', JSON.stringify(option.label));
+        setError("");
+      }else{
+        setError("Failed to push data to API");
+      }
+
     } catch (err) {
       console.error("Error sending data to API:", err);
     }
@@ -172,8 +175,13 @@ const VictimQualification = ({
                 </p>
               </>
             )}
-            {error && <div className="error-message">{error}</div>}
           </div>
+          {error && <div className="error-message">{error}</div>}
+          {answer[7] && (
+              <p className="alert-box alert" >
+                Please answer the current question before moving to the next.
+              </p>
+            )} 
       </div>
     </div>
   );

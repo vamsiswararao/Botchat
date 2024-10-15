@@ -1,23 +1,30 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import "./First.css"; // Ensure this path is correct
+import Help from "../QuestionsList/Help";
 
 const First = () => {
-  const navigate = useNavigate();
-
-  const handleStart = () => {
-    navigate("/login");
-  };
-
   return (
-    <div className="main-container">
-      <img
-        alt="police"
-        src="https://newsmeter.in/h-upload/2020/11/17/287607-965016-hyderabad-commissionerate.jpg"
-      />
-      <button className="start_btn" onClick={handleStart}>
-        Start
-      </button>
+    <div className="first-container">
+      <header>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "colum",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: "10px",
+          }}
+        >
+          <img src="\images\LOGO-TS2.jpg" alt="csb-ts" className="cst-logo" />
+          <h1 className="header-title" style={{ textAlign: "center" }}>
+            1930-Cyber Bot
+          </h1>
+          <img src="\images\LOGO-INDIA.png" alt="csb-ts" className="csi-logo" />
+        </div>
+      </header>
+      <div className="help-container">
+      <Help />
+      </div>
     </div>
   );
 };

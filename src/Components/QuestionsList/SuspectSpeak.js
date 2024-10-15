@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-// const newData=[
-//   {id: "A",value: '6660578b2de85', label: 'Telugu'},
-//   {id: "B",value: '6660578b2c728', label: 'English'},
-//   {id: "C",value: '6660578b2cced', label: 'Hindi'},
-//   {id: "D",value: '6660578b2c3e2', label: 'Bengali'},
-//   {id: "E",value: '6660578b2d1b6', label: 'Kannada'},
-//   {id: "F",value: '6660578b2d4d0', label: 'Marati'},
-//   {id: "G",value: '6660578b2d844', label: 'Other'},
-//   {id: "H",value: '6660578b2dad8', label: 'Tamil'}
-// ]
 
-const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion }) => {
+
+const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey }) => {
   const [selectedOptions, setSelectedOptions] = useState({
     contactValues: [],
     contactIds: []
@@ -21,6 +12,14 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion }) => {
   const [error, setError] = useState(null);
   const [speckOptions, setSpeckOptions] = useState([]);
   const vist_id = sessionStorage.getItem("visitor_id");
+
+  useEffect(() => {
+    const storedSuspectCall = localStorage.getItem('suspectSpeck');
+    if (storedSuspectCall) {
+      setSelectedOptions(JSON.parse(storedSuspectCall));
+      onSuspectSpeakSelected(JSON.parse(storedSuspectCall))
+    }
+  }, []);
 
 
   useEffect(() => {
@@ -32,7 +31,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion }) => {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    "api_key":"1725993564",
+                    "api_key":apiKey,
                     "visitor_token":vist_id,
                     "qtion_id":"66f653bf26e9c",
              }
@@ -52,7 +51,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion }) => {
                     label:profession.lang_nm
                    })) || []
                  );
-                //console.log(toData.resp.aud_data);
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -115,6 +114,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion }) => {
   
       // Save data after state update
       onSuspectSpeakSelected(updatedCalls);
+      localStorage.setItem("suspectSpeck", JSON.stringify(updatedCalls));
       return updatedCalls;
     });
   
@@ -145,10 +145,10 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion }) => {
         },
         body: JSON.stringify(
           {
-            "api_key":"1725993564",
+            "api_key":apiKey,
            "visitor_token":vist_id,
            "qtion_id":"66f653bf26e9c",
-           "qtion_num":"13",
+           "qtion_num":"12",
            "qtion_option": selectedOptions.contactIds,
            "option_val":selectedOptions.contactValues,
      }),

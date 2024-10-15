@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer }) => {
+const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer,apiKey }) => {
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
 
   const [howMuch, setHowMuch] = useState("");
   const vist_id = sessionStorage.getItem("visitor_id");
+
+  useEffect(() => {
+    const storedData = localStorage.getItem('howMuch');
+    if (storedData) {
+      setHowMuch(JSON.parse(storedData));
+      onHowMuchSelected(JSON.parse(storedData))
+    }
+  }, []);
 
   const handleKeyDown = (event) => {
     if (event.altKey && event.key === "Enter") {
@@ -20,11 +28,13 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer }) => {
 
   const handleChange = (event) => {
     event.preventDefault();
-    setHowMuch(event.target.value);
+    const inputValue = event.target.value;
     if (event.target.checked) {
       return; // Ignore clicks on disabled options
     }
-    setHowMuch(event.target.value);
+    if (/^\d*\.?\d*$/.test(inputValue)) {
+      setHowMuch(inputValue);
+    }
     onHowMuchSelected(event.target.value);
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
@@ -34,10 +44,6 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer }) => {
     e.preventDefault();
 
     if (howMuch) {
-      setError("");
-      onNext(3, howMuch);
-      onQuestion(4);
-      console.log(howMuch)
       try {
         const response = await fetch(`${apiUrl}/ccrim_bot_add_text`, {
           method: "POST",
@@ -45,10 +51,10 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            "api_key": "1725993564",
+            "api_key": apiKey,
             "visitor_token": vist_id,
             "qtion_id":"66f652b6e0c73",
-            "qtion_num": "3",
+            "qtion_num": "2",
             "option_val": howMuch,
           }),
         });
@@ -57,8 +63,15 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer }) => {
           throw new Error("Failed to save address");
         }
 
-        const result = await response.json();
-        console.log("Saved data:", result);
+        const data = await response.json();
+        if(data.resp.error_code ==="0"){
+          setError("");
+          onNext(3, howMuch);
+          onQuestion(4);
+          localStorage.setItem('howMuch', JSON.stringify(howMuch));
+        }else{
+          setError("Failed to push data to API");
+        }
       } catch (error) {
         console.error("Error saving data:", error);
         setError("Failed to save amount");
@@ -96,7 +109,7 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer }) => {
               onKeyDown={handleKeyDown}
               placeholder="Type your amount here..."
               id="lose-money"
-              type="number"
+              type="text"
               min="1"
               autoComplete="off"
             />

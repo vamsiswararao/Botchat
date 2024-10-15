@@ -2,16 +2,26 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const apiKey = process.env.REACT_APP_AUTH_TOKEN;
 
 const OtpInput = () => {
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [resendDisabled, setResendDisabled] = useState(true); // To disable resend button initially
-  const [countdown, setCountdown] = useState(20); // Countdown for resend button
+  const [countdown, setCountdown] = useState(30); // Countdown for resend button
   const navigate = useNavigate();
 
   const otp_id = sessionStorage.getItem("otp_id");
   const vist_id = sessionStorage.getItem("visitor_id");
+
+  const handleChange = (e) => {
+    const inputValue = e.target.value;
+
+    // Allow only digits and limit to 10 characters
+    if (/^\d*$/.test(inputValue) && inputValue.length <= 6) {
+      setOtp(inputValue);
+    }
+  };
 
   useEffect(() => {
     if (resendDisabled && countdown > 0) {
@@ -33,7 +43,7 @@ const OtpInput = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          api_key: "1725993564",
+          api_key: apiKey,
           otp_code: otp,
           otp_id: otp_id,
           visitor_token: vist_id,
@@ -42,7 +52,7 @@ const OtpInput = () => {
 
       const data = await response.json();
       console.log(data);
-      if (data.resp.error_code === "0" ) {
+      if (data.resp.error_code === "0") {
         navigate("/questions", { replace: true }); // Navigate on success
       } else {
         setErrorMessage("Invalid OTP"); // Display error message
@@ -53,7 +63,7 @@ const OtpInput = () => {
   };
 
   // Function to handle OTP resend
-  const handleResendOtp = async () => {
+  const handleResendOtp = async (type) => {
     try {
       setResendDisabled(true); // Disable the resend button
       setCountdown(20); // Reset countdown timer
@@ -64,17 +74,18 @@ const OtpInput = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          api_key: "1725993564",
+          api_key: apiKey,
           otp_id: otp_id,
           visitor_token: vist_id,
+          type: type,
         }),
       });
 
       const data = await response.json();
       console.log(data);
       console.log(data.resp.error_code);
-      sessionStorage.setItem("otp_id", data.resp.otp_id);
       if (data.resp.error_code === "0") {
+        sessionStorage.setItem("otp_id", data.resp.otp_id);
         setErrorMessage("");
       } else {
         setErrorMessage("Failed to resend OTP");
@@ -116,27 +127,46 @@ const OtpInput = () => {
           type="text"
           placeholder="Enter OTP"
           value={otp}
-          onChange={(e) => setOtp(e.target.value)}
+          onChange={handleChange}
+          maxLength="6"
+          name="otp"
         />
-        {errorMessage && <p className="error-message">{errorMessage}</p>}{" "}
+        
+        {errorMessage ? <p className="error-message">{errorMessage}</p>:<p></p>}
         {/* Display error message */}
-        <button onClick={handleVerifyOtp} className="otp-btn">
+        <button
+          onClick={handleVerifyOtp}
+          className="otp-btn"
+          disabled={otp.length !== 6}
+          style={{
+            opacity: otp.length !== 6 ? 0.5 : 1, // Make the disabled option semi-transparent
+            cursor: otp.length !== 6 ? "not-allowed" : "pointer", //
+          }}
+        >
           Verify OTP
         </button>
-        <button
-          onClick={handleResendOtp}
-          className="resend-btn"
-          disabled={resendDisabled} // Disable button if countdown is active
-        >
-          {countdown <= 0 ? (
-  <>
-    <span>Resend OTP | </span> 
-    <span>OTP via Call</span>
-  </>
-) : (
-  <span>00:{countdown}s</span>
-)}
-        </button>
+
+        {countdown <= 0 ? (
+          <div style={{ display: "flex", justifyContent:'center',alignItems:'center' }}>
+            <button
+              onClick={() => handleResendOtp("SMS")}
+              className="resend-btn"
+              disabled={resendDisabled} // Disable button if countdown is active
+            >
+              Resend OTP 
+            </button>
+            <p style={{color:'blue',marginTop:'30px'}}> | </p>
+            <button
+              onClick={() => handleResendOtp("Call")}
+              className="resend-btn"
+              disabled={resendDisabled} // Disable button if countdown is active
+            >
+              OTP via Call
+            </button>
+          </div>
+        ) : (
+          <p style={{ color:'rgb(0, 106, 255)' }} >00:{String(countdown).padStart(2, '0')}s</p>
+        )}
       </div>
     </div>
   );

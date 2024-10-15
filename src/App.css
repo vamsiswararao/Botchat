@@ -182,7 +182,7 @@ form {
 
 }
 
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
+@media only screen and (min-width: 769px) and (max-width: 1023px) {
 
   /* Small Laptop and Large Tablet Styles */
   form {
@@ -212,7 +212,7 @@ form {
   }
 
   .suspect_contact{
-    margin-left: 0px;
+    margin-left: 28%;
   }
 
   
@@ -220,7 +220,7 @@ form {
 
 }
 
-@media only screen and (min-width: 1025px) {
+@media only screen and (min-width: 1024px) {
 
   /* Laptop and Desktop Styles */
   form {
@@ -292,8 +292,7 @@ form {
 .otp-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  height: 450px;
   background-color: #ffffff;
 }
 
@@ -302,6 +301,7 @@ form {
   padding: 20px;
   border-radius: 10px;
   width: 90%;
+  max-height: 340px;
   max-width: 350px;
   text-align: center;
 }
@@ -347,6 +347,10 @@ p {
 /* Laptop view */
 @media (min-width: 768px) {
 
+
+  .suspect-bank{
+    font-size: 38px;
+  }
   .next-btns{
     margin-left:140px;
   }
@@ -976,7 +980,7 @@ h2 {
     width: 220px;
  }
  .amount{
-  width: 180px;
+  width: 210px;
  }
  .add-page-btn{
   height: 40px;
@@ -1009,8 +1013,8 @@ h2 {
     justify-content: center;
     align-items: center;
     position: fixed;
-    top: 55px;
-    right: 80;
+    top: 100px;
+    right: 40px;
     z-index: 1000;
     width: 20%;
 }
@@ -1055,7 +1059,7 @@ h2 {
   }
   .amount{
     margin-Right: 10px; 
-    width: 360px;
+    width: 420px;
    }
 .add-page-btn{
   width: 240px;
@@ -1087,8 +1091,8 @@ h2 {
   justify-content: center;
   align-items: center;
   position: fixed;
-  top: 55px;
-  right: 190px;
+  top: 90px;
+  right: 50px;
   z-index: 1000
 }
 
@@ -1114,6 +1118,10 @@ h2 {
   padding-left: 10px;
 }
 
+.alert{
+  margin-left: 120px;
+}
+
 /* Mobile view */
 @media only screen and (max-width: 600px) {
   .alert-box {
@@ -1133,7 +1141,42 @@ h2 {
   background-color:transparent !important;
   color: rgb(0, 106, 255);
   margin-top: 20px;
+  width: 115px;
 }
+
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  /* background-color: transparent; */
+  background-color: rgba(0, 0, 0, 0.5); 
+  /* Black w/ opacity */
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding:20px;
+  background-color: #fefefe;
+  border: 1px solid #888;
+  width: 60%; /* Could be more or less, depending on screen size */
+  height: 40%;
+  border-radius: 14px;
+}
+
+
+
 
 
 

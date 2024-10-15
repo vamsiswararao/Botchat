@@ -1,107 +1,8 @@
-import React, {  useState } from "react";
-// import Select,{components} from "react-select";
-// import { IoIosArrowUp } from 'react-icons/io';
+import React, {  useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-// const customStyles = {
-//   container: (provided) => ({
-//     ...provided,
-//     width: "340px",
-//     height: "24px",
-//     backgroundColor:"red",
-//     "@media (max-width: 768px)": {
-//       width: "85%",
-//     },
-//   }),
-//   menu: (provided) => ({
-//     ...provided,
-//     zIndex: 9999,
-//     maxHeight: "180px",
-//   }),
-//   menuList: (provided) => ({
-//     ...provided,
-//     maxHeight: "150px",
-//     overflowY: "auto",
-//     fontSize:'16px'
-//   }),
-//   control: (provided) => ({
-//     ...provided,
-//     minHeight: "30px",
-//     height: "30px",
-//   }),
-//   indicatorSeparator: (provided) => ({
-//     ...provided,
-//     height: "14px",
-//   }),
-//   dropdownIndicator: (provided) => ({
-//     ...provided,
-//     padding: "8px",
-//     svg: {
-//       width: "18px",
-//       height: "18px",
-//     },
-//   }),
-//   placeholder: (provided) => ({
-//     ...provided,
-//     fontSize: "14px",
-//     marginBottom: "10px",
-//     color:"#004999",
-//   }),
-//   singleValue: (provided) => ({
-//     ...provided,
-//     fontSize: "16px",
-//     marginBottom: "10px",
-//     color:"#004999",
-//   }),
-//   input: (base) => ({
-//     ...base,
-//     padding: "0px",
-//   }),
-// };
 
-
-// const CustomDropdownIndicator = (props) => {
-//   return (
-//     <components.DropdownIndicator {...props}>
-//       <IoIosArrowUp /> {/* Reverse the arrow here */}
-//     </components.DropdownIndicator>
-//   );
-// };
-
-
-
-// const indianStates = [
-//   { value: "0", label: "Andhra Pradesh" },
-//   { value: "1", label: "Arunachal Pradesh" },
-//   { value: "2", label: "Assam" },
-//   { value: "3", label: "Bihar" },
-//   { value: "4", label: "Chhattisgarh" },
-//   { value: "5", label: "Goa" },
-//   { value: "6", label: "Gujarat" },
-//   { value: "7", label: "Haryana" },
-//   { value: "8", label: "Himachal Pradesh" },
-//   { value: "9", label: "Jharkhand" },
-//   { value: "10", label: "Karnataka" },
-//   { value: "11", label: "Kerala" },
-//   { value: "12", label: "Madhya Pradesh" },
-//   { value: "13", label: "Maharashtra" },
-//   { value: "14", label: "Manipur" },
-//   { value: "15", label: "Meghalaya" },
-//   { value: "16", label: "Mizoram" },
-//   { value: "17", label: "Nagaland" },
-//   { value: "18", label: "Odisha" },
-//   { value: "19", label: "Punjab" },
-//   { value: "20", label: "Rajasthan" },
-//   { value: "21", label: "Sikkim" },
-//   { value: "22", label: "Tamil Nadu" },
-//   { value: "23", label: "Telangana" },
-//   { value: "24", label: "Tripura" },
-//   { value: "25", label: "Uttar Pradesh" },
-//   { value: "26", label: "Uttarakhand" },
-//   { value: "27", label: "West Bengal" },
-// ];
-
-const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion }) => {
+const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) => {
   const [address, setAddress] = useState({
     address1: "",
     city: "",
@@ -113,17 +14,65 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion }) => {
   const [error, setError] = useState("");
 
   const vist_id = sessionStorage.getItem("visitor_id");
+  useEffect(() => {
+    const storedDistrict = localStorage.getItem('address1');
+    if (storedDistrict) {
+      setAddress((prev) => ({ ...prev, address1: JSON.parse(storedDistrict) }));
+    }
+  }, []);
 
+  useEffect(() => {
+    const storedPoliceStation = localStorage.getItem('city');
+    if (storedPoliceStation) {
+      setAddress((prev) => ({ ...prev, city: JSON.parse(storedPoliceStation) }));
+    }
+  }, []);
+  useEffect(() => {
+    const storedPoliceStation = localStorage.getItem('zip');
+    if (storedPoliceStation) {
+      setAddress((prev) => ({ ...prev, zip: JSON.parse(storedPoliceStation) }));
+    }
+    onVictimAddressSelected(setAddress);
+  }, []);
 
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setAddress((prevState) => ({
-      ...prevState,
-      [id]: value,
-    }));
-    setError("");
+    localStorage.setItem(id, JSON.stringify(value));
+    // Validate input for address1 and city
+    if (id === 'address1' || id === 'city') {
+      // Regex to allow alphanumeric, space, -, _, and /
+      if (/^[a-zA-Z0-9\s\-_\/]*$/.test(value) && value.length <= 100) {
+        setAddress((prevState) => ({
+          ...prevState,
+          [id]: value,
+        }));
+        setError(""); // Reset error if input is valid
+      } else {
+        setError("Input can only contain letters, numbers, spaces, hyphens, underscores, and slashes, and must be less than 100 characters.");
+      }
+    } else if (id === 'zip') {
+      // Allow only numbers for zip
+      if (/^\d*$/.test(value)) {
+        setAddress((prevState) => ({
+          ...prevState,
+          [id]: value,
+        }));
+        setError(""); // Reset error if input is valid
+      } else {
+        setError("Zip code can only contain numbers.");
+      }
+    } else {
+      // Handle other fields if necessary
+      setAddress((prevState) => ({
+        ...prevState,
+        [id]: value,
+      }));
+      setError(""); // Reset error for other fields
+    }
   };
+  
+  
 
 
   const handleOkClick = async (e) => {
@@ -139,7 +88,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion }) => {
     }
 
     const dataToSubmit = {
-      api_key:"1725993564",
+      api_key:apiKey,
       visitor_token:vist_id,
       qtion_id:"66f65376898d6",
       qtion_num:"9",
@@ -148,7 +97,6 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion }) => {
       post_cod: address.zip,
     };
 
-    console.log(dataToSubmit)
 
     try {
       const response = await fetch(`${apiUrl}/ccrim_bot_add_addrs`, {
@@ -168,8 +116,8 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion }) => {
 
       // Perform any additional actions after successful save
       onVictimAddressSelected(dataToSubmit);
-      onNext(9);
-      onQuestion(10);
+      onNext(10);
+      onQuestion(11);
 
     } catch (error) {
       console.error('Error saving data:', error);
@@ -195,6 +143,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion }) => {
               placeholder="Type your answer here..."
               id="address1"
               autoComplete="off" 
+              name="address1"
             />
 
             <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="city">
@@ -207,6 +156,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion }) => {
               placeholder="Type your answer here..."
               id="city"
               autoComplete="off"
+              name="city"
             />
 
             <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="zip">
@@ -219,6 +169,8 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion }) => {
               placeholder="Type your answer here..."
               id="zip"
               autoComplete="off"
+              name="zip"
+              maxLength="6"
             />
             </div>
 
@@ -237,7 +189,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion }) => {
               </p>
             </div>
             {error && (
-              <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
+              <p style={{ color: "red", marginTop: "10px", width:'650px' }}>{error}</p>
             )}
           </div>
         </div>

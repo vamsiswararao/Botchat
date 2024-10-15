@@ -1,63 +1,8 @@
-/* First.css */
+.first-container{
+  width: 100vw;
+}
 
-.main-container {
-    position: relative;
-    width: 100vw;
-    height: 90%; /* Full viewport height for proper centering */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .main-container img {
-    opacity: 0.9;
-    width: 100vw;
-    height: 100vh; /* Maintain aspect ratio */
-  }
-  
-  .start_btn {
-    position: absolute;
-    bottom: 320px; /* Adjust as needed */
-    background-color: #007bff; /* Example color, change as needed */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    z-index: 1; /* Ensure button is above the image */
-  }
-  
-  .start_btn:hover {
-    background-color: #0056b3; /* Darker shade for hover effect */
-  }
-  
-  /* Mobile view */
-  @media (max-width: 768px) {
-    .start_btn {
-      font-size: 16px;
-      padding: 12px 16px;
-    }
-  }
-  
-  /* Laptop view */
-  @media (min-width: 769px) {
-    .start_btn {
-      font-size: 18px;
-      padding: 12px 24px;
-    }
-
-    .main-container img {
-        opacity: 0.8;
-        width: 100vw;
-        height: 100vh; /* Maintain aspect ratio */
-      }
-
-      .start_btn {
-      width: 200px;
-      bottom: 320px; /* Adjust as needed */
-      font-size: 24px;
-      }
-      
-  }
-  
+.help-container{
+  display: flex;
+  justify-content: center;
+}

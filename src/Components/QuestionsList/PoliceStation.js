@@ -10,7 +10,7 @@ const customStyles = {
     height: "24px",
     backgroundColor:"red",
     "@media (max-width: 768px)": {
-      width: "85%",
+      width: "100%",
     },
   }),
   menu: (provided) => ({
@@ -101,7 +101,7 @@ const indianStates = [
   { value: "27", label: "West Bengal" },
 ];
 
-const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
+const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) => {
   const [address, setAddress] = useState({
     address1: "",
     city: "",
@@ -111,10 +111,27 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
     policeStation: null,
   });
   const [error, setError] = useState("");
-  const [AddressOptions, setAddressOptions] = useState([]);
+  const [policeOptions, setPoliceOptions] = useState([]);
   const [psOptions, setPsOptions] = useState([]);
 
   const vist_id = sessionStorage.getItem("visitor_id");
+
+  useEffect(() => {
+    const storedDistrict = localStorage.getItem('district');
+    if (storedDistrict) {
+      setAddress((prev) => ({ ...prev, district: JSON.parse(storedDistrict) }));
+    }
+  }, []);
+
+  useEffect(() => {
+    const storedPoliceStation = localStorage.getItem('policeStation');
+    if (storedPoliceStation) {
+      setAddress((prev) => ({ ...prev, policeStation: JSON.parse(storedPoliceStation) }));
+    }
+    onVictimAddressSelected(setAddress);
+  }, []);
+
+
   useEffect(() => {
     const fetchAddressData= async () => {
       try {
@@ -124,7 +141,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    "api_key":"1725993564",
+                    "api_key":apiKey,
                     visitor_token:vist_id,
                     qtion_id:"66f65376898d6",
              }
@@ -136,13 +153,12 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
                 }
         
                 const qulificationData = await qulificationResponse.json();
-                 setAddressOptions(
+                 setPoliceOptions(
                   qulificationData.resp.districts_list.map((address) => ({
                     value: address.dist_uniq,
                     label:address.dist_nm
                    })) || []
                  );
-                //console.log(toData.resp.aud_data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -161,7 +177,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    "api_key":"1725993564",
+                    "api_key":apiKey,
                     "dst": districtValue,
                     visitor_token:vist_id,
                     qtion_id:"66f65376898d6",
@@ -174,7 +190,6 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
                 }
         
                 const qulificationData = await qulificationResponse.json();
-                console.log(qulificationData)
                  setPsOptions(
                   qulificationData.resp.ps_list.map((ps) => ({
                     value: ps.aplps_uni,
@@ -182,7 +197,6 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
                                         
                    })) || []
                  );
-                //console.log(toData.resp.aud_data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -197,7 +211,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
     }));
     setError("");
   };
-
+ 
   const handleDistrictChange = (selectedOption) => {
     setAddress((prevState) => ({
       ...prevState,
@@ -205,6 +219,8 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
       policeStation: ""
     }));
     fetchPsData(selectedOption.value);
+    localStorage.setItem('district', JSON.stringify(selectedOption));
+    localStorage.setItem('policeStation', JSON.stringify(null));
     setError("");
     
   };
@@ -214,6 +230,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
       ...prevState,
       policeStation: selectedOption,
     }));
+    localStorage.setItem('policeStation', JSON.stringify(selectedOption));
     setError("");
   };
 
@@ -230,15 +247,15 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
     }
 
     const dataToSubmit = {
-      api_key:"1725993564",
+      api_key:apiKey,
       visitor_token:vist_id,
       qtion_id:"67064ae25a10a798740151",
-      qtion_num:"10",
+      qtion_num:"8",
       district: address.district ? address.district.value : null,
       ps: address.policeStation ? address.policeStation.value : null,
     };
 
-    console.log(dataToSubmit)
+
 
     try {
       const response = await fetch(`${apiUrl}/ccrim_add_ps`, {
@@ -253,13 +270,15 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
         throw new Error('Failed to save address');
       }
 
-      const result = await response.json();
-      console.log('Saved data:', result);
+      const data = await response.json();
+      if(data.resp.error_code ==="0"){
+        onVictimAddressSelected(dataToSubmit);
+        onNext(9);
+        onQuestion(10);
+      }else{
+        setError("Failed to push data to API");
+      }
 
-      // Perform any additional actions after successful save
-      onVictimAddressSelected(dataToSubmit);
-      onNext(10);
-      onQuestion(11);
 
     } catch (error) {
       console.error('Error saving data:', error);
@@ -272,7 +291,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
     <div className="question">
       <div style={{ display: "flex" }}>
         <div>
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", flexDirection: "column",justifyContent:'center',alignItems:'center' }}>
             <h2>Select the police station?</h2>
             <div>
             <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="state">
@@ -286,8 +305,6 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
               styles={customStyles}
               isDisabled={true}
             />
-
-            {/* {address.state.value === "23" && ( */}
               <>
                 <h6
                   style={{ margin: "5px", marginTop: "20px" }}
@@ -296,14 +313,13 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion }) => {
                   District<span style={{color:'red'}}>*</span>
                 </h6>
                 <Select
-                  options={AddressOptions}
+                  options={policeOptions}
                   value={address.district}
                   onChange={handleDistrictChange}
                   id="district"
                   styles={customStyles}
                 />
               </>
-            {/* )} */}
             <h6
               style={{ margin: "5px", marginTop: "20px" }}
               htmlFor="policeStation"

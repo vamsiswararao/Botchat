@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
+const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey }) => {
   const [suspectContacts, setSuspectContacts] = useState({
     contactValues: [],
     contactIds: []
@@ -14,6 +14,14 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
   const vist_id = sessionStorage.getItem("visitor_id");
 
   useEffect(() => {
+    const storedSuspectCall = localStorage.getItem('suspectCall');
+    if (storedSuspectCall) {
+      setSuspectContacts(JSON.parse(storedSuspectCall));
+      onSuspectCallSelected(JSON.parse(storedSuspectCall))
+    }
+  }, []);
+
+  useEffect(() => {
     const fetchPlatFormData = async () => {
       try {
         const platFormResponse = await fetch(
@@ -24,7 +32,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              api_key: "1725993564",
+              api_key: apiKey,
               visitor_token: vist_id,
               qtion_id: "66f653ab73faa",
             }),
@@ -44,7 +52,6 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
             label: bank.scom_nm,
           })) || []
         );
-        //console.log(toData.resp.aud_data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -81,6 +88,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
   
       // Save data after state update
       onSuspectCallSelected(updatedCalls);
+      localStorage.setItem("suspectCall", JSON.stringify(updatedCalls));
       return updatedCalls;
     });
   
@@ -105,7 +113,6 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
 
   const handleOkClick = async (e) => {
     e.preventDefault();
-    console.log(suspectContacts.contactIds)
     if (suspectContacts.contactIds.length > 0) {
       onSuspectCallSelected(suspectContacts);
       onNext(12);
@@ -119,7 +126,6 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
 
   // Function to save data to RequestBin API
   const saveDataToAPI = async (selectedContacts) => {
-    console.log(suspectContacts)
     try {
       const response = await fetch(`${apiUrl}/ccrim_bot_add_multichoice`, {
         method: "POST",
@@ -127,15 +133,14 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          api_key: "1725993564",
+          api_key: apiKey,
           visitor_token: vist_id,
           qtion_id: "66f653ab73faa",
-          qtion_num: "12",
+          qtion_num: "11",
           qtion_option:suspectContacts.contactIds,
           option_val:  suspectContacts.contactValues,
         }),
       });
-
       if (!response.ok) {
         throw new Error("Failed to save data");
       }
@@ -149,19 +154,6 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion }) => {
     }
   };
 
-  // const options = [
-  //   { id: "A", label: "Normal Call-Number" },
-  //   { id: "B", label: "WhatsApp Call-Number" },
-  //   { id: "C", label: "Telegram Call-Number" },
-  //   { id: "D", label: "Instagram Call-Number" },
-  //   { id: "E", label: "Facebook Call-Number" },
-  //   { id: "F", label: "Skype Call-Number" },
-  //   { id: "G", label: "Zoom Call-Number" },
-  //   { id: "H", label: "Snap Call-Number" },
-  //   { id: "I", label: "Webex Call-Number" },
-  //   { id: "J", label: "Duos Call-Number" },
-  //   { id: "K", label: "Microsoft Call-Number" },
-  // ];
 
   return (
     <div className="question">

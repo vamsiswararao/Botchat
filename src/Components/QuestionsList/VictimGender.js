@@ -1,20 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer }) => {
+const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer,apiKey }) => {
   const [gender, setGender] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const vist_id = sessionStorage.getItem("visitor_id");
-  
-  // const translateOptionIdToEnglish = (id) => {
-  //   const translations = {
-  //    "66d31c12457c3489795485": "A",
-  //   "66d31c2486272638130560": "B" ,
-  //   "66d31c42bd15f000864236": "C" }
 
-  //   return translations[id] || id; // Return the English equivalent, or the id if no match is found
-  // };
+  useEffect(() => {
+    const storedData = localStorage.getItem('gender');
+    if (storedData) {
+      setGender(JSON.parse(storedData));
+      onVictimGenderSelected(JSON.parse(storedData))
+    }
+  }, []);
+  
+
 
   const handleOptionClick = async(option,e) => {
     e.preventDefault();
@@ -22,15 +23,6 @@ const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer }) => {
     if (option.disabled) {
       return; // Ignore clicks on disabled options
     } 
-    setGender(option.label)
-    handleOkClick()
-    onVictimGenderSelected(option.label);
-    setShowOkButton(true); // Show the OK button after a successful click
-    setError("");
-    onNext(6);
-    onQuestion("7")
-    //const translatedId = translateOptionIdToEnglish(option.value);
-    console.log(option)
     try {
       const response = await fetch(`${apiUrl}/ccrim_bot_add_choice`, {
         method: "POST",
@@ -38,10 +30,10 @@ const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          "api_key":"1725993564",
+          "api_key":apiKey,
          "visitor_token":vist_id,
          "qtion_id":"66f65326d886a",
-         "qtion_num":"6",
+         "qtion_num":"5",
          "qtion_option":option.id,
          "option_val":option.value
    } 
@@ -53,9 +45,18 @@ const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer }) => {
       }
 
       const data = await response.json()
-      console.log(data)
-
-      console.log("Data pushed to RequestBin:", option.id);
+      if(data.resp.error_code ==="0"){
+        setGender(option.label)
+        handleOkClick()
+        onVictimGenderSelected(option.label);
+        setShowOkButton(true); // Show the OK button after a successful click
+        onNext(6);
+        onQuestion("7")
+        localStorage.setItem('gender', JSON.stringify(option.label));
+        setError("");
+      }else{
+        setError("Failed to push data to API");
+      }
     } catch (err) {
       console.error("Error sending data to API:", err);
     }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
+const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey }) => {
   const [suspectContacts, setSuspectContacts] = useState({
     contactValues: [],
     contactIds: []
@@ -12,6 +12,13 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
   const [options, setOptions] = useState([]);
   const vist_id = sessionStorage.getItem("visitor_id");
 
+  useEffect(() => {
+    const storedSuspectCall = localStorage.getItem('suspectContact');
+    if (storedSuspectCall) {
+      setSuspectContacts(JSON.parse(storedSuspectCall));
+      onSuspectContactSelected(JSON.parse(storedSuspectCall))
+    }
+  }, []);
 
   useEffect(() => {
     const fetchPlatFormData = async () => {
@@ -24,7 +31,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              api_key: "1725993564",
+              api_key: apiKey,
               "visitor_token":vist_id,
               "qtion_id":"66f653d914bc5",
             }),
@@ -52,30 +59,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
     fetchPlatFormData();
   }, []);
   
-  // const handleOptionClick = (option, e) => {
-  //   e.preventDefault();
-  //   if (option.disabled) {
-  //     return; // Ignore clicks on disabled options
-  //   }
-  //   setShowOkButton(true); // Show the OK button after a successful click
-  //   setError("");
-  //   setSuspectContacts((prevSelectedCalls) => {
-  //     const updatedCalls = prevSelectedCalls.includes(option.value)
-  //       ? prevSelectedCalls.filter((call) => call !== option.value)
-  //       : [...prevSelectedCalls, option.value];
 
-  //     // Save data after state update
-  //     onSuspectContactSelected(updatedCalls);
-  //     //saveDataToAPI(updatedCalls);
-  //     return updatedCalls;
-  //   });
-
-  //   if (suspectContacts.includes(option.value)) {
-  //     setSuspectContacts(suspectContacts.filter((contact) => contact !== option.value));
-  //   } else {
-  //     setSuspectContacts([...suspectContacts, option.value]);
-  //   }
-  // };
 
 
   const handleOptionClick = (option, e) => {
@@ -106,6 +90,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
   
       // Save data after state update
       onSuspectContactSelected(updatedCalls);
+      localStorage.setItem("suspectContact", JSON.stringify(updatedCalls));
       return updatedCalls;
     });
   
@@ -137,10 +122,10 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion }) => {
         },
         body: JSON.stringify(
           {
-            "api_key":"1725993564",
+            "api_key":apiKey,
            "visitor_token":vist_id,
            "qtion_id":"66f653d914bc5",
-           "qtion_num":"14",
+           "qtion_num":"13",
            "qtion_option": suspectContacts.contactIds,
            "option_val":suspectContacts.contactValues,
      }),

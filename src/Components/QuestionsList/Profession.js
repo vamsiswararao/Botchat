@@ -5,7 +5,8 @@ const Profession = ({
   onNext,
   onVictimProfessionSelected,
   onQuestion,
-  answer,
+  answer
+  ,apiKey
 }) => {
   const [Profession, setProfession] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
@@ -13,26 +14,15 @@ const Profession = ({
   const [professionOptions, setProfessionOptions] = useState([]);
   const vist_id = sessionStorage.getItem("visitor_id");
 
-  // const options= [ {id: "A",value: '66669b511d028', label: 'Business' },
 
-  // {id: "B",value: '66669b511d567', label: 'Farmer' },
+  useEffect(() => {
+    const storedData = localStorage.getItem('Profession');
+    if (storedData) {
+      setProfession(JSON.parse(storedData));
+      onVictimProfessionSelected(JSON.parse(storedData))
+    }
+  }, []);
 
-  // {id: "C",value: '66669b511da3a', label: 'Govt Employee' },
-
-  // {id: "D",value: '66669b511dd12', label: 'House Wife' },
-
-  // {id: "E",value: '66669b511e070', label: 'Private Employee'},
-
-  // {id: "F",value: '66669b511e36d', label: 'Self Employee' },
-
-  // {id: "G",value: '66669b511e596', label: 'Senior Citizen'},
-
-  // {id: "H",value: '66669b511e8eb', label: 'Software/IT Corporate Employee'},
-
-  // {id: "I",value: '66669b511ebbe', label: 'Student'},
-
-  // {id: "J",value: '66669b511efb0', label: 'Un-Employee'}
-  //  ]
   useEffect(() => {
     const fetchProfessionData = async () => {
       try {
@@ -44,7 +34,7 @@ const Profession = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              api_key: "1725993564",
+              api_key: apiKey,
               visitor_token: vist_id,
               qtion_id: "66f65342db514",
             }),
@@ -56,7 +46,6 @@ const Profession = ({
         }
 
         const qulificationData = await qulificationResponse.json();
-        console.log(qulificationData);
         if (qulificationData.resp.error_code === "0") {
           setProfessionOptions(
             qulificationData.resp.profesion_list.map((profession, index) => ({
@@ -66,7 +55,6 @@ const Profession = ({
             })) || []
           );
         }
-        //console.log(toData.resp.aud_data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -81,14 +69,6 @@ const Profession = ({
     if (option.disabled) {
       return; // Ignore clicks on disabled options
     }
-    setProfession(option.label);
-    handleOkClick();
-    onVictimProfessionSelected(option.label);
-    setShowOkButton(true); // Show the OK button after a successful click
-    setError("");
-    onNext(7);
-    onQuestion("8");
-    console.log(option);
     try {
       const response = await fetch(`${apiUrl}/ccrim_bot_add_choice`, {
         method: "POST",
@@ -96,23 +76,33 @@ const Profession = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          api_key: "1725993564",
+          api_key: apiKey,
           visitor_token: vist_id,
           qtion_id: "66f65342db514",
-          qtion_num: "7",
+          qtion_num: "6",
           qtion_option: option.id,
           option_val: option.value,
         }),
       });
 
       const data = await response.json();
-      console.log(data);
 
       if (!response.ok) {
         throw new Error("Failed to push data to API");
       }
 
-      console.log("Data pushed to RequestBin:", option.id);
+      if(data.resp.error_code ==="0"){
+        setProfession(option.label);
+        handleOkClick();
+        onVictimProfessionSelected(option.label);
+        setShowOkButton(true); // Show the OK button after a successful click
+        onNext(7);
+        onQuestion("8");
+        localStorage.setItem('Profession', JSON.stringify(option.label));
+        setError("");
+      }else{
+        setError("Failed to push data to API");
+      }
     } catch (err) {
       console.error("Error sending data to API:", err);
     }
@@ -128,26 +118,7 @@ const Profession = ({
     }
   };
 
-  // const options = [
-  //   {
-  //     id: "A",
-  //     label: "Business",
-  //   },
-  //   { id: "B", label: "Farmer" },
-  //   { id: "C", label: "Govt Employee" },
-  //   {
-  //       id: "D",
-  //       label: "House Wife",
-  //     },
-  //     { id: "E", label: "Private Employee" },
-  //     { id: "F", label: "Self Employee" },
-  //     { id: "G", label: "Senior Citizen" },
-  //     { id: "H", label: "Software/IT Corporate Employee" },
-  //     { id: "I", label: "Student" },
-  //     { id: "I", label: "Un-Employee" },
-
-  //   ];
-
+  
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
@@ -201,13 +172,13 @@ const Profession = ({
                 </p>
               </>
             )}
+            </div>
             {error && <div className="error-message">{error}</div>}
             {answer[6] && (
               <p className="alert-box">
                 Please answer the current question before moving to the next.
               </p>
-            )}
-          </div>
+            )} 
         </div>
       </div>
     </div>

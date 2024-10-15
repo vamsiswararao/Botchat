@@ -1,23 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const Time = ({ onNext, onTimeSelected, onQuestion, answer }) => {
+const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey }) => {
   const [timeId, setTimeId] = useState(null);
   const [time, setTime] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const vist_id = sessionStorage.getItem("visitor_id");
 
+  useEffect(() => {
+    const storedData = localStorage.getItem('time');
+    if (storedData) {
+      setTimeId(JSON.parse(storedData));
+      setTime(JSON.parse(storedData));
+      onTimeSelected(JSON.parse(storedData));
+    }
+  }, []);
+
+  
   const handleOptionClick = async (option, e) => {
-    console.log(option);
     e.preventDefault();
-    setTimeId(option.id);
-    setTime(option.id);
-    onTimeSelected(option.id);
-    onNext(2);
-    onQuestion(3);
-    setShowOkButton(true); // Hide the OK button after successful click
-    setError("");
     try {
       const response = await fetch(`${apiUrl}/ccrim_bot_register`, {
         method: "POST",
@@ -25,17 +27,28 @@ const Time = ({ onNext, onTimeSelected, onQuestion, answer }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          api_key: "1725993564",
+          api_key: apiKey,
           visitor_token: vist_id,
           qtion_id: "66f6529450490",
-          qtion_num: "2",
+          qtion_num: "1",
           qtion_option: option.id,
           option_val: option.value,
         }),
       });
       const data = await response.json();
-      console.log(data);
-
+      if(data.resp.error_code ==="0"){
+        setTimeId(option.id);
+        setTime(option.id);
+        onTimeSelected(option.id);
+        localStorage.setItem('time', JSON.stringify(option.id));
+        onNext(2);
+        onQuestion(3);
+        setShowOkButton(true); // Hide the OK button after successful click
+        setError("");
+      }else{
+        setError("Failed to push data to API");
+      }
+     
       if (!response.ok) {
         throw new Error("Failed to push data to API");
       }
@@ -47,7 +60,6 @@ const Time = ({ onNext, onTimeSelected, onQuestion, answer }) => {
   const handleOkClick = (e) => {
     //e.preventDefault();
     if (time) {
-      console.log("Selected Option:", time);
       onNext(2);
       onQuestion(3);
       // Proceed with the next steps

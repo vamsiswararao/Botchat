@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey }) => {
+const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey,botToken,vist_id }) => {
   const [suspectContacts, setSuspectContacts] = useState({
     contactValues: [],
     contactIds: []
@@ -10,7 +10,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey })
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null)
   const [options, setOptions] = useState([]);
-  const vist_id = sessionStorage.getItem("visitor_id");
+  //const vist_id = sessionStorage.getItem("visitor_id");
 
   useEffect(() => {
     const storedSuspectCall = localStorage.getItem('suspectContact');
@@ -34,6 +34,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey })
               api_key: apiKey,
               "visitor_token":vist_id,
               "qtion_id":"66f653d914bc5",
+              lac_token: botToken,
             }),
           }
         );
@@ -43,7 +44,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey })
         }
 
         const platFormData = await platFormResponse.json();
-        console.log(platFormData);
+        //console.log(platFormData);
         setOptions(
           platFormData.resp.suspect_platforms_list.map((bank,index) => ({
             id: String.fromCharCode(65 + index),
@@ -128,6 +129,8 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey })
            "qtion_num":"13",
            "qtion_option": suspectContacts.contactIds,
            "option_val":suspectContacts.contactValues,
+           lac_token: botToken,
+           
      }),
       });
 
@@ -135,8 +138,8 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey })
         throw new Error("Failed to save data");
       }
 
-      const result = await response.json();
-      console.log("Data saved successfully:", result);
+     // const result = await response.json();
+      //console.log("Data saved successfully:", result);
       // Optionally, handle the result as needed
     } catch (error) {
       console.error("Error saving data:", error);

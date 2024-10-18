@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer,apiKey }) => {
+const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer,apiKey,botToken,vist_id }) => {
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
 
   const [howMuch, setHowMuch] = useState("");
-  const vist_id = sessionStorage.getItem("visitor_id");
+  //const vist_id = sessionStorage.getItem("visitor_id");
 
   useEffect(() => {
     const storedData = localStorage.getItem('howMuch');
@@ -56,6 +56,7 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer,apiKey }) => {
             "qtion_id":"66f652b6e0c73",
             "qtion_num": "2",
             "option_val": howMuch,
+            lac_token: botToken
           }),
         });
 
@@ -64,6 +65,7 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer,apiKey }) => {
         }
 
         const data = await response.json();
+       // console.log(data)
         if(data.resp.error_code ==="0"){
           setError("");
           onNext(3, howMuch);

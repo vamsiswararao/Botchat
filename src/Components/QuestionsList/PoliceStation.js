@@ -101,7 +101,7 @@ const indianStates = [
   { value: "27", label: "West Bengal" },
 ];
 
-const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) => {
+const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answer,botToken,vist_id }) => {
   const [address, setAddress] = useState({
     address1: "",
     city: "",
@@ -114,7 +114,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) =
   const [policeOptions, setPoliceOptions] = useState([]);
   const [psOptions, setPsOptions] = useState([]);
 
-  const vist_id = sessionStorage.getItem("visitor_id");
+  //const vist_id = sessionStorage.getItem("visitor_id");
 
   useEffect(() => {
     const storedDistrict = localStorage.getItem('district');
@@ -144,6 +144,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) =
                     "api_key":apiKey,
                     visitor_token:vist_id,
                     qtion_id:"66f65376898d6",
+                    lac_token: botToken,
              }
              ),
                 });
@@ -181,6 +182,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) =
                     "dst": districtValue,
                     visitor_token:vist_id,
                     qtion_id:"66f65376898d6",
+                    lac_token: botToken,
              }
              ),
                 });
@@ -253,6 +255,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) =
       qtion_num:"8",
       district: address.district ? address.district.value : null,
       ps: address.policeStation ? address.policeStation.value : null,
+      lac_token: botToken
     };
 
 
@@ -289,9 +292,9 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) =
 
   return (
     <div className="question">
-      <div style={{ display: "flex" }}>
-        <div>
-          <div style={{ display: "flex", flexDirection: "column",justifyContent:'center',alignItems:'center' }}>
+      <div style={{ display: "flex",justifyContent:'center' }}>
+        <div style={{ display: "flex",justifyContent:'center' }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
             <h2>Select the police station?</h2>
             <div>
             <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="state">
@@ -358,6 +361,11 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) =
             </div>
             {error && (
               <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
+            )}
+                        {answer[2] && (
+              <p className="alert-box">
+                Please answer the current question before moving to the next.
+              </p>
             )}
           </div>
         </div>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer,apiKey }) => {
+const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer,apiKey,botToken,vist_id }) => {
   const [gender, setGender] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
-  const vist_id = sessionStorage.getItem("visitor_id");
+  //const vist_id = sessionStorage.getItem("visitor_id");
 
   useEffect(() => {
     const storedData = localStorage.getItem('gender');
@@ -35,7 +35,8 @@ const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer,apiKey }
          "qtion_id":"66f65326d886a",
          "qtion_num":"5",
          "qtion_option":option.id,
-         "option_val":option.value
+         "option_val":option.value,
+         lac_token: botToken
    } 
    ),
       });
@@ -45,6 +46,7 @@ const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer,apiKey }
       }
 
       const data = await response.json()
+      //console.log(data)
       if(data.resp.error_code ==="0"){
         setGender(option.label)
         handleOkClick()
@@ -83,7 +85,7 @@ const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer,apiKey }
 
   return (
     <div className="question">
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex",justifyContent:'center' }}>
         <div>
           <h2>What is your (victim) gender? </h2>
           <div>

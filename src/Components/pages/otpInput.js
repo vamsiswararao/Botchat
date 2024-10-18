@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie'; 
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiKey = process.env.REACT_APP_AUTH_TOKEN;
@@ -12,7 +13,11 @@ const OtpInput = () => {
   const navigate = useNavigate();
 
   const otp_id = sessionStorage.getItem("otp_id");
-  const vist_id = sessionStorage.getItem("visitor_id");
+  // const vist_id = sessionStorage.getItem("visitor_id");
+
+  const vist_id= Cookies.get('visitor_id');
+
+  
 
   const handleChange = (e) => {
     const inputValue = e.target.value;
@@ -51,8 +56,18 @@ const OtpInput = () => {
       });
 
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       if (data.resp.error_code === "0") {
+        //setError("")
+        // Store visitor_id in session storage
+        //sessionStorage.setItem("visitor_id", data.resp.visitor_id);
+        sessionStorage.setItem("otp_id", data.resp.otp_id);
+        // const expirationDate = new Date();
+        // expirationDate.setMinutes(expirationDate.getMinutes() + 15); 
+        // Cookies.set('visitor_id', data.resp.visitor_id, { path: '/', sameSite: 'Strict', expires: expirationDate });
+        Cookies.set('bot_token', data.resp.bot_token, { path: '/', sameSite: 'Strict', expires: 7 });
+        //console.log("Visitor ID:", data.resp.visitor_id);
+        //console.log("otp_id", data.resp.bot_token)
         navigate("/questions", { replace: true }); // Navigate on success
       } else {
         setErrorMessage("Invalid OTP"); // Display error message
@@ -82,8 +97,8 @@ const OtpInput = () => {
       });
 
       const data = await response.json();
-      console.log(data);
-      console.log(data.resp.error_code);
+      //console.log(data);
+      //console.log(data.resp.error_code);
       if (data.resp.error_code === "0") {
         sessionStorage.setItem("otp_id", data.resp.otp_id);
         setErrorMessage("");

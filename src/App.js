@@ -6,6 +6,7 @@ import Questions from "./Components/pages/Questions";
 import Final from "./Components/pages/Final";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import First from "./Components/pages/First";
+import NotFound from "./Components/pages/NotFound"; // Import the NotFound component
 
 
 
@@ -14,10 +15,10 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<First />} />
+          <Route path="/:id" element={ <First />} />
           {/* <Route path="/" element={<Navigate to="/login" />} /> */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/otp" element={<OtpInput />} />
+          <Route path="/login"  element={<ProtectedRoute><Login /></ProtectedRoute>} />
+          <Route path="/otp" element={<ProtectedRoute> <OtpInput /> </ProtectedRoute>} />
 
           {/* Protected Routes */}
           <Route
@@ -31,11 +32,12 @@ function App() {
           <Route
             path="/success"
             element={
-              // <ProtectedRoute>
+              <ProtectedRoute>
                 <Final />
-              // </ProtectedRoute>
+              </ProtectedRoute>
             }
           />
+                  <Route path="*" element={<NotFound />} />                                  
         </Routes>
       </div>
     </Router>

@@ -3,7 +3,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 
 
-const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey }) => {
+const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey,botToken,vist_id }) => {
   const [selectedOptions, setSelectedOptions] = useState({
     contactValues: [],
     contactIds: []
@@ -11,7 +11,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey }) => 
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const [speckOptions, setSpeckOptions] = useState([]);
-  const vist_id = sessionStorage.getItem("visitor_id");
+  //const vist_id = sessionStorage.getItem("visitor_id");
 
   useEffect(() => {
     const storedSuspectCall = localStorage.getItem('suspectSpeck');
@@ -34,6 +34,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey }) => 
                     "api_key":apiKey,
                     "visitor_token":vist_id,
                     "qtion_id":"66f653bf26e9c",
+                    lac_token: botToken
              }
              ),
                 });
@@ -43,7 +44,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey }) => 
                 }
         
                 const professionData = await professionResponse.json();
-                console.log(professionData)
+                //console.log(professionData)
                  setSpeckOptions(
                   professionData.resp.lng_list.map((profession,index) => ({
                     id: String.fromCharCode(65 + index),
@@ -158,8 +159,8 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey }) => 
         throw new Error("Failed to save data");
       }
 
-      const result = await response.json();
-      console.log("Data saved successfully:", result);
+      //const result = await response.json();
+      //console.log("Data saved successfully:", result);
       // Optionally, handle the result as needed
     } catch (error) {
       console.error("Error saving data:", error);
@@ -210,8 +211,8 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey }) => 
     <div className="question">
       <div style={{ display: "flex" }}>
         <div style={{display:'flex',flexDirection:"column",justifyContent:'flex-end'}}>
-          <h2>Language used by the fraudster? *</h2>
-          <div className="option-list">
+          <h2>Language used by the fraudster? </h2>
+          <div className="options-list">
             {speckOptions.map((option) => (
               <button
                 key={option.id}

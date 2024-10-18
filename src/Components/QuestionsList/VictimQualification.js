@@ -6,13 +6,13 @@ const VictimQualification = ({
   onNext,
   onVictimQualificationSelected,
   onQuestion,
-  answer,apiKey
+  answer,apiKey,botToken,vist_id
 }) => {
   const [qualification, setQualification] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const [options, setOptions] = useState([]);
-  const vist_id = sessionStorage.getItem("visitor_id");
+  //const vist_id = sessionStorage.getItem("visitor_id");
   useEffect(() => {
     const storedData = localStorage.getItem('qualification');
     if (storedData) {
@@ -37,6 +37,7 @@ const VictimQualification = ({
               api_key: apiKey,
               visitor_token: vist_id,
               qtion_id: "66f6536277ea3",
+              lac_token: botToken,
             }),
           }
         );
@@ -84,6 +85,7 @@ const VictimQualification = ({
           qtion_num: "7",
           qtion_option: option.id,
           option_val: option.value,
+          lac_token: botToken
         }),
       });
       const data = await response.json();

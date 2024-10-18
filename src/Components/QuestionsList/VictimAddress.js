@@ -2,7 +2,7 @@ import React, {  useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
-const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) => {
+const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botToken,vist_id}) => {
   const [address, setAddress] = useState({
     address1: "",
     city: "",
@@ -13,7 +13,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) =
   });
   const [error, setError] = useState("");
 
-  const vist_id = sessionStorage.getItem("visitor_id");
+  // const vist_id = sessionStorage.getItem("visitor_id");
   useEffect(() => {
     const storedDistrict = localStorage.getItem('address1');
     if (storedDistrict) {
@@ -95,6 +95,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) =
       address: address.address1,
       village: address.city,
       post_cod: address.zip,
+      lac_token: botToken
     };
 
 
@@ -111,8 +112,8 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) =
         throw new Error('Failed to save address');
       }
 
-      const result = await response.json();
-      console.log('Saved data:', result);
+      //const result = await response.json();
+      //console.log('Saved data:', result);
 
       // Perform any additional actions after successful save
       onVictimAddressSelected(dataToSubmit);
@@ -128,13 +129,13 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) =
 
   return (
     <div className="question">
-      <div style={{ display: "flex" }}>
-        <div>
+      <div style={{ display: "flex" ,justifyContent:'center'}}>
+        <div style={{ display: "flex",justifyContent:'center' }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <h2>Fill your (victim) current full address?</h2>
             <div >
             <h6 style={{ margin: "5px", marginTop: "20px"}} htmlFor="address1">
-              Address
+              Address  <span style={{color:'red'}}>*</span>
             </h6>
             <input
               className="text-input"
@@ -147,8 +148,8 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey }) =
             />
 
             <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="city">
-              Village/City/Town
-            </h6>
+              Village/City/Town <span style={{color:'red'}}>*</span>
+            </h6> 
             <input
               className="text-input"
               value={address.city}

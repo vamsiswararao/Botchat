@@ -7,12 +7,13 @@ const Victim = ({ onNext,onQuestion }) => {
     e.preventDefault();
     onNext(4);
     onQuestion("5")
+    localStorage.setItem('victim', JSON.stringify('victim'));
     };
 
 
   return (
     <div className="question">
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex",justifyContent:'center' }}>
         <div>
           <h2 htmlFor="lose-money">Basic information of victim</h2>
           <p>Answer the set of questions about victim.</p>

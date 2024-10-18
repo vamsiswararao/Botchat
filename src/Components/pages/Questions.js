@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import Cookies from 'js-cookie';
 import Time from "../QuestionsList/Time";
 import HowLoss from "../QuestionsList/HowLoss";
 import Victim from "../QuestionsList/Victim";
@@ -90,6 +91,36 @@ const Questions = () => {
   const [victimValue, setVictimValue] = useState(0)
   const [isNextDisabled, setIsNextDisabled] = useState(false);
   const [answerQuestion, setAnswerQuestion] = useState(Array(16).fill(false));
+  const vist_id= Cookies.get('visitor_id');
+  const botToken= Cookies.get('bot_token');
+
+
+
+  // useEffect(() => {
+  //   //Retrieve localStorage keys and their lengths
+  //   const keys = Object.keys(localStorage);
+  //   const keyLengths = keys.map(key => ({ key, length: key.length }));
+    
+  //   console.log(keyLengths.length);
+
+  //   //Update the answerQuestion array to fill 'true' for the length of keyLengths
+  //   const updatedAnswers = answerQuestion.map((item, index) =>
+  //     index-1 < keyLengths.length ? true : item
+  //   );
+  //   const element = document.querySelector(`#question-${keyLengths.length-1}`);
+  //   element.scrollIntoView({ behavior: "smooth" });
+  //   console.log()
+  //   setAnswerQuestion(updatedAnswers);
+  //   console.log(keyLengths.length)
+  //   setQuestion(keyLengths.length)
+  //   setCurrentQuestion(keyLengths.length)
+  // }, []);
+
+
+  // useEffect(() => {
+  //   // Save the current question to localStorage whenever it changes
+  //   localStorage.setItem('currentQuestion', question);
+  // }, [question]);
 
   const [formData, setFormData] = useState({
     help: "",
@@ -167,24 +198,49 @@ const Questions = () => {
     element.scrollIntoView({ behavior: "smooth" });
   };
 
-  function clearStorageAndRedirectHome() {
-    setTimeout(() => {
-      // Clear all data from localStorage and sessionStorage
-      localStorage.clear();
-      sessionStorage.clear();
+  // function clearStorageAndRedirectHome() {
+  //   setTimeout(() => {
+  //     // Clear all data from localStorage and sessionStorage
+  //     localStorage.clear();
+  //     sessionStorage.clear();
       
-      console.log("Local and session storage cleared. Redirecting to the home page.");
+  //     console.log("Local and session storage cleared. Redirecting to the home page.");
       
-      // Redirect to the home page (assuming '/' is the home page)
-      window.location.replace('/');
-      // Alternatively, you can use: window.location.href = '/';
-    }, 15 * 60 * 1000); // 15 minutes in milliseconds (900000 ms)
-  }
+  //     // Redirect to the home page (assuming '/' is the home page)
+  //     window.location.replace('/');
+  //     // Alternatively, you can use: window.location.href = '/';
+  //   }, 15 * 60 * 1000); // 15 minutes in milliseconds (900000 ms)
+  // }
   
-  // Call the function
-  clearStorageAndRedirectHome();
+  // // Call the function
+  // clearStorageAndRedirectHome();
+
+ const  policeStation=(value)=>{
+   setFormData((prevData) => ({
+    ...prevData,
+    police_station: value,
+  }));
+  const updatedAnswers = [...answerQuestion];
+  updatedAnswers[currentQuestion] = false;  // Mark as unanswered
+ // console.log(updatedAnswers)
+  setAnswerQuestion(updatedAnswers);
+ }
+
+ const  Address=(value)=>{
+  setFormData((prevData) => ({
+   ...prevData,
+   victim_address: value,
+ }));
+ const updatedAnswers = [...answerQuestion];
+ updatedAnswers[currentQuestion] = false;  // Mark as unanswered
+ //console.log(updatedAnswers)
+ setAnswerQuestion(updatedAnswers);
+}
 
   const isQuestionAnswered = (questionIndex) => {
+   // console.log(formData.police_station.district)
+   // console.log(formData.police_station.ps)
+    console.log(formData)
      switch (questionIndex) {
        case 0:
          return formData.help !== "";
@@ -203,9 +259,9 @@ const Questions = () => {
        case 7:
          return formData.victim_qualification !== "";
        case 8:
-         return formData.police_station !== "";
+         return formData.police_station.district!== undefined && formData.police_station.ps!== undefined;
       case 9:
-          return formData.victim_address !== "";
+          return formData.victim_address.address1 !== undefined && formData.victim_address.city !== undefined;
        case 10:
          return true;
        case 11:
@@ -232,11 +288,12 @@ const Questions = () => {
   }, [formData, currentQuestion]);
 
   const handleNextQuestion = (optionId, result) => {
+   // console.log(currentQuestion,formData.victim_bank.length , victimValue )
     if (isQuestionAnswered(currentQuestion)) {
       const updatedAnswers = [...answerQuestion];
       updatedAnswers[currentQuestion] = false;  // Mark as answered
       setAnswerQuestion(updatedAnswers);
-      if(currentQuestion===13 && formData.victim_bank.length > victimValue){
+      if(currentQuestion===13 && formData.victim_bank.length >=victimValue){
         setVictimValue(victimValue+1)
         window.scrollBy({ top:window.innerHeight*1.3 , behavior: 'smooth' });
         const nextQuestion = Math.min(currentQuestion + 1, questionCount - 1);
@@ -277,16 +334,18 @@ const Questions = () => {
 
 
   const handlePreviousQuestion = () => {
-    if(currentQuestion===15 &&  victimValue  <= 0){
+    //console.log(currentQuestion,formData.victim_bank.length , victimValue )
+    if(currentQuestion===15 &&  victimValue  <formData.victim_bank.length){
       window.scrollBy({ top: -window.innerHeight*1.3 , behavior: 'smooth' });
-      setVictimValue(victimValue-1)
+      setVictimValue(victimValue+1)
     } else if(currentQuestion===16 && suspectValue < 0){
       window.scrollBy({ top: -window.innerHeight*1.3 , behavior: 'smooth' });
-      setSuspectValue(suspectValue-1)
-      setVictimValue(formData.victim_bank.length-1)
-    }else{
+      setSuspectValue(suspectValue+1)
+      setVictimValue(formData.victim_bank.length+1)
+    }
+    else{
       if(currentQuestion===17){
-        setSuspectValue(formData.suspect_bank.length-1)
+        setSuspectValue(formData.suspect_bank.length+1)
         const prevQuestion = Math.max(currentQuestion - 1, 1);
         setCurrentQuestion(prevQuestion);
         setQuestion(questionSequence[prevQuestion]);
@@ -364,6 +423,8 @@ const Questions = () => {
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                 />
               </div>
 
@@ -376,6 +437,8 @@ const Questions = () => {
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                 />
               </div>
               <div id="question-3" className="page">
@@ -397,6 +460,8 @@ const Questions = () => {
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                 />
               </div>
               <div id="question-5" className="page">
@@ -408,6 +473,8 @@ const Questions = () => {
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                 />
               </div>
 
@@ -420,6 +487,8 @@ const Questions = () => {
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                 />
               </div>
 
@@ -432,30 +501,32 @@ const Questions = () => {
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                 />
               </div>
 
               <div id="question-8" className="page">
                 <PoliceStation
                   onNext={handleNextClickQuestion}
-                  onVictimAddressSelected={(value) =>
-                    handleDataUpdate("police_station", value)
-                  }
+                  onVictimAddressSelected={policeStation}
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                 />
               </div>
 
               <div id="question-9" className="page">
                 <VictimAddress
                   onNext={handleNextClickQuestion}
-                  onVictimAddressSelected={(value) =>
-                    handleDataUpdate("victim_address", value)
-                  }
+                  onVictimAddressSelected={Address}
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                 />
               </div>
               <div id="question-10" className="page">
@@ -464,6 +535,8 @@ const Questions = () => {
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                 />
               </div>
 
@@ -476,6 +549,8 @@ const Questions = () => {
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                 />
               </div>
 
@@ -488,6 +563,8 @@ const Questions = () => {
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                 />
               </div>
 
@@ -500,6 +577,8 @@ const Questions = () => {
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                 />
               </div>
               <div
@@ -523,6 +602,8 @@ const Questions = () => {
                       onQuestion={handleQuestionChange}
                       answer={answerQuestion}
                       apiKey={apiKey}
+                      botToken={botToken}
+                      vist_id={vist_id}
                     />
                   </div>
                 ))}
@@ -550,6 +631,8 @@ const Questions = () => {
                       onNextPage={handleNextPageClickQuestion}
                       answer={answerQuestion}
                       apiKey={apiKey}
+                      botToken={botToken}
+                      vist_id={vist_id}
                     />
                   </div>
                 ))}
@@ -564,6 +647,8 @@ const Questions = () => {
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                   
                 />
               </div>
@@ -576,6 +661,8 @@ const Questions = () => {
                   onQuestion={handleQuestionChange}
                   answer={answerQuestion}
                   apiKey={apiKey}
+                  botToken={botToken}
+                  vist_id={vist_id}
                 />
               </div>
         <p

@@ -72,7 +72,8 @@ const VictimBank = ({
   addVictimBank,
   index,
   onQuestion,
-  apiKey
+  apiKey,
+  botToken,vist_id
 }) => {
   const [victimBankData, setVictimBankData] = useState([]);
   const [formData, setFormData] = useState({
@@ -94,7 +95,7 @@ const VictimBank = ({
   const [typeOptions, setTypeOptions] = useState([]);
   const [pageCount, setPageCount] = useState(1);
   const [error, setError] = useState("");
-  const vist_id = sessionStorage.getItem("visitor_id");
+  //const vist_id = sessionStorage.getItem("visitor_id");
 
   const parseDate = (formattedDateTime) => {
     const [date, time] = formattedDateTime.split("T");
@@ -114,7 +115,7 @@ const VictimBank = ({
 
   useEffect(() => {
     const storedDistrict = localStorage.getItem('formVictimData');
-    console.log(storedDistrict);
+    //console.log(storedDistrict);
     if (storedDistrict) {
       setFormData((prev) => ({ ...prev, ...JSON.parse(storedDistrict) }));
     }
@@ -134,6 +135,7 @@ const VictimBank = ({
               api_key: apiKey,
               visitor_token: vist_id,
               qtion_id: "66f6544451d1f",
+              lac_token: botToken,
             }),
           }
         );
@@ -143,7 +145,7 @@ const VictimBank = ({
         }
 
         const BankData = await BankResponse.json();
-        console.log(BankData);
+        //console.log(BankData);
         setBankOptions(
           BankData.resp.bank_wlet_pg_pa_list.map((bank) => ({
             value: bank.bwpa_uniq,
@@ -171,6 +173,7 @@ const VictimBank = ({
             api_key: apiKey,
             visitor_token: vist_id,
             qtion_id: "66f6544451d1f",
+            lac_token: botToken,
           }),
         });
 
@@ -179,7 +182,7 @@ const VictimBank = ({
         }
 
         const BankData = await BankResponse.json();
-        console.log(BankData);
+        //console.log(BankData);
         setTypeOptions(
           BankData.resp.sub_category_list.map((bank) => ({
             value: bank.subcat_uni,
@@ -196,11 +199,11 @@ const VictimBank = ({
   }, []);
 
   const handleSelectChange = (field, selectedOption) => {
-    console.log(selectedOption);
+    //console.log(selectedOption);
     
     if (field === "sub_cat") {
       if (selectedOption.value === "66d300879af61335355481") {
-        console.log("A");
+        //console.log("A");
         setFormData((prev) => {
           const updatedFormData = {
             ...prev,
@@ -334,7 +337,7 @@ const VictimBank = ({
   const handleOkClick = async (e) => {
     e.preventDefault();
 
-    // Validate the form fields
+    //Validate the form fields
     if (!formData.sub_cat) {
       setError("Please select the sub_category.");
       return;
@@ -382,6 +385,7 @@ const VictimBank = ({
           amt: formData.amt,
           ref_num: formData.ref_num,
           trans_dtm: parseDate(formData.date),
+          lac_token: botToken
         }),
       });
 
@@ -447,7 +451,7 @@ const VictimBank = ({
           <div style={{ display: "flex" }}>
             <h2>Please provide debtor/victim bank account details.</h2>
           </div>
-          <div className="option-list">
+          <div className="bank-list">
             <p className="bank-para">
               Sub Category:<span style={{ color: "red" }}>*</span>
             </p>
@@ -460,7 +464,7 @@ const VictimBank = ({
               }
               options={typeOptions}
               className="dropdown-input"
-              placeholder="Select Bank"
+              placeholder="Select..."
               styles={customStyles}
             />
 

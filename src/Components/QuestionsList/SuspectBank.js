@@ -79,7 +79,7 @@ const SuspectBank = ({
   index,
   onQuestion,
   onNextPage,
-  apiKey 
+  apiKey,botToken,vist_id
 }) => {
   const [suspectBankData, setSuspectBankData] = useState([]);
   const [SuspectFormData, setSuspectFormData] = useState({
@@ -97,7 +97,7 @@ const SuspectBank = ({
   const [walletOption, setWalletOptions] = useState([]);
   const [pageCount, setPageCount] = useState(1);
   const [error, setError] = useState("");
-  const vist_id = sessionStorage.getItem("visitor_id");
+  //const vist_id = sessionStorage.getItem("visitor_id");
 
   const parseDate = (formattedDateTime) => {
     const [date, time] = formattedDateTime.split("T");
@@ -133,6 +133,7 @@ const SuspectBank = ({
               api_key: apiKey,
               visitor_token: vist_id,
               qtion_id: "66f6545af3d6e",
+              lac_token: botToken,
             }),
           }
         );
@@ -164,6 +165,7 @@ const SuspectBank = ({
             api_key: apiKey,
             visitor_token: vist_id,
             qtion_id: "66f6545af3d6e",
+            lac_token: botToken,
           }),
         });
 
@@ -194,6 +196,7 @@ const SuspectBank = ({
             api_key: apiKey,
             visitor_token: vist_id,
             qtion_id: "66f6545af3d6e",
+            lac_token: botToken,
           }),
         });
 
@@ -318,22 +321,22 @@ const SuspectBank = ({
 
   const handleOkClick = async (e) => {
     e.preventDefault();
-    if (!SuspectFormData.transferType) {
-      setError("Please fill in the transferType.");
-      return;
-    }
-    if (!SuspectFormData.acc_no) {
-      setError("Please Enter the AccountNo Bank(Wallet/PG/PA)/Merchant.");
-      return;
-    }
-    if (!SuspectFormData.amt) {
-      setError("Please fill in the Amount.");
-      return;
-    }
-    if (!SuspectFormData.date) {
-      setError("Please select in the date.");
-      return;
-    }
+    // if (!SuspectFormData.transferType) {
+    //   setError("Please fill in the transferType.");
+    //   return;
+    // }
+    // if (!SuspectFormData.acc_no) {
+    //   setError("Please Enter the AccountNo Bank(Wallet/PG/PA)/Merchant.");
+    //   return;
+    // }
+    // if (!SuspectFormData.amt) {
+    //   setError("Please fill in the Amount.");
+    //   return;
+    // }
+    // if (!SuspectFormData.date) {
+    //   setError("Please select in the date.");
+    //   return;
+    // }
 
     try {
       // Send the data to the dummy API
@@ -353,6 +356,7 @@ const SuspectBank = ({
           trans_id: SuspectFormData.transaction_no,
           amt: SuspectFormData.amt,
           trans_dtm: "10-10-2024 16:21:00",
+          lac_token: botToken
         }),
       });
 
@@ -360,8 +364,8 @@ const SuspectBank = ({
         throw new Error("Failed to submit form data.");
       }
 
-      const responseData = await response.json();
-      console.log("Form data submitted successfully:", responseData);
+      //const responseData = await response.json();
+      //console.log("Form data submitted successfully:", responseData);
 
       // If successful, add the data to the victimBankData list and show options
       onNext(16); // Move to the next step
@@ -420,7 +424,7 @@ const SuspectBank = ({
               have)
             </h2>
           </div>
-          <div className="option-list">
+          <div className="bank-list">
             <p className="bank-para">
               Money Transfer:<span style={{ color: "red" }}>*</span>
             </p>

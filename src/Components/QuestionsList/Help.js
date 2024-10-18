@@ -1,56 +1,65 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-//const apiUrl = process.env.REACT_APP_API_URL;
+import PopupBoxComponent from "../PopupBoxComponent";
+import Cookies from 'js-cookie';
+const apiUrl = process.env.REACT_APP_API_URL;
+const apiKey = process.env.REACT_APP_AUTH_TOKEN;
 
 
-const Help = ({ onNext, onHelpSelected,onQuestion,answer,apiKey }) => {
+const Help = ({ onNext, onHelpSelected,onQuestion,answer }) => {
   const [help, setHelp] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   //const vist_id = sessionStorage.getItem("visitor_id");
+  const [responseStatus, setResponseStatus] = useState(null);
+  const vist_id= Cookies.get('visitor_id');
+  
   const handleHelpOptionClick = async(option, e) => {
     e.preventDefault();
     if (option.disabled) {
       return; // Ignore clicks on disabled options
     } 
     setHelp(option.id)
+   // console.log(vist_id)
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
+  
+    try {
+      const response = await fetch(`${apiUrl}/ccrim_bot_help_request`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          "api_key":apiKey,
+          "visitor_token":vist_id,
+          "qtion_id":"66f6524562171",
+          "qtion_num":"0",
+          "qtion_option":option.id,
+          "option_val":option.value
+         }),
+      });
+      const data = await response.json()
+      setResponseStatus(data);
+      //console.log(data)
+      if (!response.ok) {
+        throw new Error("Failed to push data to API");
+      }
 
-    // try {
-    //   const response = await fetch(`${apiUrl}/ccrim_bot_help_request`, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ 
-    //       "api_key":apiKey,
-    //       "visitor_token":vist_id,
-    //       "qtion_id":"66f6524562171",
-    //       "qtion_num":"1",
-    //       "qtion_option":option.id,
-    //       "option_val":"1725993564"
-    //      }),
-    //   });
-    //   const data = await response.json()
-    //   console.log(data)
-    //   if (!response.ok) {
-    //     throw new Error("Failed to push data to API");
-    //   }
-
-    //   //console.log("Data pushed to RequestBin:", option.id);
-    // } catch (err) {
-    //   console.error("Error sending data to API:", err);
-    // }
+      //console.log("Data pushed to RequestBin:", option.id);
+    } catch (err) {
+      console.error("Error sending data to API:", err);
+    }
   };
 
   const handleOkClick = (e) => {
     e.preventDefault();
     if (help) {
       if(help==="A"){
-        navigate("/login");
+        sessionStorage.setItem("access_id", "65437890753690647985");
+        navigate("/login",{ replace: true });
       }else if (help === "B") {
         setShowModal(true); 
         //window.location.href = "https://www.cybercrime.gov.in/"; // Redirect to external URL
@@ -63,13 +72,13 @@ const Help = ({ onNext, onHelpSelected,onQuestion,answer,apiKey }) => {
 
   const handleModalOkClick = () => {
     setShowModal(false);
-   window.location.href = "https://www.cybercrime.gov.in/"; // Redirect to external URL
+   window.location.href = "https://www.cybercrime.gov.in/Webform/Crime_AuthoLogin.aspx"; // Redirect to external URL
   };
 
   const helpOptions = [
-    { id: "A", label: "Did you lose an amount in Cybercrimes?" },
+    { id: "A",value:"670fce3010e33775926208", label: "Did you lose an amount in Cybercrimes?" },
     {
-      id: "B",
+      id: "B", value:"670fce44708f0764144307",
       label: "Have you faced Cybercrime in Non-financial cyber fraud?",
     },
     // { id: "C", label: " Do you want to know the status of the complaint?", disabled: true }, // Option C is disabled
@@ -140,6 +149,9 @@ const Help = ({ onNext, onHelpSelected,onQuestion,answer,apiKey }) => {
           </div>
         </div>
       </div>
+      {responseStatus && responseStatus.resp && responseStatus.resp.error_code === "105" && (
+  <PopupBoxComponent responseStatus={responseStatus} />
+)}
       {showModal && (
         <div className="modal">
           <div className="modal-content">

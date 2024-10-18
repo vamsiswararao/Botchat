@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey }) => {
+const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_id }) => {
   const [timeId, setTimeId] = useState(null);
   const [time, setTime] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
-  const vist_id = sessionStorage.getItem("visitor_id");
+  //const vist_id = sessionStorage.getItem("visitor_id");
 
   useEffect(() => {
     const storedData = localStorage.getItem('time');
@@ -33,9 +33,11 @@ const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey }) => {
           qtion_num: "1",
           qtion_option: option.id,
           option_val: option.value,
+          lac_token: botToken
         }),
       });
       const data = await response.json();
+      // console.log(data)
       if(data.resp.error_code ==="0"){
         setTimeId(option.id);
         setTime(option.id);

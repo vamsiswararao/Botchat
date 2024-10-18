@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 //import Cookies from "js-cookie";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey }) => {
+const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id }) => {
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const [howLoss, setHowLoss] = useState("");
   const navigate = useNavigate();
-  const vist_id = sessionStorage.getItem("visitor_id");
+  //const vist_id = sessionStorage.getItem("visitor_id");
   //const vist_id = Cookies.get("visitor_id");
 
   const handleKeyDown = (event) => {
@@ -57,6 +57,7 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey }) => {
           qtion_id: "66f655a76d2d0",
           qtion_num: "17",
           option_val: howLoss,
+          lac_token: botToken
         }),
       });
 
@@ -64,7 +65,9 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey }) => {
         throw new Error("Failed to save address");
       }
       const data = await response.json();
+     // console.log(data)
       if (data.resp.error_code === "0") {
+        sessionStorage.setItem("comp_id", data.resp.complaint_num);
         // List of keys to remove from localStorage
         const keysToRemove = [
           "gender",
@@ -95,28 +98,28 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey }) => {
           localStorage.removeItem(key);
         });
 
+        sessionStorage.removeItem("access_id");
 
-        navigate("/success");
+
+        navigate("/success", { replace: true } );
         sessionStorage.removeItem("visitor_id");
         sessionStorage.removeItem("otp_id");
         setError("");
       } else {
         setError("Failed to push data to API");
       }
-
-      const result = await response.json();
     } catch (error) {
       console.error("Error saving data:", error);
       setError("Failed to save amount");
     }
-    if (howLoss) {
-      navigate("/success");
-      sessionStorage.removeItem("visitor_id");
-      sessionStorage.removeItem("otp_id");
-    } else {
-      setError("Please answer before proceeding.");
-      setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
-    }
+    // if (howLoss) {
+    //   navigate("/success");
+    //   sessionStorage.removeItem("visitor_id");
+    //   sessionStorage.removeItem("otp_id");
+    // } else {
+    //   setError("Please answer before proceeding.");
+    //   setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
+    // }
   };
 
   return (

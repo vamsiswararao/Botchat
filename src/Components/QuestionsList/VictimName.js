@@ -64,15 +64,16 @@ const VictimName = ({
   onVictimAgeSelected,
   onQuestion,
   answer,
-  apiKey
+  apiKey,
+  botToken,
+  vist_id
 }) => {
   const [victimName, setVictimName] = useState("");
   const [victimAge, setVictimAge] = useState("");
   //const [documentOptions, setDocumentOptions] = useState("");
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState({ name: null, age: null }); // Updated error state
-  const vist_id = sessionStorage.getItem("visitor_id");
-
+  //const vist_id = sessionStorage.getItem("visitor_id");
   useEffect(() => {
     const storedData = localStorage.getItem("victimName");
     if (storedData) {
@@ -217,6 +218,7 @@ const VictimName = ({
             qtion_num: "4",
             vict_nm: victimName,
             vict_age: victimAge,
+            lac_token: botToken
           }),
         });
         const data = await response.json();
@@ -242,7 +244,7 @@ const VictimName = ({
 
   return (
     <div className="question">
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex",justifyContent:'center' }}>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <h2 htmlFor="victim-name">What is your (victim) name?</h2>
           <input

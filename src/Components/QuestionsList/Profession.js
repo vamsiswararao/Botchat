@@ -6,13 +6,13 @@ const Profession = ({
   onVictimProfessionSelected,
   onQuestion,
   answer
-  ,apiKey
+  ,apiKey,botToken,vist_id
 }) => {
   const [Profession, setProfession] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const [professionOptions, setProfessionOptions] = useState([]);
-  const vist_id = sessionStorage.getItem("visitor_id");
+ // const vist_id = sessionStorage.getItem("visitor_id");
 
 
   useEffect(() => {
@@ -37,6 +37,7 @@ const Profession = ({
               api_key: apiKey,
               visitor_token: vist_id,
               qtion_id: "66f65342db514",
+              lac_token: botToken,
             }),
           }
         );
@@ -82,6 +83,7 @@ const Profession = ({
           qtion_num: "6",
           qtion_option: option.id,
           option_val: option.value,
+          lac_token: botToken
         }),
       });
 

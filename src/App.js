@@ -32,9 +32,9 @@ function App() {
           <Route
             path="/success"
             element={
-              <ProtectedRoute>
+              // <ProtectedRoute>
                 <Final />
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
                   <Route path="*" element={<NotFound />} />                                  

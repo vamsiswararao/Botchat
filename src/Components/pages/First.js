@@ -6,6 +6,7 @@ import Help from "../QuestionsList/Help";
 import TranslateComponent from "../TranslateComponent";
 import PopupBoxComponent from "../PopupBoxComponent";
 import Cookies from "js-cookie";
+import appVersion from '../../version';
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiKey = process.env.REACT_APP_AUTH_TOKEN;
 //const vist_id = sessionStorage.getItem("visitor_id");
@@ -18,13 +19,15 @@ const First = () => {
   const [responseStatus, setResponseStatus] = useState(null);
   //const botToken = sessionStorage.getItem("visitor_id");
   const botToken = Cookies.get("bot_token");
+  const app_ver = appVersion.app_ver;
+  console.log(app_ver)
 
   //const id="1234567890"
 
   useEffect(() => {
     const fetchVisitorData = async () => {
       try {
-        const visitorResponse = await fetch(`${apiUrl}/ccrim_bot_vist_ip`, {
+        const visitorResponse = await fetch(`${apiUrl}/v1/ccrim_bot_vist_ip`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -33,6 +36,8 @@ const First = () => {
             api_key: apiKey,
             visitor_token: id,
             lac_token: botToken,
+            "app_ver":app_ver
+            
           }),
         });
 
@@ -40,7 +45,7 @@ const First = () => {
           throw new Error("Failed to fetch Address options");
         }
         const vistorData = await visitorResponse.json();
-        //console.log(vistorData);
+        console.log(vistorData);
         // setResponseStatus(vistorData);
         // console.log(vistorData.resp);
         if (vistorData.resp.error_code === "0") {
@@ -99,7 +104,7 @@ const First = () => {
     };
 
     fetchVisitorData();
-  }, [id, navigate,botToken]);
+  }, [id, navigate,botToken,app_ver]);
 
   return (
     <div className="first-container">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie'; 
+import appVersion from '../../version';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiKey = process.env.REACT_APP_AUTH_TOKEN;
@@ -11,6 +12,8 @@ const OtpInput = () => {
   const [resendDisabled, setResendDisabled] = useState(true); // To disable resend button initially
   const [countdown, setCountdown] = useState(30); // Countdown for resend button
   const navigate = useNavigate();
+  const app_ver = appVersion.app_ver;
+  console.log(app_ver)
 
   const otp_id = sessionStorage.getItem("otp_id");
   // const vist_id = sessionStorage.getItem("visitor_id");
@@ -42,7 +45,7 @@ const OtpInput = () => {
   // Function to handle OTP verification
   const handleVerifyOtp = async () => {
     try {
-      const response = await fetch(`${apiUrl}/ccrim_bot_otp_verify`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_otp_verify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,6 +55,7 @@ const OtpInput = () => {
           otp_code: otp,
           otp_id: otp_id,
           visitor_token: vist_id,
+          "app_ver":app_ver
         }),
       });
 
@@ -83,7 +87,7 @@ const OtpInput = () => {
       setResendDisabled(true); // Disable the resend button
       setCountdown(20); // Reset countdown timer
 
-      const response = await fetch(`${apiUrl}/ccrim_otp_resend`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_otp_resend`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

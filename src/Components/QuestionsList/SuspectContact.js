@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey,botToken,vist_id }) => {
+const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey,botToken,vist_id,app_ver }) => {
   const [suspectContacts, setSuspectContacts] = useState({
     contactValues: [],
     contactIds: []
@@ -24,7 +24,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey,bo
     const fetchPlatFormData = async () => {
       try {
         const platFormResponse = await fetch(
-          `${apiUrl}/cy_ma_suspect_platforms_list`,
+          `${apiUrl}/v1/cy_ma_suspect_platforms_list`,
           {
             method: "POST",
             headers: {
@@ -35,6 +35,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey,bo
               "visitor_token":vist_id,
               "qtion_id":"66f653d914bc5",
               lac_token: botToken,
+              "app_ver":app_ver
             }),
           }
         );
@@ -90,7 +91,6 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey,bo
           };
   
       // Save data after state update
-      onSuspectContactSelected(updatedCalls);
       localStorage.setItem("suspectContact", JSON.stringify(updatedCalls));
       return updatedCalls;
     });
@@ -116,7 +116,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey,bo
 
   const saveDataToAPI = async (selectedContacts) => {
     try {
-      const response = await fetch(`${apiUrl}/ccrim_bot_add_multichoice`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_multichoice`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -130,6 +130,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey,bo
            "qtion_option": suspectContacts.contactIds,
            "option_val":suspectContacts.contactValues,
            lac_token: botToken,
+           "app_ver":app_ver
            
      }),
       });
@@ -148,6 +149,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey,bo
   };
 
   const handleOkClick = async(e) => {
+    onSuspectContactSelected(suspectContacts);
     e.preventDefault();
     if (suspectContacts.contactValues.length > 0) {
       await saveDataToAPI(suspectContacts);
@@ -204,7 +206,7 @@ const SuspectContact = ({ onNext, onSuspectContactSelected, onQuestion,apiKey,bo
             ))}
           </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center" }} className="suspect_contact">
+          <div style={{ display: "flex", alignItems: "center" }}  className="calls-btn">
             {showOkButton && (
               <>
                 <button

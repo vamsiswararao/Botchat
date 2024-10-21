@@ -79,7 +79,7 @@ const SuspectBank = ({
   index,
   onQuestion,
   onNextPage,
-  apiKey,botToken,vist_id
+  apiKey,botToken,vist_id,app_ver
 }) => {
   const [suspectBankData, setSuspectBankData] = useState([]);
   const [SuspectFormData, setSuspectFormData] = useState({
@@ -123,7 +123,7 @@ const SuspectBank = ({
     const fetchBankData = async () => {
       try {
         const BankResponse = await fetch(
-          `${apiUrl}/cy_ma_bank_wlet_pg_pa_list`,
+          `${apiUrl}/v1/cy_ma_bank_wlet_pg_pa_list`,
           {
             method: "POST",
             headers: {
@@ -134,6 +134,7 @@ const SuspectBank = ({
               visitor_token: vist_id,
               qtion_id: "66f6545af3d6e",
               lac_token: botToken,
+              "app_ver":app_ver
             }),
           }
         );
@@ -156,7 +157,7 @@ const SuspectBank = ({
 
     const fetchMerchantData = async () => {
       try {
-        const BankResponse = await fetch(`${apiUrl}/cy_ma_merchants_list`, {
+        const BankResponse = await fetch(`${apiUrl}/v1/cy_ma_merchants_list`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -166,6 +167,7 @@ const SuspectBank = ({
             visitor_token: vist_id,
             qtion_id: "66f6545af3d6e",
             lac_token: botToken,
+            "app_ver":app_ver
           }),
         });
 
@@ -187,7 +189,7 @@ const SuspectBank = ({
 
     const fetchWalletData = async () => {
       try {
-        const BankResponse = await fetch(`${apiUrl}/cy_ma_wlet_pg_pa_list`, {
+        const BankResponse = await fetch(`${apiUrl}/v1/cy_ma_wlet_pg_pa_list`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -197,6 +199,7 @@ const SuspectBank = ({
             visitor_token: vist_id,
             qtion_id: "66f6545af3d6e",
             lac_token: botToken,
+            "app_ver":app_ver
           }),
         });
 
@@ -222,7 +225,6 @@ const SuspectBank = ({
   }, []);
 
   const handleSelectChange = (id,selectedOption) => {
-
     setSuspectFormData((prev) => ({
       ...prev,
       [id]: selectedOption ? selectedOption.value : "",
@@ -338,47 +340,57 @@ const SuspectBank = ({
     //   return;
     // }
 
-    try {
-      // Send the data to the dummy API
-      const response = await fetch(`${apiUrl}/ccrim_bot_add_susp_trans`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          api_key: apiKey,
-          visitor_token: vist_id,
-          qtion_id: "66f6545af3d6e",
-          qtion_num: "15",
-          mtfr_uni: SuspectFormData.transferType,
-          bwpa_uni: SuspectFormData.bank,
-          acc_no: SuspectFormData.acc_no,
-          trans_id: SuspectFormData.transaction_no,
-          amt: SuspectFormData.amt,
-          trans_dtm: "10-10-2024 16:21:00",
-          lac_token: botToken
-        }),
-      });
 
-      if (!response.ok) {
-        throw new Error("Failed to submit form data.");
+
+    if( SuspectFormData.transferType && SuspectFormData.acc_no && SuspectFormData.amt && SuspectFormData.date ){
+
+      try {
+        // Send the data to the dummy API
+        const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_susp_trans`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            api_key: apiKey,
+            visitor_token: vist_id,
+            qtion_id: "66f6545af3d6e",
+            qtion_num: "15",
+            mtfr_uni: SuspectFormData.transferType,
+            bwpa_uni: SuspectFormData.bank,
+            acc_no: SuspectFormData.acc_no,
+            trans_id: SuspectFormData.transaction_no,
+            amt: SuspectFormData.amt,
+            trans_dtm: "10-10-2024 16:21:00",
+            lac_token: botToken,
+            "app_ver":app_ver
+          }),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to submit form data.");
+        }
+  
+        const responseData = await response.json();
+        console.log("Form data submitted successfully:", responseData);
+  
+        // If successful, add the data to the victimBankData list and show options
+        onNext(16); // Move to the next step
+        onQuestion(17);
+      } catch (error) {
+        console.error("Error submitting form data:", error);
+        setError("Failed to submit form data. Please try again.");
       }
-
-      //const responseData = await response.json();
-      //console.log("Form data submitted successfully:", responseData);
-
-      // If successful, add the data to the victimBankData list and show options
-      onNext(16); // Move to the next step
-      onQuestion(17);
-    } catch (error) {
-      console.error("Error submitting form data:", error);
-      setError("Failed to submit form data. Please try again.");
+      
     }
+    onNext(16); // Move to the next step
+    onQuestion(17);
+
     setError("");
     setSuspectBankData((prevData) => [...prevData, SuspectFormData]);
   };
 
-  const handleAddPageClick = (e) => {
+  const handleAddPageClick = async(e) => {
     e.preventDefault();
     handleOkClick()
     addSuspectBank(pageCount);
@@ -393,6 +405,49 @@ const SuspectBank = ({
       date: "",
       amt: "",
     });
+
+    if( SuspectFormData.transferType && SuspectFormData.acc_no && SuspectFormData.amt && SuspectFormData.date ){
+
+      try {
+        // Send the data to the dummy API
+        const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_susp_trans`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            api_key: apiKey,
+            visitor_token: vist_id,
+            qtion_id: "66f6545af3d6e",
+            qtion_num: "15",
+            mtfr_uni: SuspectFormData.transferType,
+            bwpa_uni: SuspectFormData.bank,
+            acc_no: SuspectFormData.acc_no,
+            trans_id: SuspectFormData.transaction_no,
+            amt: SuspectFormData.amt,
+            trans_dtm: "10-10-2024 16:21:00",
+            lac_token: botToken,
+            "app_ver":app_ver
+          }),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to submit form data.");
+        }
+  
+        const responseData = await response.json();
+        console.log("Form data submitted successfully:", responseData);
+  
+        // If successful, add the data to the victimBankData list and show options
+        onNext(16); // Move to the next step
+        onQuestion(17);
+      } catch (error) {
+        console.error("Error submitting form data:", error);
+        setError("Failed to submit form data. Please try again.");
+      }
+      
+    }
+
     const isMobile = window.innerWidth <= 768; // Adjust the width breakpoint as per your design
     const scrollAmount = isMobile
       ? window.innerHeight

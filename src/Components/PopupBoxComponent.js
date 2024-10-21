@@ -45,7 +45,7 @@ const PopupBoxComponent = ({ responseStatus }) => {
           Data already submitted  */}
           {/* There was an issue with your request. Please try again later. */}
         {/* </p> */}
-                <p style={{ textAlign: 'center', fontSize: '18px' }}>
+                <p style={{ textAlign: 'center', fontSize: '18px',fontWeight:800 }}>
           {responseStatus.resp.message}
         </p>
       </Modal>

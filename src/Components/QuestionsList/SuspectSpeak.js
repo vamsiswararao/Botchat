@@ -3,7 +3,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 
 
-const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey,botToken,vist_id }) => {
+const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey,botToken,vist_id,app_ver }) => {
   const [selectedOptions, setSelectedOptions] = useState({
     contactValues: [],
     contactIds: []
@@ -25,7 +25,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey,botTok
   useEffect(() => {
     const fetchProfessionData= async () => {
       try {
-                const professionResponse = await fetch(`${apiUrl}/cy_ma_lang_list`, {
+                const professionResponse = await fetch(`${apiUrl}/v1/cy_ma_lang_list`, {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -34,7 +34,8 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey,botTok
                     "api_key":apiKey,
                     "visitor_token":vist_id,
                     "qtion_id":"66f653bf26e9c",
-                    lac_token: botToken
+                    lac_token: botToken,
+                    "app_ver":app_ver
              }
              ),
                 });
@@ -63,28 +64,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey,botTok
     fetchProfessionData();
   }, []);
 
-  // const handleOptionClick = (option, e) => {
-  //   e.preventDefault();
-  //   if (selectedOptions.disabled) {
-  //     return; // Ignore clicks on disabled options
-  //   } 
-  //   //setHelp(option.id);
-  //   //onHelpSelected(option.id);
-  //   setShowOkButton(true); // Show the OK button after a successful click
-  //   setError("");
-  //   // Toggle selection
-  //   setSelectedOptions((prevSelected) =>{
-  //     const updatedCalls = prevSelected.includes(option.value)
-  //       ? prevSelected.filter((option) => option !== option.value)
-  //       : [...prevSelected, option.value]
-  //       onSuspectSpeakSelected(updatedCalls);
-  //     //saveDataToAPI(updatedCalls);
-  //     return updatedCalls;
-  // });
 
-
-    
-  // };
 
 
   const handleOptionClick = (option, e) => {
@@ -139,7 +119,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey,botTok
 
   const saveDataToAPI = async (selectedOptions) => {
     try {
-      const response = await fetch(`${apiUrl}/ccrim_bot_add_multichoice`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_multichoice`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -152,6 +132,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey,botTok
            "qtion_num":"12",
            "qtion_option": selectedOptions.contactIds,
            "option_val":selectedOptions.contactValues,
+           "app_ver":app_ver
      }),
       });
 
@@ -181,32 +162,6 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey,botTok
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
     }
   };
-
-  // const options = [
-  //   { id: "A", label: "Telugu" },
-  //   { id: "B", label: "English" },
-  //   { id: "C", label: "Hindi" },
-  //   { id: "D", label: "Tamil" },
-  //   { id: "E", label: "Bengali" },
-  //   { id: "F", label: "Gujarati" },
-  //   { id: "G", label: "Bodo" },
-  //   { id: "H", label: "Kannada" },
-  //   { id: "I", label: "Jammu and Kashmir" },
-  //   { id: "J", label: "Konkani" },
-  //   { id: "K", label: "Malayalam" },
-  //   { id: "L", label: "Manipuri" },
-  //   { id: "M", label: "Marathi" },
-  //   { id: "N", label: "Nepali" },
-  //   { id: "O", label: "Odia" },
-  //   { id: "P", label: "Punjabi" },
-  //   { id: "Q", label: "Sanskrit" },
-  //   { id: "R", label: "Santali" },
-  //   { id: "S", label: "Sindhi" },
-  //   { id: "T", label: "Dogri" },
-  //   { id: "U", label: "Assamese" },
-  //   { id: "V", label: "Urdu" },
-  // ];
-
   return (
     <div className="question">
       <div style={{ display: "flex" }}>
@@ -245,7 +200,7 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey,botTok
               </button>
             ))}
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center" }} >
               {showOkButton && (
                 <>
                   <button

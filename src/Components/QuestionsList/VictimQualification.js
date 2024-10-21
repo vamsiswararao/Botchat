@@ -6,7 +6,7 @@ const VictimQualification = ({
   onNext,
   onVictimQualificationSelected,
   onQuestion,
-  answer,apiKey,botToken,vist_id
+  answer,apiKey,botToken,vist_id,app_ver
 }) => {
   const [qualification, setQualification] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
@@ -27,7 +27,7 @@ const VictimQualification = ({
     const fetchQulificationData = async () => {
       try {
         const qulificationResponse = await fetch(
-          `${apiUrl}/cy_ma_edu_qulfs_list`,
+          `${apiUrl}/v1/cy_ma_edu_qulfs_list`,
           {
             method: "POST",
             headers: {
@@ -38,6 +38,7 @@ const VictimQualification = ({
               visitor_token: vist_id,
               qtion_id: "66f6536277ea3",
               lac_token: botToken,
+              "app_ver":app_ver
             }),
           }
         );
@@ -73,7 +74,7 @@ const VictimQualification = ({
     }
  
     try {
-      const response = await fetch(`${apiUrl}/ccrim_bot_add_choice`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_choice`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +86,8 @@ const VictimQualification = ({
           qtion_num: "7",
           qtion_option: option.id,
           option_val: option.value,
-          lac_token: botToken
+          lac_token: botToken,
+          "app_ver":app_ver
         }),
       });
       const data = await response.json();

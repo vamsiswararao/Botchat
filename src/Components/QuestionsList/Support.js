@@ -1,53 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
+import { FaRedoAlt } from "react-icons/fa"; // For the retry icon
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey,botToken,vist_id }) => {
+const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey, botToken, vist_id }) => {
   const [files, setFiles] = useState([]);
   const [successfulUploads, setSuccessfulUploads] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  //const vist_id = sessionStorage.getItem("visitor_id");
   const MAX_UPLOAD_SIZE = 100 * 1024 * 1024; // 100MB in bytes
 
   useEffect(() => {
     const storedFiles = localStorage.getItem("file");
     if (storedFiles) {
-      // Files were stored in the previous session, rehydrate the state
       const parsedFileNames = JSON.parse(storedFiles);
       const rehydratedFiles = parsedFileNames.map((fileName) => ({
         name: fileName,
       }));
-      setFiles(rehydratedFiles); // Save back to state for proper handling
+      setFiles(rehydratedFiles);
     }
   }, []);
 
-  // Upload files as soon as the user selects them
   const handleFileChange = async (event) => {
     const selectedFiles = Array.from(event.target.files);
+    if (files.length + selectedFiles.length > 50) {
+      setErrorMessage("You can only upload a maximum of 50 images.");
+      return;
+    }
 
-    // Store only file names in localStorage, but use actual File objects in state
     localStorage.setItem(
       "file",
       JSON.stringify(selectedFiles.map((file) => file.name))
     );
     let errorMessages = "";
 
-    // Validate file types and sizes
     const validFiles = [];
-
     selectedFiles.forEach((file) => {
       const isImage = file.type.startsWith("image/");
       const isSizeValid = file.size <= MAX_UPLOAD_SIZE;
 
       if (!isImage) {
-        errorMessages +=`File  is not an image.\n`;
+        errorMessages += `File is not an image.\n`;
       }
       if (!isSizeValid) {
-        errorMessages +=`File  exceeds 100MB.\n`;
+        errorMessages += `File exceeds 100MB.\n`;
       }
       if (isImage && isSizeValid) {
-        validFiles.push(file); // Only push valid files
+        validFiles.push(file);
       }
       setErrorMessage(errorMessages);
     });
@@ -58,31 +57,33 @@ const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey,botToken,vi
     }
 
     setFiles((prevFiles) => [...prevFiles, ...validFiles]);
-    //setErrorMessage("");
 
+    uploadFiles(validFiles);
+  };
+
+  const uploadFiles = async (validFiles) => {
     const formData = new FormData();
     formData.append("api_key", apiKey);
     formData.append("visitor_token", vist_id);
     formData.append("qtion_id", "66f654783112a");
     formData.append("qtion_num", "16");
-    formData.append("lac_token",botToken)
+    formData.append("lac_token", botToken);
 
     validFiles.forEach((file) => {
-      formData.append("userImage", file); // Append each valid file
+      formData.append("userImage", file);
     });
 
     try {
       setIsUploading(true);
-      const response = await fetch(`${apiUrl}/ccrim_bot_add_doc`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_doc`, {
         method: "POST",
         body: formData,
       });
 
       const fileData = await response.json();
-      //console.log(fileData)
       if (fileData.resp.error_code === "0") {
         setSuccessfulUploads((prevUploads) => [...prevUploads, ...validFiles]);
-        submitSupport(files);
+        submitSupport(validFiles);
       } else {
         console.error("File upload failed");
       }
@@ -95,6 +96,11 @@ const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey,botToken,vi
 
   const handleRemoveFile = (index) => {
     setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setSuccessfulUploads((prevUploads) => prevUploads.filter((_, i) => i !== index));
+  };
+
+  const handleRetryUpload = (file) => {
+    uploadFiles([file]); // Retry upload for the specific file
   };
 
   const handleSubmit = (e) => {
@@ -123,38 +129,62 @@ const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey,botToken,vi
             Choose File
           </label>
           {errorMessage && (
-            <div className="error-message" style={{ color: "red" }}>
-              {errorMessage.split("\n").map((msg, index) => (
+            <div className="error-message" style={{ color: "red"}}>
+              {/* {errorMessage.split("\n").map((msg, index) => (
                 <p key={index}>{msg}</p>
-              ))}
+              ))} */} {errorMessage}
             </div>
           )}
           <div className="file-preview">
             {files.length > 0 && (
               <ul>
-                {files.map((file, index) => (
-                  <li key={index} className="file-item">
-                    <div className="image-container">
-                      {/* Only create object URLs for actual File objects */}
-                      {file instanceof File ? (
-                        <img
-                          src={URL.createObjectURL(file)}
-                          alt={`preview ${index}`}
-                          className="preview-image"
-                        />
-                      ) : (
-                        <p>{file.name}</p>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveFile(index)}
-                        className="remove-button"
-                      >
-                        <RxCross2 />
-                      </button>
-                    </div>
-                  </li>
-                ))}
+                {files.map((file, index) => {
+                  const isUploaded = successfulUploads.includes(file);
+                  return (
+                    <li key={index} className="file-item">
+                      <div className="image-container">
+                        {file instanceof File && (
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={`preview ${index}`}
+                            className="preview-image"
+                          />
+                        )}
+                        {!isUploaded && (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveFile(index)}
+                              className="remove-button"
+                            >
+                              <RxCross2 />
+                            </button>
+                            <div
+                              className={`retry-circle ${isUploading ? "rotating" : ""}`} 
+                              onClick={() => handleRetryUpload(file)}
+                              style={{
+                                position: "absolute", // Make the retry icon absolutely positioned
+                                top: "50%",           // Position at the vertical center
+                                left: "50%",          // Position at the horizontal center
+                                transform: "translate(-50%, -50%)", // Center it perfectly
+                                width: "30px",        // Increase size for better visibility
+                                height: "30px",       // Same as width
+                                backgroundColor: "red", // Red background
+                                borderRadius: "50%",   // Make it a circle
+                                display: "flex",       // Flex to center the icon inside
+                                justifyContent: "center", // Center the icon horizontally
+                                alignItems: "center",  // Center the icon vertically
+                                cursor: "pointer",
+                              }}
+                            >
+                              <FaRedoAlt style={{ color: "white", fontSize: "14px" }} />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>
@@ -169,7 +199,7 @@ const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey,botToken,vi
                 "Uploading..."
               ) : (
                 <span>
-                  OK <span style={{ fontSize: "15px" }}>({files.length})</span>
+                  OK <span style={{ fontSize: "15px" }}>({successfulUploads.length})</span>
                 </span>
               )}
             </button>

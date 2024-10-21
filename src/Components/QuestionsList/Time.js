@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_id }) => {
+const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_id,app_ver }) => {
   const [timeId, setTimeId] = useState(null);
   const [time, setTime] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
@@ -21,7 +21,7 @@ const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_
   const handleOptionClick = async (option, e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${apiUrl}/ccrim_bot_register`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,7 +33,8 @@ const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_
           qtion_num: "1",
           qtion_option: option.id,
           option_val: option.value,
-          lac_token: botToken
+          lac_token: botToken,
+          "app_ver":app_ver
         }),
       });
       const data = await response.json();
@@ -82,7 +83,7 @@ const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_
     <div  className="question">
       <div>
         <div>
-          <h2>When did you lost the amount? </h2>
+          <h2>When did you lose the amount? </h2>
           <div className="options-container">
             {options.map((option) => (
               <button

@@ -2,14 +2,11 @@ import React, {  useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
-const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botToken,vist_id}) => {
+const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botToken,vist_id,app_ver}) => {
   const [address, setAddress] = useState({
     address1: "",
     city: "",
-    state: { value: "23", label: "Telangana" },
-    district: null,
     zip: "",
-    policeStation: null,
   });
   const [error, setError] = useState("");
 
@@ -77,16 +74,6 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
 
   const handleOkClick = async (e) => {
     e.preventDefault();
-
-    if (!address.address1) {
-      setError("Please Enter the address.");
-      return;
-    }
-    if (!address.city) {
-      setError("Please Enter the city.");
-      return;
-    }
-
     const dataToSubmit = {
       api_key:apiKey,
       visitor_token:vist_id,
@@ -95,12 +82,22 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
       address: address.address1,
       village: address.city,
       post_cod: address.zip,
-      lac_token: botToken
+      lac_token: botToken,
+      "app_ver":app_ver
     };
 
+    if( address.address1 || address.city || address.zip){
 
+      if (!address.address1) {
+        setError("Please Enter the address.");
+        return;
+      }
+      if (!address.city) {
+        setError("Please Enter the city.");
+        return;
+      }
     try {
-      const response = await fetch(`${apiUrl}/ccrim_bot_add_addrs`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_addrs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -124,6 +121,9 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
       console.error('Error saving data:', error);
       setError('Failed to save address data');
     }
+  }
+  onNext(10);
+  onQuestion(11);
   };
 
 
@@ -135,7 +135,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
             <h2>Fill your (victim) current full address?</h2>
             <div >
             <h6 style={{ margin: "5px", marginTop: "20px"}} htmlFor="address1">
-              Address  <span style={{color:'red'}}>*</span>
+              Address  
             </h6>
             <input
               className="text-input"
@@ -148,7 +148,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
             />
 
             <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="city">
-              Village/City/Town <span style={{color:'red'}}>*</span>
+              Village/City/Town 
             </h6> 
             <input
               className="text-input"
@@ -190,7 +190,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
               </p>
             </div>
             {error && (
-              <p style={{ color: "red", marginTop: "10px", width:'650px' }}>{error}</p>
+              <p className="bank-error">{error}</p>
             )}
           </div>
         </div>

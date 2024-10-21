@@ -2,19 +2,22 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import PopupBoxComponent from "../PopupBoxComponent";
 import Cookies from 'js-cookie';
+import appVersion from '../../version';
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiKey = process.env.REACT_APP_AUTH_TOKEN;
 
 
-const Help = ({ onNext, onHelpSelected,onQuestion,answer }) => {
+const Help = ({ onNext, onHelpSelected,onQuestion,answer, }) => {
   const [help, setHelp] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
+  const [number, setNumber] = useState(null);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   //const vist_id = sessionStorage.getItem("visitor_id");
   const [responseStatus, setResponseStatus] = useState(null);
   const vist_id= Cookies.get('visitor_id');
+  const app_ver = appVersion.app_ver;
   
   const handleHelpOptionClick = async(option, e) => {
     e.preventDefault();
@@ -27,7 +30,7 @@ const Help = ({ onNext, onHelpSelected,onQuestion,answer }) => {
     setError("");
   
     try {
-      const response = await fetch(`${apiUrl}/ccrim_bot_help_request`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_help_request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,16 +41,18 @@ const Help = ({ onNext, onHelpSelected,onQuestion,answer }) => {
           "qtion_id":"66f6524562171",
           "qtion_num":"0",
           "qtion_option":option.id,
-          "option_val":option.value
+          "option_val":option.value,
+          "app_ver":app_ver
          }),
       });
       const data = await response.json()
+      //console.log(data.resp)
       setResponseStatus(data);
       //console.log(data)
       if (!response.ok) {
         throw new Error("Failed to push data to API");
       }
-
+      setNumber(data.resp.comp_mob)
       //console.log("Data pushed to RequestBin:", option.id);
     } catch (err) {
       console.error("Error sending data to API:", err);
@@ -58,8 +63,10 @@ const Help = ({ onNext, onHelpSelected,onQuestion,answer }) => {
     e.preventDefault();
     if (help) {
       if(help==="A"){
+        if(responseStatus.resp.error_code==="0"){
         sessionStorage.setItem("access_id", "65437890753690647985");
-        navigate("/login",{ replace: true });
+        navigate("/login",{ replace: true, state: { number: number }  });
+        }
       }else if (help === "B") {
         setShowModal(true); 
         //window.location.href = "https://www.cybercrime.gov.in/"; // Redirect to external URL

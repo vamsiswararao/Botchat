@@ -66,7 +66,8 @@ const VictimName = ({
   answer,
   apiKey,
   botToken,
-  vist_id
+  vist_id,
+  app_ver
 }) => {
   const [victimName, setVictimName] = useState("");
   const [victimAge, setVictimAge] = useState("");
@@ -206,7 +207,7 @@ const VictimName = ({
 
     if (valid) {
       try {
-        const response = await fetch(`${apiUrl}/ccrim_bot_add_victim_data`, {
+        const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_victim_data`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -218,7 +219,8 @@ const VictimName = ({
             qtion_num: "4",
             vict_nm: victimName,
             vict_age: victimAge,
-            lac_token: botToken
+            lac_token: botToken,
+            "app_ver":app_ver
           }),
         });
         const data = await response.json();
@@ -244,8 +246,8 @@ const VictimName = ({
 
   return (
     <div className="question">
-      <div style={{ display: "flex",justifyContent:'center' }}>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+      <div >
+        <div >
           <h2 htmlFor="victim-name">What is your (victim) name?</h2>
           <input
             type="text"
@@ -260,13 +262,7 @@ const VictimName = ({
           {/* Individual name error message */}
           <div>
             <h2 htmlFor="victim-age">What is your (victim) age?</h2>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                marginRight: "20px",
-              }}
-            >
+            <div>
               <input
                 className="text-input"
                 value={victimAge}

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 //import Cookies from "js-cookie";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id }) => {
+const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id,app_ver }) => {
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const [howLoss, setHowLoss] = useState("");
@@ -46,7 +46,7 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id }) 
     e.preventDefault();
     onHowLossSelected(howLoss);
     try {
-      const response = await fetch(`${apiUrl}/ccrim_bot_add_text`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_text`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +57,8 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id }) 
           qtion_id: "66f655a76d2d0",
           qtion_num: "17",
           option_val: howLoss,
-          lac_token: botToken
+          lac_token: botToken,
+          "app_ver":app_ver
         }),
       });
 
@@ -126,7 +127,7 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id }) 
     <div className="question">
       <div style={{ display: "flex" }}>
         <div>
-          <h2 htmlFor="lose-money">Can you explain how you lose money?</h2>
+          <h2 htmlFor="lose-money">Can you explain how you lost the money?</h2>
           <p>Write in detail about how you lost the money.</p>
           <textarea
             value={howLoss}

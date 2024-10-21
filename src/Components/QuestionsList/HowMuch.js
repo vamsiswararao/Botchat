@@ -45,7 +45,7 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer,apiKey,botToken
 
     if (howMuch) {
       try {
-        const response = await fetch(`${apiUrl}/ccrim_bot_add_text`, {
+        const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_text`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -100,9 +100,10 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer,apiKey,botToken
   return (
     <div className="question">
       <div >
-        <div>
-          <h2>How much amount did you lost?</h2>
+        <div >
+          <h2>How much money did you lose?</h2>
           <div className="options-container">
+            <div style={{ display: "flex", alignItems: "center" }}>
           <span className="rupee-symbol">₹</span>
             <input
               className="text-input"
@@ -115,6 +116,7 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer,apiKey,botToken
               min="1"
               autoComplete="off"
             />
+            </div>
             <div style={{ display: "flex", alignItems: "center" }}>
               {showOkButton && (
                 <>

@@ -101,7 +101,7 @@ const indianStates = [
   { value: "27", label: "West Bengal" },
 ];
 
-const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answer,botToken,vist_id }) => {
+const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answer,botToken,vist_id,app_ver }) => {
   const [address, setAddress] = useState({
     address1: "",
     city: "",
@@ -135,7 +135,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
   useEffect(() => {
     const fetchAddressData= async () => {
       try {
-                const qulificationResponse = await fetch(`${apiUrl}/cy_ma_districts_list`, {
+                const qulificationResponse = await fetch(`${apiUrl}/v1/cy_ma_districts_list`, {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -145,6 +145,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
                     visitor_token:vist_id,
                     qtion_id:"66f65376898d6",
                     lac_token: botToken,
+                    "app_ver":app_ver
              }
              ),
                 });
@@ -172,7 +173,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
 
     const fetchPsData= async ( districtValue) => {
       try {
-                const qulificationResponse = await fetch(`${apiUrl}/cy_ma_applicable_ps_list`, {
+                const qulificationResponse = await fetch(`${apiUrl}/v1/cy_ma_applicable_ps_list`, {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -183,6 +184,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
                     visitor_token:vist_id,
                     qtion_id:"66f65376898d6",
                     lac_token: botToken,
+                    "app_ver":app_ver
              }
              ),
                 });
@@ -255,13 +257,14 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
       qtion_num:"8",
       district: address.district ? address.district.value : null,
       ps: address.policeStation ? address.policeStation.value : null,
-      lac_token: botToken
+      lac_token: botToken,
+      "app_ver":app_ver
     };
 
 
 
     try {
-      const response = await fetch(`${apiUrl}/ccrim_add_ps`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_add_ps`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

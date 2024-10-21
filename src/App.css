@@ -93,6 +93,17 @@ form {
 @media only screen and (max-width: 768px) {
 
   /* Tablet and Mobile Styles */
+
+  .question {
+    height: 100vh;
+    font-size: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 180px;
+    width: 80vw;
+  }
+
   form {
     padding: 10px;
   }
@@ -153,8 +164,9 @@ form {
     font-size: 24px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     margin-top: 180px;
-    width: 80vw;
+    width: 60vw;
   }
 
   .help{
@@ -166,14 +178,6 @@ form {
 
 .btns-ok{
   margin-left: 0px;
-}
-
-.next-btns{
-  margin-left:30px;
-}
-
-.suspect-btns{
-  margin-left:30px;
 }
 
 .call-btn{
@@ -203,6 +207,7 @@ form {
     font-size: 24px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     margin-top: 180px;
     width: 80vw;
   }
@@ -212,8 +217,15 @@ form {
   }
 
   .suspect_contact{
-    margin-left: 28%;
+    margin-left: 20%;
   }
+
+  .bank-error{
+    color: red; 
+    margin-top: 10px;
+     width:650px; 
+    }
+    
 
   
 
@@ -226,6 +238,8 @@ form {
   form {
     max-width: 80%;
   }
+
+
 
   .navigation-buttons {
     bottom: 20px;
@@ -284,6 +298,7 @@ form {
     padding-left: 20px;
    padding-right: 10px;
   }
+  
 }
 
 
@@ -351,20 +366,24 @@ p {
   .suspect-bank{
     font-size: 38px;
   }
-  .next-btns{
-    margin-left:140px;
+  .victim-btns{
+    margin-left:220px;
   }
 
   .suspect-btns{
-    margin-left:290px;
+    margin-left:260px;
   }
 
   .call-btn{
-    margin-left:90px;
+    margin-left:150px;
+  }
+
+  .calls-btn{
+    margin-left:160px;
   }
 
   .btns-ok{
-    margin-left: 120px;
+    margin-left: 150px;
   }
   .login-container,
   .otp-container {
@@ -403,7 +422,9 @@ p {
   font-size: 24px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   margin-top: 210px;
+  width: 60vw;
 }
 
 .questions {
@@ -412,6 +433,7 @@ p {
   display: flex;
   flex-direction: column;
   margin-top: 210px;
+ 
 }
 
 .error-message {
@@ -420,7 +442,7 @@ p {
   font-size: 14px;
   background-color: rgb(224, 197, 197);
   height: 20px;
-  width: 280px;
+  width: 30%;
   padding-top: 5px;
   margin-left: 10px;
   padding-left: 10px;
@@ -636,12 +658,13 @@ h2 {
   border: 1px solid currentColor;
   font-size: 12px;
   font-weight: 600;
+  
 }
 
 .option-label {
   font-size: 9px;
   font-weight: 600;
-  color: #000000;
+  color:#000;
 }
 
 
@@ -655,7 +678,7 @@ h2 {
   margin-right: 20px;
   margin-bottom: 10px;
   background-color: #fff;
-  width: 250px;
+  width: 220px;
   height: 18px;
   font-size: 14px;
   color: #004999;
@@ -731,14 +754,14 @@ h2 {
     justify-content: center;
     width: 30px;
     height: 30px;
-    border: 1px solid #000000;
+    border: 1px solid #222121;
     font-size: 16px;
     font-weight: 600;
   }
 
   .option-label {
     font-size: 16px;
-    color: #000000;
+    color: #222121;
     font-weight: 600;
   }
 
@@ -966,7 +989,7 @@ h2 {
     font-size: 9px;
     background-color: rgb(224, 197, 197);
     height: 18px;
-    width: 180px;
+    width: 100%;
     padding-top: 5px;
     margin-left: 10px;
     padding-left: 10px;
@@ -1212,6 +1235,27 @@ h2 {
   width: 60%; /* Could be more or less, depending on screen size */
   height: 40%;
   border-radius: 14px;
+}
+
+
+.bank-error{
+color: red; 
+margin-top: 10px;
+ width:320px; 
+}
+
+
+.retry-circle.rotating {
+  animation: rotate 0.5s linear infinite; /* Rotate continuously */
+}
+
+@keyframes rotate {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg); /* Full rotation */
+  }
 }
 
 

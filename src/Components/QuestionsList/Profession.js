@@ -6,7 +6,7 @@ const Profession = ({
   onVictimProfessionSelected,
   onQuestion,
   answer
-  ,apiKey,botToken,vist_id
+  ,apiKey,botToken,vist_id,app_ver
 }) => {
   const [Profession, setProfession] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
@@ -27,7 +27,7 @@ const Profession = ({
     const fetchProfessionData = async () => {
       try {
         const qulificationResponse = await fetch(
-          `${apiUrl}/cy_ma_profesion_list`,
+          `${apiUrl}/v1/cy_ma_profesion_list`,
           {
             method: "POST",
             headers: {
@@ -38,6 +38,7 @@ const Profession = ({
               visitor_token: vist_id,
               qtion_id: "66f65342db514",
               lac_token: botToken,
+              "app_ver":app_ver
             }),
           }
         );
@@ -71,7 +72,7 @@ const Profession = ({
       return; // Ignore clicks on disabled options
     }
     try {
-      const response = await fetch(`${apiUrl}/ccrim_bot_add_choice`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_choice`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +84,8 @@ const Profession = ({
           qtion_num: "6",
           qtion_option: option.id,
           option_val: option.value,
-          lac_token: botToken
+          lac_token: botToken,
+          "app_ver":app_ver
         }),
       });
 
@@ -108,7 +110,7 @@ const Profession = ({
     } catch (err) {
       console.error("Error sending data to API:", err);
     }
-  };
+  }; 
 
   const handleOkClick = (e) => {
     if (Profession) {

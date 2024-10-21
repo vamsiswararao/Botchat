@@ -19,6 +19,7 @@ import HowMuch from "../QuestionsList/HowMuch";
 import TranslateComponent from "../TranslateComponent";
 import Profession from "../QuestionsList/Profession";
 import PoliceStation from "../QuestionsList/PoliceStation";
+import appVersion from '../../version';
 const apiKey = process.env.REACT_APP_AUTH_TOKEN;
 
 const questionSequence = [
@@ -93,7 +94,8 @@ const Questions = () => {
   const [answerQuestion, setAnswerQuestion] = useState(Array(16).fill(false));
   const vist_id= Cookies.get('visitor_id');
   const botToken= Cookies.get('bot_token');
-
+  const app_ver = appVersion.app_ver;
+  console.log(app_ver)
 
 
   // useEffect(() => {
@@ -261,7 +263,8 @@ const Questions = () => {
        case 8:
          return formData.police_station.district!== undefined && formData.police_station.ps!== undefined;
       case 9:
-          return formData.victim_address.address1 !== undefined && formData.victim_address.city !== undefined;
+          return true;
+          //formData.victim_address.address !== undefined && formData.victim_address.village !== undefined;
        case 10:
          return true;
        case 11:
@@ -288,35 +291,40 @@ const Questions = () => {
   }, [formData, currentQuestion]);
 
   const handleNextQuestion = (optionId, result) => {
-   // console.log(currentQuestion,formData.victim_bank.length , victimValue )
+   console.log(currentQuestion,formData.victim_bank.length , victimValue )
     if (isQuestionAnswered(currentQuestion)) {
+      console.log("1")
       const updatedAnswers = [...answerQuestion];
       updatedAnswers[currentQuestion] = false;  // Mark as answered
       setAnswerQuestion(updatedAnswers);
       if(currentQuestion===13 && formData.victim_bank.length >=victimValue){
+        console.log("2")
         setVictimValue(victimValue+1)
         window.scrollBy({ top:window.innerHeight*1.3 , behavior: 'smooth' });
         const nextQuestion = Math.min(currentQuestion + 1, questionCount - 1);
-        setQuestion(questionSequence[nextQuestion])
+        setQuestion(questionSequence[nextQuestion-1])
         setSuspectValue(1)
       }
       else if(currentQuestion===15 && formData.suspect_bank.length > suspectValue) {
+        console.log("3")
         setSuspectValue(suspectValue+1)
         window.scrollBy({ top: window.innerHeight*1.3, behavior: 'smooth' });
         const nextQuestion = Math.min(currentQuestion + 1, questionCount - 1);
         setCurrentQuestion(nextQuestion);
-        setQuestion(questionSequence[nextQuestion]);
+        setQuestion(questionSequence[nextQuestion-1]);
       }
       else{
         setVictimValue(1)
-         if( (currentQuestion===13 && formData.victim_bank.length>1 )){
+         if( (currentQuestion===13 && formData.victim_bank.length>=1 )){
+          console.log("4")
           const nextQuestion = Math.min(currentQuestion + 2, questionCount - 1);
           const element = document.querySelector(`#question-${nextQuestion}`);
           setCurrentQuestion(nextQuestion);
           setSuspectValue(suspectValue+1)
-          setQuestion(questionSequence[nextQuestion]);
+          setQuestion(questionSequence[nextQuestion-1]);
           element.scrollIntoView({ behavior: "smooth" });
          }else{
+          console.log("5")
          const nextQuestion = Math.min(currentQuestion + 1, questionCount - 1);
       const element = document.querySelector(`#question-${nextQuestion}`);
       setCurrentQuestion(nextQuestion);
@@ -325,6 +333,7 @@ const Questions = () => {
          }
       }
     } else {
+      console.log("6")
       const updatedAnswers = [...answerQuestion];
       updatedAnswers[currentQuestion] = true;  // Mark as unanswered
       setAnswerQuestion(updatedAnswers);
@@ -425,6 +434,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                 />
               </div>
 
@@ -439,6 +449,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                 />
               </div>
               <div id="question-3" className="page">
@@ -462,6 +473,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                 />
               </div>
               <div id="question-5" className="page">
@@ -475,6 +487,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                 />
               </div>
 
@@ -489,6 +502,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                 />
               </div>
 
@@ -503,6 +517,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                 />
               </div>
 
@@ -515,6 +530,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                 />
               </div>
 
@@ -527,6 +543,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                 />
               </div>
               <div id="question-10" className="page">
@@ -537,6 +554,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                 />
               </div>
 
@@ -551,6 +569,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                 />
               </div>
 
@@ -565,6 +584,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                 />
               </div>
 
@@ -579,6 +599,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                 />
               </div>
               <div
@@ -604,6 +625,7 @@ const Questions = () => {
                       apiKey={apiKey}
                       botToken={botToken}
                       vist_id={vist_id}
+                      app_ver={app_ver}
                     />
                   </div>
                 ))}
@@ -633,6 +655,7 @@ const Questions = () => {
                       apiKey={apiKey}
                       botToken={botToken}
                       vist_id={vist_id}
+                      app_ver={app_ver}
                     />
                   </div>
                 ))}
@@ -649,6 +672,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                   
                 />
               </div>
@@ -663,6 +687,7 @@ const Questions = () => {
                   apiKey={apiKey}
                   botToken={botToken}
                   vist_id={vist_id}
+                  app_ver={app_ver}
                 />
               </div>
         <p

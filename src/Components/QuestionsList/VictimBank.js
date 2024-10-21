@@ -73,12 +73,15 @@ const VictimBank = ({
   index,
   onQuestion,
   apiKey,
-  botToken,vist_id
+  botToken,
+  vist_id,
+  app_ver
 }) => {
   const [victimBankData, setVictimBankData] = useState([]);
   const [formData, setFormData] = useState({
     sub_cat: "",
     bank_name: "",
+    wallet_list: "",
     acc_no: "",
     trans_id: "",
     payment: "",
@@ -93,6 +96,7 @@ const VictimBank = ({
 
   const [bankOption, setBankOptions] = useState([]);
   const [typeOptions, setTypeOptions] = useState([]);
+  const [walletOption, setWalletOptions] = useState([]);
   const [pageCount, setPageCount] = useState(1);
   const [error, setError] = useState("");
   //const vist_id = sessionStorage.getItem("visitor_id");
@@ -100,10 +104,10 @@ const VictimBank = ({
   const parseDate = (formattedDateTime) => {
     const [date, time] = formattedDateTime.split("T");
     const [year, month, day] = date.split("-");
-    const parsedDateTime = `${day}-${month}-${year} ${time}`; 
+    const parsedDateTime = `${day}-${month}-${year} ${time}`;
     return parsedDateTime;
   };
-  
+
   const handleDateChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({
@@ -112,9 +116,8 @@ const VictimBank = ({
     }));
   };
 
-
   useEffect(() => {
-    const storedDistrict = localStorage.getItem('formVictimData');
+    const storedDistrict = localStorage.getItem("formVictimData");
     //console.log(storedDistrict);
     if (storedDistrict) {
       setFormData((prev) => ({ ...prev, ...JSON.parse(storedDistrict) }));
@@ -125,7 +128,7 @@ const VictimBank = ({
     const fetchBankData = async () => {
       try {
         const BankResponse = await fetch(
-          `${apiUrl}/cy_ma_bank_wlet_pg_pa_list`,
+          `${apiUrl}/v1/cy_ma_bank_wlet_pg_pa_list`,
           {
             method: "POST",
             headers: {
@@ -136,6 +139,7 @@ const VictimBank = ({
               visitor_token: vist_id,
               qtion_id: "66f6544451d1f",
               lac_token: botToken,
+              "app_ver":app_ver
             }),
           }
         );
@@ -158,13 +162,9 @@ const VictimBank = ({
       }
     };
 
-    fetchBankData();
-  }, []);
-
-  useEffect(() => {
-    const fetchBankData = async () => {
+    const fetchWalletData = async () => {
       try {
-        const BankResponse = await fetch(`${apiUrl}/cy_ma_sub_category_list`, {
+        const BankResponse = await fetch(`${apiUrl}/v1/cy_ma_wlet_pg_pa_list`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -172,10 +172,51 @@ const VictimBank = ({
           body: JSON.stringify({
             api_key: apiKey,
             visitor_token: vist_id,
-            qtion_id: "66f6544451d1f",
+            qtion_id: "66f6545af3d6e",
             lac_token: botToken,
+            "app_ver":app_ver
           }),
         });
+
+        if (!BankResponse.ok) {
+          throw new Error("Failed to fetch Wallet options");
+        }
+
+        const BankData = await BankResponse.json();
+        setWalletOptions(
+          BankData.resp.wlet_pg_pa_list.map((bank) => ({
+            value: bank.wpa_uniq,
+            label: bank.wpa_nm,
+          })) || []
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchBankData();
+    fetchWalletData();
+  }, []);
+
+  useEffect(() => {
+    const fetchBankData = async () => {
+      try {
+        const BankResponse = await fetch(
+          `${apiUrl}/v1/cy_ma_sub_category_list`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              api_key: apiKey,
+              visitor_token: vist_id,
+              qtion_id: "66f6544451d1f",
+              lac_token: botToken,
+              "app_ver":app_ver
+            }),
+          }
+        );
 
         if (!BankResponse.ok) {
           throw new Error("Failed to fetch audio options");
@@ -199,17 +240,33 @@ const VictimBank = ({
   }, []);
 
   const handleSelectChange = (field, selectedOption) => {
-    //console.log(selectedOption);
-    
+    console.log(selectedOption);
+
     if (field === "sub_cat") {
       if (selectedOption.value === "66d300879af61335355481") {
-        //console.log("A");
+         
+        setFormData((prev) => {
+          const updatedFormData = {
+            ...prev,
+            [field]: selectedOption ? selectedOption.value : "",
+            wallet_list: "",
+          };
+          localStorage.setItem(
+            "formVictimData",
+            JSON.stringify(updatedFormData)
+          ); // Save to localStorage
+          return updatedFormData;
+        });
+      } else if (selectedOption.value === "66d300879af44537699255") {
         setFormData((prev) => {
           const updatedFormData = {
             ...prev,
             [field]: selectedOption ? selectedOption.value : "",
           };
-          localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+          localStorage.setItem(
+            "formVictimData",
+            JSON.stringify(updatedFormData)
+          ); // Save to localStorage
           return updatedFormData;
         });
       } else {
@@ -218,13 +275,40 @@ const VictimBank = ({
             ...prev,
             [field]: selectedOption ? selectedOption.value : "",
             mod_op: "",
+            wallet_list: "",
+            first_six: "",
+            last_four: "",
+            card_len: "",
           };
-          localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+          localStorage.setItem(
+            "formVictimData",
+            JSON.stringify(updatedFormData)
+          ); // Save to localStorage
           return updatedFormData;
         });
       }
     }
-  
+
+    if(field==="mod_op"){
+      if(selectedOption.value!=="66d31e6e8b6cb953390002"){
+        setFormData((prev) => {
+          const updatedFormData = {
+            ...prev,
+            [field]: selectedOption ? selectedOption.value : "",
+            first_six: "",
+            last_four: "",
+            card_len: "",
+          };
+          localStorage.setItem(
+            "formVictimData",
+            JSON.stringify(updatedFormData)
+          ); // Save to localStorage
+          return updatedFormData;
+        });
+      }
+      
+    }
+
     setFormData((prev) => {
       const updatedFormData = {
         ...prev,
@@ -234,13 +318,11 @@ const VictimBank = ({
       return updatedFormData;
     });
   };
-  
-
 
   const handleTextChange = (id, value) => {
     let updatedFormData;
-  
-    if (id === 'acc_no') {
+
+    if (id === "acc_no") {
       // Regex to allow alphanumeric characters and spaces, max 50 characters
       if (/^[a-zA-Z0-9\s]*$/.test(value) && value.length <= 50) {
         updatedFormData = {
@@ -249,7 +331,7 @@ const VictimBank = ({
         };
         setFormData(updatedFormData);
         localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
-  
+
         if (value.length < 10) {
           setError("Account number must be at least 10 characters long.");
         } else {
@@ -259,10 +341,12 @@ const VictimBank = ({
         if (value.length > 50) {
           setError("Account number must be less than 50 characters.");
         } else {
-          setError("Account number can only contain letters, numbers, and spaces.");
+          setError(
+            "Account number can only contain letters, numbers, and spaces."
+          );
         }
       }
-    } else if (id === 'transaction_no') {
+    } else if (id === "transaction_no") {
       // Regex to allow alphanumeric characters and spaces, max 100 characters
       if (/^[a-zA-Z0-9\s]*$/.test(value) && value.length <= 50) {
         updatedFormData = {
@@ -271,7 +355,7 @@ const VictimBank = ({
         };
         setFormData(updatedFormData);
         localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
-  
+
         if (value.length < 10) {
           setError("Transaction number must be at least 10 characters long.");
         } else {
@@ -281,10 +365,12 @@ const VictimBank = ({
         if (value.length > 50) {
           setError("Transaction number must be less than 50 characters.");
         } else {
-          setError("Transaction number can only contain letters, numbers, and spaces.");
+          setError(
+            "Transaction number can only contain letters, numbers, and spaces."
+          );
         }
       }
-    } else if (id === 'amt') {
+    } else if (id === "amt") {
       // Allow only numbers and dot (for decimal), validate input before updating state
       if (/^\d*\.?\d*$/.test(value)) {
         updatedFormData = {
@@ -297,7 +383,7 @@ const VictimBank = ({
       } else {
         setError("Amount can only contain numbers and a decimal point.");
       }
-    } else if (id === 'ref_num') {
+    } else if (id === "ref_num") {
       // Regex to allow alphanumeric characters and spaces, max 100 characters
       if (/^[a-zA-Z0-9\s]*$/.test(value) && value.length <= 100) {
         updatedFormData = {
@@ -306,7 +392,7 @@ const VictimBank = ({
         };
         setFormData(updatedFormData);
         localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
-  
+
         if (value.length < 10) {
           setError("Reference number must be at least 10 characters long.");
         } else {
@@ -316,7 +402,9 @@ const VictimBank = ({
         if (value.length > 50) {
           setError("Reference number must be less than 50 characters.");
         } else {
-          setError("Reference number can only contain letters, numbers, and spaces.");
+          setError(
+            "Reference number can only contain letters, numbers, and spaces."
+          );
         }
       }
     } else {
@@ -330,85 +418,97 @@ const VictimBank = ({
       setError(""); // Reset error for other fields
     }
   };
-  
-  
-  
 
   const handleOkClick = async (e) => {
     e.preventDefault();
 
     //Validate the form fields
-    if (!formData.sub_cat) {
-      setError("Please select the sub_category.");
-      return;
-    }
-    if (!formData.bank_name) {
-      setError("Please select in the Bank.");
-      return;
-    }
-    if (!formData.acc_no) {
-      setError("Please fill in the AccountNo.");
-      return;
-    }
-    if (!formData.amt) {
-      setError("Please fill in the Amount.");
-      return;
-    }
-    if (!formData.date) {
-      setError("Please select in the date.");
-      return;
-    }
+    // if (!formData.sub_cat) {
+    //   setError("Please select the sub_category.");
+    //   return;
+    // }
+    // if (!formData.bank_name) {
+    //   setError("Please select in the Bank.");
+    //   return;
+    // }
+    // if (!formData.acc_no) {
+    //   setError("Please fill in the AccountNo.");
+    //   return;
+    // }
+    // if (!formData.amt) {
+    //   setError("Please fill in the Amount.");
+    //   return;
+    // }
+    // if (!formData.date) {
+    //   setError("Please select in the date.");
+    //   return;
+    // }
 
-    setError("");
+    // setError("");
 
-    try {
-      // Send the data to the dummy API
-      const response = await fetch(`${apiUrl}/ccrim_bot_add_victim_trans`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          api_key: apiKey,
-          visitor_token: vist_id,
-          qtion_id: "66f6544451d1f",
-          qtion_num: "14",
-          sub_cat: formData.sub_cat,
-          mod_op: formData.mod_op,
-          bank_mer: formData.bank_name,
-          wallet_list: "15a877d76abf11ef8bf01a4da71d0804",
-          acc_no: formData.acc_no,
-          trans_id: formData.transaction_no,
-          first_six: formData.first_six,
-          last_four: formData.last_four,
-          card_len: formData.card_len,
-          amt: formData.amt,
-          ref_num: formData.ref_num,
-          trans_dtm: parseDate(formData.date),
-          lac_token: botToken
-        }),
-      });
+    if (
+      formData.sub_cat ||
+      formData.bank_name ||
+      formData.acc_no ||
+      formData.amt ||
+      formData.date
+    ) {
+      console.log("A")
+      try {
+        // Send the data to the dummy API
+        const response = await fetch(
+          `${apiUrl}/v1/ccrim_bot_add_victim_trans`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              api_key: apiKey,
+              visitor_token: vist_id,
+              qtion_id: "66f6544451d1f",
+              qtion_num: "14",
+              sub_cat: formData.sub_cat,
+              mod_op: formData.mod_op,
+              bank_mer: formData.bank_name,
+              wallet_list: formData.wallet_list,
+              acc_no: formData.acc_no,
+              trans_id: formData.transaction_no,
+              first_six: formData.first_six,
+              last_four: formData.last_four,
+              card_len: formData.card_len,
+              amt: formData.amt,
+              ref_num: formData.ref_num,
+              trans_dtm: parseDate(formData.date),
+              lac_token: botToken,
+              "app_ver":app_ver
+            }),
+          }
+        );
 
-      if (!response.ok) {
-        throw new Error("Failed to submit form data.");
+        if (!response.ok) {
+          throw new Error("Failed to submit form data.");
+        }
+
+        const responseData = await response.json();
+        console.log(responseData)
+        if (responseData.resp.error_code === "0") {
+          onNext(15); // Move to the next step
+          onQuestion(16);
+
+          // If successful, add the data to the victimBankData list and show options
+          setVictimBankData((prevData) => [...prevData, formData]);
+        }
+      } catch (error) {
+        console.error("Error submitting form data:", error);
+        setError("Failed to submit form data. Please try again.");
       }
-
-      const responseData = await response.json();
-
-      if (responseData.resp.error_code === "0") {
-        onNext(15); // Move to the next step
-        onQuestion(16);
-
-        // If successful, add the data to the victimBankData list and show options
-        setVictimBankData((prevData) => [...prevData, formData]);
-      }
-    } catch (error) {
-      console.error("Error submitting form data:", error);
-      setError("Failed to submit form data. Please try again.");
     }
+    onNext(15); // Move to the next step
+    onQuestion(16);
   };
 
-  const handleAddPageClick = (e) => {
+  const handleAddPageClick = async (e) => {
     e.preventDefault();
     addVictimBank(pageCount);
     setPageCount((prevCount) => prevCount + 1); // Add another form
@@ -427,6 +527,62 @@ const VictimBank = ({
       mod_op: "",
     });
 
+    if (
+      formData.sub_cat &&
+      formData.bank_name &&
+      formData.acc_no &&
+      formData.acc_no &&
+      formData.amt &&
+      formData.date
+    ) {
+      try {
+        // Send the data to the dummy API
+        console.log(formData.wallet_list)
+        const response = await fetch(
+          `${apiUrl}/v1/ccrim_bot_add_victim_trans`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              api_key: apiKey,
+              visitor_token: vist_id,
+              qtion_id: "66f6544451d1f",
+              qtion_num: "14",
+              sub_cat: formData.sub_cat,
+              mod_op: formData.mod_op,
+              bank_mer: formData.bank_name,
+              wallet_list: formData.wallet_list,
+              acc_no: formData.acc_no,
+              trans_id: formData.transaction_no,
+              first_six: formData.first_six,
+              last_four: formData.last_four,
+              card_len: formData.card_len,
+              amt: formData.amt,
+              ref_num: formData.ref_num,
+              trans_dtm: parseDate(formData.date),
+              lac_token: botToken,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to submit form data.");
+        }
+
+        const responseData = await response.json();
+    
+        if (responseData.resp.error_code === "0") {
+          // If successful, add the data to the victimBankData list and show options
+          setVictimBankData((prevData) => [...prevData, formData]);
+        }
+      } catch (error) {
+        console.error("Error submitting form data:", error);
+        setError("Failed to submit form data. Please try again.");
+      }
+    }
+
     const isMobile = window.innerWidth <= 768; // Adjust the width breakpoint as per your design
     const scrollAmount = isMobile
       ? window.innerHeight
@@ -436,6 +592,8 @@ const VictimBank = ({
     // const newPageIndex = index + 1;
     // onNextPage(newPageIndex);
   };
+
+  
 
   return (
     <div className="question">
@@ -484,6 +642,25 @@ const VictimBank = ({
               placeholder="Select..."
               styles={customStyles} // Apply custom styles
             />
+            {formData.sub_cat === "66d300879af44537699255" && (
+              <>
+                <p className="bank-para" style={{ marginTop: "20px" }}>
+                  Wallet/PG/PA List :<span style={{ color: "red" }}>*</span>
+                </p>
+                <Select
+                  value={walletOption.find(
+                    (Merchant) => Merchant.value === formData.wallet_list
+                  )}
+                  onChange={(selectedOption) =>
+                    handleSelectChange("wallet_list", selectedOption)
+                  }
+                  options={walletOption}
+                  className="dropdown-input"
+                  placeholder="Select..."
+                  styles={customStyles} // Apply custom styles
+                />
+              </>
+            )}
             {formData.sub_cat === "66d300879af61335355481" && (
               <>
                 <p className="bank-para" style={{ marginTop: "20px" }}>
@@ -513,9 +690,7 @@ const VictimBank = ({
                   type="text"
                   className="text-input account"
                   name="acc_no"
-                  onChange={(e) =>
-                    handleTextChange("acc_no", e.target.value)
-                  }
+                  onChange={(e) => handleTextChange("acc_no", e.target.value)}
                   value={formData.acc_no}
                   autoComplete="off"
                 />
@@ -621,7 +796,7 @@ const VictimBank = ({
         </div>
         <div
           style={{ display: "flex", marginTop: "20px" }}
-          className="next-btns"
+          className="victim-btns"
         >
           <button
             type="button"

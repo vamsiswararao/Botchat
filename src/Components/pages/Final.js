@@ -1,7 +1,6 @@
 import React from 'react'
-
-const comp_id = sessionStorage.getItem("comp_id"); 
 const Final = () => {
+  const comp_id = sessionStorage.getItem("comp_id"); 
   return (
     <div className="page">
     <div style={{display:'flex',flexDirection:'column', justifyContent:'center', alignItems:'center', height:'100vh'}}>

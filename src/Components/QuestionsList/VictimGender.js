@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer,apiKey,botToken,vist_id }) => {
+const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer,apiKey,botToken,vist_id ,app_ver}) => {
   const [gender, setGender] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
@@ -24,7 +24,7 @@ const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer,apiKey,b
       return; // Ignore clicks on disabled options
     } 
     try {
-      const response = await fetch(`${apiUrl}/ccrim_bot_add_choice`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_choice`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,7 +36,8 @@ const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer,apiKey,b
          "qtion_num":"5",
          "qtion_option":option.id,
          "option_val":option.value,
-         lac_token: botToken
+         lac_token: botToken,
+         "app_ver":app_ver
    } 
    ),
       });

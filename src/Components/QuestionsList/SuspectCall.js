@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken,vist_id }) => {
+const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken,vist_id,app_ver}) => {
   const [suspectContacts, setSuspectContacts] = useState({
     contactValues: [],
     contactIds: []
@@ -25,7 +25,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
     const fetchPlatFormData = async () => {
       try {
         const platFormResponse = await fetch(
-          `${apiUrl}/cy_ma_suspect_comncation_list`,
+          `${apiUrl}/v1/cy_ma_suspect_comncation_list`,
           {
             method: "POST",
             headers: {
@@ -35,7 +35,8 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
               api_key: apiKey,
               visitor_token: vist_id,
               qtion_id: "66f653ab73faa",
-              lac_token: botToken
+              lac_token: botToken,
+              "app_ver":app_ver
             }),
           }
         );
@@ -128,7 +129,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
   // Function to save data to RequestBin API
   const saveDataToAPI = async (selectedContacts) => {
     try {
-      const response = await fetch(`${apiUrl}/ccrim_bot_add_multichoice`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_multichoice`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -141,6 +142,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
           qtion_option:suspectContacts.contactIds,
           option_val:  suspectContacts.contactValues,
           lac_token: botToken,
+          "app_ver":app_ver
         }),
       });
       if (!response.ok) {

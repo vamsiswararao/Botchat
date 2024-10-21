@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
+import { useLocation } from "react-router-dom";
+import appVersion from '../../version';
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiKey = process.env.REACT_APP_AUTH_TOKEN;
 
@@ -11,6 +13,17 @@ const Login = (onOtpSent) => {
   //const vist_id = sessionStorage.getItem("visitor_id") ;
   const vist_id= Cookies.get('visitor_id');
 
+  const app_ver = appVersion.app_ver;
+  // console.log(app_ver)
+
+  const location = useLocation();
+  const { number } = location.state || {};
+
+
+  useEffect(() => {
+     setPhoneNumber(number)
+  }, [number]);
+  
 
 
   const handleChange = (e) => {
@@ -34,16 +47,15 @@ const Login = (onOtpSent) => {
     }
 
     try {
-      const response = await fetch(`${apiUrl}/ccrim_bot_login`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ api_key: apiKey, mob: phoneNumber,visitor_token: vist_id, }),
+        body: JSON.stringify({ api_key: apiKey, mob: phoneNumber,visitor_token: vist_id,"app_ver":app_ver }),
       });
 
       const data = await response.json();
-      //console.log(data)
       if (data.resp.error_code === "0") {
         setError("")
         // Store visitor_id in session storage
@@ -57,10 +69,7 @@ const Login = (onOtpSent) => {
 
         // Navigate to OTP page
         navigate("/otp",{ replace: true });
-      } else if (data.resp.error_code === "117") {
-        setError("ip blocked")
-      }
-       else {
+      }else {
         setError(data.resp.message);
         //alert("Failed to send OTP");
       }

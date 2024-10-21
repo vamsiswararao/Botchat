@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { FaRedoAlt } from "react-icons/fa"; // For the retry icon
 const apiUrl = process.env.REACT_APP_API_URL;
+const apiImage = process.env.REACT_APP_MY_ID_IMAGE;
 
-const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey, botToken, vist_id }) => {
+const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey, botToken, vist_id,app_ver }) => {
   const [files, setFiles] = useState([]);
   const [successfulUploads, setSuccessfulUploads] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -23,8 +24,8 @@ const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey, botToken, 
 
   const handleFileChange = async (event) => {
     const selectedFiles = Array.from(event.target.files);
-    if (files.length + selectedFiles.length > 50) {
-      setErrorMessage("You can only upload a maximum of 50 images.");
+    if (files.length + selectedFiles.length > apiImage) {
+      setErrorMessage(`You can only upload a maximum of ${apiImage} images.`);
       return;
     }
 
@@ -68,6 +69,7 @@ const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey, botToken, 
     formData.append("qtion_id", "66f654783112a");
     formData.append("qtion_num", "16");
     formData.append("lac_token", botToken);
+    formData.append("app_ver",app_ver);
 
     validFiles.forEach((file) => {
       formData.append("userImage", file);

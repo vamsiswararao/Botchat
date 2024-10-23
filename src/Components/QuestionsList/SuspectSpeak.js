@@ -132,7 +132,8 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey,botTok
            "qtion_num":"12",
            "qtion_option": selectedOptions.contactIds,
            "option_val":selectedOptions.contactValues,
-           "app_ver":app_ver
+           "app_ver":app_ver,
+            lac_token: botToken,
      }),
       });
 
@@ -140,9 +141,14 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey,botTok
         throw new Error("Failed to save data");
       }
 
-      //const result = await response.json();
-      //console.log("Data saved successfully:", result);
-      // Optionally, handle the result as needed
+      const data = await response.json();
+      if (data.resp.error_code === "0") {
+        onSuspectSpeakSelected(selectedOptions);
+        onNext(13);
+        onQuestion("14")
+      } else {
+        setError("Failed to push data to API");
+      }
     } catch (error) {
       console.error("Error saving data:", error);
       setError("Failed to save data, please try again.");
@@ -154,9 +160,6 @@ const SuspectSpeak = ({ onNext, onSuspectSpeakSelected, onQuestion,apiKey,botTok
    
     if (selectedOptions.contactValues.length > 0) {
       await saveDataToAPI(selectedOptions);
-      onSuspectSpeakSelected(selectedOptions);
-      onNext(13);
-      onQuestion("14")
     } else {
       setError("Please select an option before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt

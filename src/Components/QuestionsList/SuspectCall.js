@@ -116,9 +116,6 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
   const handleOkClick = async (e) => {
     e.preventDefault();
     if (suspectContacts.contactIds.length > 0) {
-      onSuspectCallSelected(suspectContacts);
-      onNext(12);
-      onQuestion("13");
       await saveDataToAPI(suspectContacts);
     } else {
       setError("Please select an option before proceeding.");
@@ -149,9 +146,14 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
         throw new Error("Failed to save data");
       }
 
-      //const result = await response.json();
-     // console.log("Data saved successfully:", result);
-      // Optionally, handle the result as needed
+      const data = await response.json();
+      if(data.resp.error_code ==="0"){
+        onSuspectCallSelected(suspectContacts);
+        onNext(12);
+        onQuestion("13");
+      }else{
+        setError("Failed to push data to API");
+      }
     } catch (error) {
       console.error("Error saving data:", error);
       setError("Failed to save data, please try again.");

@@ -4,12 +4,13 @@ import { FaRedoAlt } from "react-icons/fa"; // For the retry icon
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiImage = process.env.REACT_APP_MY_ID_IMAGE;
 
-const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey, botToken, vist_id,app_ver }) => {
+const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey, botToken, vist_id, app_ver }) => {
   const [files, setFiles] = useState([]);
   const [successfulUploads, setSuccessfulUploads] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const MAX_UPLOAD_SIZE = 100 * 1024 * 1024; // 100MB in bytes
+  const stateValue=""
 
   useEffect(() => {
     const storedFiles = localStorage.getItem("file");
@@ -69,7 +70,7 @@ const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey, botToken, 
     formData.append("qtion_id", "66f654783112a");
     formData.append("qtion_num", "16");
     formData.append("lac_token", botToken);
-    formData.append("app_ver",app_ver);
+    formData.append("app_ver", app_ver);
 
     validFiles.forEach((file) => {
       formData.append("userImage", file);
@@ -116,7 +117,7 @@ const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey, botToken, 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <h2>Upload supporting evidence</h2>
           <p className="upload-de">
-            Upload screenshots of all the fraudulent transactions, suspect websites, 
+            Upload screenshots of all the fraudulent transactions, suspect websites,
             suspect call log screenshots, screenshots of social media, WhatsApp chat, etc.
           </p>
           <input
@@ -126,12 +127,14 @@ const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey, botToken, 
             onChange={handleFileChange}
             className="file-input"
             style={{ display: "none" }}
+            value={stateValue} 
+            
           />
           <label htmlFor="file-upload" className="upload-file">
             Choose File
           </label>
           {errorMessage && (
-            <div className="error-message" style={{ color: "red"}}>
+            <div className="error-message" style={{ color: "red" }}>
               {/* {errorMessage.split("\n").map((msg, index) => (
                 <p key={index}>{msg}</p>
               ))} */} {errorMessage}
@@ -162,7 +165,7 @@ const Support = ({ submitSupport, onNext, onQuestion, answer, apiKey, botToken, 
                               <RxCross2 />
                             </button>
                             <div
-                              className={`retry-circle ${isUploading ? "rotating" : ""}`} 
+                              className={`retry-circle ${isUploading ? "rotating" : ""}`}
                               onClick={() => handleRetryUpload(file)}
                               style={{
                                 position: "absolute", // Make the retry icon absolutely positioned

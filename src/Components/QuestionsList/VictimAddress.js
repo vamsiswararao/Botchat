@@ -88,14 +88,14 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
 
     if( address.address1 || address.city || address.zip){
 
-      if (!address.address1) {
-        setError("Please Enter the address.");
-        return;
-      }
-      if (!address.city) {
-        setError("Please Enter the city.");
-        return;
-      }
+      // if (!address.address1) {
+      //   setError("Please Enter the address.");
+      //   return;
+      // }
+      // if (!address.city) {
+      //   setError("Please Enter the city.");
+      //   return;
+      // }
     try {
       const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_addrs`, {
         method: 'POST',
@@ -109,8 +109,17 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
         throw new Error('Failed to save address');
       }
 
-      //const result = await response.json();
-      //console.log('Saved data:', result);
+      const data = await response.json();
+
+      if(data.resp.error_code ==="0"){
+        onVictimAddressSelected(dataToSubmit);
+        onNext(10);
+        onQuestion(11);
+      }else{
+        setError("Failed to push data to API");
+      }
+
+
 
       // Perform any additional actions after successful save
       onVictimAddressSelected(dataToSubmit);

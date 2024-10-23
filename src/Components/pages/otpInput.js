@@ -13,7 +13,6 @@ const OtpInput = () => {
   const [countdown, setCountdown] = useState(30); // Countdown for resend button
   const navigate = useNavigate();
   const app_ver = appVersion.app_ver;
-  console.log(app_ver)
 
   const otp_id = sessionStorage.getItem("otp_id");
   // const vist_id = sessionStorage.getItem("visitor_id");
@@ -97,6 +96,7 @@ const OtpInput = () => {
           otp_id: otp_id,
           visitor_token: vist_id,
           type: type,
+          "app_ver":app_ver
         }),
       });
 

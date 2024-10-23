@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PopupBoxComponent from "../PopupBoxComponent";
 import Cookies from 'js-cookie';
 import appVersion from '../../version';
@@ -7,18 +7,19 @@ const apiUrl = process.env.REACT_APP_API_URL;
 const apiKey = process.env.REACT_APP_AUTH_TOKEN;
 
 
-const Help = ({ onNext, onHelpSelected,onQuestion,answer, }) => {
+const Help = ({vist_id}) => {
   const [help, setHelp] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const [number, setNumber] = useState(null);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  //const vist_id = sessionStorage.getItem("visitor_id");
   const [responseStatus, setResponseStatus] = useState(null);
-  const vist_id= Cookies.get('visitor_id');
-  const app_ver = appVersion.app_ver;
+ 
   
+ 
+  const app_ver = appVersion.app_ver;
+
   const handleHelpOptionClick = async(option, e) => {
     e.preventDefault();
     if (option.disabled) {
@@ -28,13 +29,14 @@ const Help = ({ onNext, onHelpSelected,onQuestion,answer, }) => {
    // console.log(vist_id)
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
-  
+    console.log(vist_id)
     try {
       const response = await fetch(`${apiUrl}/v1/ccrim_bot_help_request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+     
         body: JSON.stringify({ 
           "api_key":apiKey,
           "visitor_token":vist_id,
@@ -48,7 +50,7 @@ const Help = ({ onNext, onHelpSelected,onQuestion,answer, }) => {
       const data = await response.json()
       //console.log(data.resp)
       setResponseStatus(data);
-      //console.log(data)
+      console.log(data)
       if (!response.ok) {
         throw new Error("Failed to push data to API");
       }
@@ -152,6 +154,12 @@ const Help = ({ onNext, onHelpSelected,onQuestion,answer, }) => {
                 </>
               )}
             </div>
+            {/* <img         style={{
+          position: 'fixed',
+          bottom: '0',
+          left: '0',
+          zIndex: '1000', // Make sure it's above other elements
+        }} src="https://th.bing.com/th/id/OIP.V-_1TjaE7JQj34hwTTBxkAAAAA?w=314&h=121&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="cloud"/> */}
             {error && <div className="error-message">{error}</div>}
           </div>
         </div>

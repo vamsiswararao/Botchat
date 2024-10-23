@@ -83,7 +83,7 @@ const VictimBank = ({
     bank_name: "",
     wallet_list: "",
     acc_no: "",
-    trans_id: "",
+    transaction_no:'',
     payment: "",
     ref_num: "",
     trans_dtm: "",
@@ -421,7 +421,6 @@ const VictimBank = ({
 
   const handleOkClick = async (e) => {
     e.preventDefault();
-
     //Validate the form fields
     // if (!formData.sub_cat) {
     //   setError("Please select the sub_category.");
@@ -485,6 +484,7 @@ const VictimBank = ({
             }),
           }
         );
+
 
         if (!response.ok) {
           throw new Error("Failed to submit form data.");

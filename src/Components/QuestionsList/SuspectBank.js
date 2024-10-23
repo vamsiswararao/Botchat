@@ -340,6 +340,22 @@ const SuspectBank = ({
     //   return;
     // }
 
+    console.log({
+      api_key: apiKey,
+      visitor_token: vist_id,
+      qtion_id: "66f6545af3d6e",
+      qtion_num: "15",
+      mtfr_uni: SuspectFormData.transferType,
+      bwpa_uni: SuspectFormData.bank,
+      acc_no: SuspectFormData.acc_no,
+      trans_id: SuspectFormData.trans_id,
+      amt: SuspectFormData.amt,
+      trans_dtm: parseDate(SuspectFormData.date),
+      lac_token: botToken,
+      "app_ver":app_ver
+    })
+
+
 
 
     if( SuspectFormData.transferType && SuspectFormData.acc_no && SuspectFormData.amt && SuspectFormData.date ){
@@ -359,11 +375,11 @@ const SuspectBank = ({
             mtfr_uni: SuspectFormData.transferType,
             bwpa_uni: SuspectFormData.bank,
             acc_no: SuspectFormData.acc_no,
-            trans_id: SuspectFormData.transaction_no,
+            trans_id: SuspectFormData.trans_id,
             amt: SuspectFormData.amt,
             trans_dtm: "10-10-2024 16:21:00",
             lac_token: botToken,
-            "app_ver":app_ver
+            "app_ver":app_ver 
           }),
         });
   
@@ -407,7 +423,7 @@ const SuspectBank = ({
     });
 
     if( SuspectFormData.transferType && SuspectFormData.acc_no && SuspectFormData.amt && SuspectFormData.date ){
-
+   
       try {
         // Send the data to the dummy API
         const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_susp_trans`, {
@@ -425,7 +441,7 @@ const SuspectBank = ({
             acc_no: SuspectFormData.acc_no,
             trans_id: SuspectFormData.transaction_no,
             amt: SuspectFormData.amt,
-            trans_dtm: "10-10-2024 16:21:00",
+            trans_dtm: parseDate(SuspectFormData.date),
             lac_token: botToken,
             "app_ver":app_ver
           }),

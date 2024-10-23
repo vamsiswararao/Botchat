@@ -95,7 +95,7 @@ const Questions = () => {
   const vist_id= Cookies.get('visitor_id');
   const botToken= Cookies.get('bot_token');
   const app_ver = appVersion.app_ver;
-  console.log(app_ver)
+
 
 
   // useEffect(() => {
@@ -242,7 +242,6 @@ const Questions = () => {
   const isQuestionAnswered = (questionIndex) => {
    // console.log(formData.police_station.district)
    // console.log(formData.police_station.ps)
-    console.log(formData)
      switch (questionIndex) {
        case 0:
          return formData.help !== "";
@@ -290,90 +289,98 @@ const Questions = () => {
     setIsNextDisabled(!isQuestionAnswered(currentQuestion-1));
   }, [formData, currentQuestion]);
 
-  const handleNextQuestion = (optionId, result) => {
-   console.log(currentQuestion,formData.victim_bank.length , victimValue )
-    if (isQuestionAnswered(currentQuestion)) {
-      console.log("1")
-      const updatedAnswers = [...answerQuestion];
-      updatedAnswers[currentQuestion] = false;  // Mark as answered
-      setAnswerQuestion(updatedAnswers);
-      if(currentQuestion===13 && formData.victim_bank.length >=victimValue){
-        console.log("2")
-        setVictimValue(victimValue+1)
-        window.scrollBy({ top:window.innerHeight*1.3 , behavior: 'smooth' });
-        const nextQuestion = Math.min(currentQuestion + 1, questionCount - 1);
-        setQuestion(questionSequence[nextQuestion-1])
-        setSuspectValue(1)
-      }
-      else if(currentQuestion===15 && formData.suspect_bank.length > suspectValue) {
-        console.log("3")
-        setSuspectValue(suspectValue+1)
-        window.scrollBy({ top: window.innerHeight*1.3, behavior: 'smooth' });
-        const nextQuestion = Math.min(currentQuestion + 1, questionCount - 1);
-        setCurrentQuestion(nextQuestion);
-        setQuestion(questionSequence[nextQuestion-1]);
-      }
-      else{
-        setVictimValue(1)
-         if( (currentQuestion===13 && formData.victim_bank.length>=1 )){
-          console.log("4")
-          const nextQuestion = Math.min(currentQuestion + 2, questionCount - 1);
-          const element = document.querySelector(`#question-${nextQuestion}`);
-          setCurrentQuestion(nextQuestion);
-          setSuspectValue(suspectValue+1)
-          setQuestion(questionSequence[nextQuestion-1]);
-          element.scrollIntoView({ behavior: "smooth" });
-         }else{
-          console.log("5")
-         const nextQuestion = Math.min(currentQuestion + 1, questionCount - 1);
-      const element = document.querySelector(`#question-${nextQuestion}`);
-      setCurrentQuestion(nextQuestion);
-      setQuestion(questionSequence[nextQuestion-1]);
-      element.scrollIntoView({ behavior: "smooth" });
-         }
-      }
+// Scroll to a specific question element smoothly
+const scrollToQuestion = (questionIndex) => {
+  const element = document.querySelector(`#question-${questionIndex}`);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" });
+  }
+};
+
+// Move to the next question based on various conditions
+const handleNextQuestion = (optionId, result) => {
+  console.log(currentQuestion, formData.victim_bank.length, victimValue);
+
+  if (isQuestionAnswered(currentQuestion)) {
+    console.log("1");
+    const updatedAnswers = [...answerQuestion];
+    updatedAnswers[currentQuestion] = false; // Mark current question as answered
+    setAnswerQuestion(updatedAnswers);
+
+    // Case: victim bank handling
+    if (currentQuestion === 13 && victimValue <= formData.victim_bank.length) {
+      console.log("2");
+      setVictimValue(victimValue + 1);
+      window.scrollBy({ top: window.innerHeight * 1.3, behavior: 'smooth' });
+      //setNextQuestion(currentQuestion + 1);
+      setSuspectValue(1);
+
+    // Case: suspect bank handling
+    } else if (currentQuestion === 15 && suspectValue < formData.suspect_bank.length) {
+      console.log("3");
+      setSuspectValue(suspectValue + 1);
+      window.scrollBy({ top: window.innerHeight * 1.3, behavior: 'smooth' });
+      setNextQuestion(currentQuestion + 1);
+
     } else {
-      console.log("6")
-      const updatedAnswers = [...answerQuestion];
-      updatedAnswers[currentQuestion] = true;  // Mark as unanswered
-      setAnswerQuestion(updatedAnswers);
-    }
-  
-  };
-
-
-  const handlePreviousQuestion = () => {
-    //console.log(currentQuestion,formData.victim_bank.length , victimValue )
-    if(currentQuestion===15 &&  victimValue  <formData.victim_bank.length){
-      window.scrollBy({ top: -window.innerHeight*1.3 , behavior: 'smooth' });
-      setVictimValue(victimValue+1)
-    } else if(currentQuestion===16 && suspectValue < 0){
-      window.scrollBy({ top: -window.innerHeight*1.3 , behavior: 'smooth' });
-      setSuspectValue(suspectValue+1)
-      setVictimValue(formData.victim_bank.length+1)
-    }
-    else{
-      if(currentQuestion===17){
-        setSuspectValue(formData.suspect_bank.length+1)
-        const prevQuestion = Math.max(currentQuestion - 1, 1);
-        setCurrentQuestion(prevQuestion);
-        setQuestion(questionSequence[prevQuestion]);
-        document
-          .querySelector(`#question-${prevQuestion}`)
-          .scrollIntoView({ behavior: "smooth" });
-         
+      setVictimValue(1);
+      // Skipping two questions for victim bank handling
+      if (currentQuestion === 13 && formData.victim_bank.length >= 1) {
+        console.log("4");
+        setNextQuestion(currentQuestion + 2);
+        setSuspectValue(1);
+      } else {
+        console.log("5");
+        setNextQuestion(currentQuestion + 1);
       }
-      if(currentQuestion!==2){
-    const prevQuestion = Math.max(currentQuestion - 1, 1);
-    setCurrentQuestion(prevQuestion);
-    setQuestion(questionSequence[prevQuestion-1]);
-    document
-      .querySelector(`#question-${prevQuestion}`)
-      .scrollIntoView({ behavior: "smooth" });
-      }
-
     }
-  };
+  } else {
+    console.log("6");
+    const updatedAnswers = [...answerQuestion];
+    updatedAnswers[currentQuestion] = true; // Mark current question as unanswered
+    setAnswerQuestion(updatedAnswers);
+  }
+};
+
+// Move to the previous question
+const handlePreviousQuestion = () => {
+  if (currentQuestion === 15 && victimValue < formData.victim_bank.length) {
+    window.scrollBy({ top: -window.innerHeight * 1.3, behavior: 'smooth' });
+    setVictimValue(victimValue + 1);
+
+  } else if (currentQuestion === 16 && suspectValue < formData.suspect_bank.length) {
+    window.scrollBy({ top: -window.innerHeight * 1.3, behavior: 'smooth' });
+    setSuspectValue(suspectValue + 1);
+    setVictimValue(formData.victim_bank.length + 1);
+
+  } else {
+    if (currentQuestion === 17) {
+      setSuspectValue(formData.suspect_bank.length + 1);
+    }
+
+    // Don't allow going to a question earlier than question 2
+    if (currentQuestion !== 2) {
+      setPreviousQuestion(currentQuestion - 1);
+    }
+  }
+};
+
+// Helper function to set the next question with boundaries
+const setNextQuestion = (nextIndex) => {
+  const nextQuestion = Math.min(nextIndex, questionCount - 1);
+  setCurrentQuestion(nextQuestion);
+  setQuestion(questionSequence[nextQuestion - 1]);
+  scrollToQuestion(nextQuestion);
+};
+
+// Helper function to set the previous question with boundaries
+const setPreviousQuestion = (prevIndex) => {
+  const prevQuestion = Math.max(prevIndex, 1);
+  setCurrentQuestion(prevQuestion);
+  setQuestion(questionSequence[prevQuestion - 1]);
+  scrollToQuestion(prevQuestion);
+};
+
 
   const isHeaderVisible =
     (currentQuestion >= 4 && currentQuestion <= 9) ||

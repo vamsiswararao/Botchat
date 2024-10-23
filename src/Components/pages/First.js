@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import "./First.css"; // Ensure this path is correct
 import Help from "../QuestionsList/Help";
 import TranslateComponent from "../TranslateComponent";
@@ -9,15 +8,17 @@ import Cookies from "js-cookie";
 import appVersion from '../../version';
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiKey = process.env.REACT_APP_AUTH_TOKEN;
-//const vist_id = sessionStorage.getItem("visitor_id");
+
 
 const First = () => {
   const { id } = useParams();
   //console.log(id);
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const [visitorID, setVisitorID] = useState(null);
   const [responseStatus, setResponseStatus] = useState(null);
   //const botToken = sessionStorage.getItem("visitor_id");
+  const vist_id= Cookies.get('visitor_id');
   const botToken = Cookies.get("bot_token");
   const app_ver = appVersion.app_ver;
   console.log(app_ver)
@@ -37,7 +38,6 @@ const First = () => {
             visitor_token: id,
             lac_token: botToken,
             "app_ver":app_ver
-            
           }),
         });
 
@@ -46,9 +46,12 @@ const First = () => {
         }
         const vistorData = await visitorResponse.json();
         console.log(vistorData);
-        // setResponseStatus(vistorData);
-        // console.log(vistorData.resp);
+
+       
         if (vistorData.resp.error_code === "0") {
+          if(vistorData.resp.visitor_id===vist_id){
+            setVisitorID(vistorData.resp.visitor_id)
+            console.log("A")
           if (vistorData.resp.sess_sts !== 0) {
             if (vistorData.resp.submitted === 0) {
               navigate("/questions", { replace: true }); // Navigate on success
@@ -58,7 +61,7 @@ const First = () => {
                 sameSite: "Strict",
                 expires: 7,
               });
-              setResponseStatus(vistorData);
+              navigate("/submited",{ replace: true, state: { visitorData: vistorData }  });
             }
           } else {
             Cookies.set("visitor_id", vistorData.resp.visitor_id, {
@@ -95,8 +98,48 @@ const First = () => {
               localStorage.removeItem(key);
             });
           }
+        } else{
+          console.log("B")
+          Cookies.remove('visitor_id');
+          Cookies.remove('botToken')
+          setVisitorID(vistorData.resp.visitor_id)
+          Cookies.set("visitor_id", vistorData.resp.visitor_id, {
+            path: "/",
+            sameSite: "Strict",
+            expires: 7,
+          })
+
+          const keysToRemove = [
+            "gender",
+            "howMuch",
+            "Profession",
+            "policeStation",
+            "qualification",
+            "suspectCall",
+            "suspectContact",
+            "suspectSpeck",
+            "time",
+            "victimAge",
+            "victimName",
+            "zip",
+            "file",
+            "des",
+            "address1",
+            "city",
+            "formData",
+            "district",
+            "phoneNumber",
+            "formSuspectData",
+            "formVictimData",
+          ];
+
+          // Loop through the keys and remove them from localStorage
+          keysToRemove.forEach((key) => {
+            localStorage.removeItem(key);
+          });
+        }
         } else {
-          navigate("/", { replace: true }); // Navigate on success
+          navigate("/",{ replace: true, state: { visitorData: vistorData }  });
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -104,7 +147,7 @@ const First = () => {
     };
 
     fetchVisitorData();
-  }, [id, navigate,botToken,app_ver]);
+  }, [id, navigate,botToken,app_ver,vist_id]);
 
   return (
     <div className="first-container">
@@ -126,7 +169,7 @@ const First = () => {
         </div>
       </header>
       <div className="help-container">
-        <Help />
+        <Help vist_id={visitorID}/>
         {error && <div className="error-msg">{error}</div>}
       </div>
       <p className="translate">
@@ -136,7 +179,7 @@ const First = () => {
         responseStatus.resp &&
         responseStatus.resp.error_code === "0" &&
         responseStatus.resp.submitted === 1 && (
-          <PopupBoxComponent responseStatus={responseStatus} />
+          <PopupBoxComponent responseStatus={responseStatus}  />
         )}
     </div>
   );

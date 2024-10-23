@@ -7,6 +7,8 @@ import Final from "./Components/pages/Final";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import First from "./Components/pages/First";
 import NotFound from "./Components/pages/NotFound"; // Import the NotFound component
+import ErrorPage from "./Components/pages/ErrorPage";
+import Success from "./Components/pages/Success";
 
 
 
@@ -37,6 +39,15 @@ function App() {
               // </ProtectedRoute>
             }
           />
+                    <Route
+            path="/submited"
+            element={
+              // <ProtectedRoute>
+                <Success />
+              // </ProtectedRoute>
+            }
+          />
+            <Route path="*" element={<ErrorPage />} />    
                   <Route path="*" element={<NotFound />} />                                  
         </Routes>
       </div>

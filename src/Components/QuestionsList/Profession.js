@@ -81,7 +81,7 @@ const Profession = ({
           api_key: apiKey,
           visitor_token: vist_id,
           qtion_id: "66f65342db514",
-          qtion_num: "6",
+          qtion_num: "7",
           qtion_option: option.id,
           option_val: option.value,
           lac_token: botToken,
@@ -100,8 +100,8 @@ const Profession = ({
         handleOkClick();
         onVictimProfessionSelected(option.label);
         setShowOkButton(true); // Show the OK button after a successful click
-        onNext(7);
-        onQuestion("8");
+        onNext(8);
+        onQuestion(9);
         localStorage.setItem('Profession', JSON.stringify(option.label));
         setError("");
       }else{
@@ -114,8 +114,8 @@ const Profession = ({
 
   const handleOkClick = (e) => {
     if (Profession) {
-      onNext(7);
-      onQuestion("8");
+      onNext(8);
+      onQuestion(9);
     } else {
       setError("Please select an option before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
@@ -127,7 +127,7 @@ const Profession = ({
     <div className="question">
       <div style={{ display: "flex" }}>
         <div>
-          <h2>What is your (victim) profession? </h2>
+          <h2>Profession/ Occupation </h2>
           <div className="option-list">
             {professionOptions.map((option) => (
               <button
@@ -161,7 +161,7 @@ const Profession = ({
             ))}
           </div>
 
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center",zIndex:"1000" }}>
             {showOkButton && (
               <>
                 <button
@@ -171,14 +171,14 @@ const Profession = ({
                 >
                   OK
                 </button>
-                <p className="enter-text">
+                {/* <p className="enter-text">
                   press <strong>Enter ↵</strong>
-                </p>
+                </p> */}
               </>
             )}
             </div>
             {error && <div className="error-message">{error}</div>}
-            {answer[6] && (
+            {answer[7] && (
               <p className="alert-box">
                 Please answer the current question before moving to the next.
               </p>

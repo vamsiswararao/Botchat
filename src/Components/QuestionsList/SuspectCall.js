@@ -135,7 +135,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
           api_key: apiKey,
           visitor_token: vist_id,
           qtion_id: "66f653ab73faa",
-          qtion_num: "11",
+          qtion_num: "12",
           qtion_option:suspectContacts.contactIds,
           option_val:  suspectContacts.contactValues,
           lac_token: botToken,
@@ -149,8 +149,8 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
       const data = await response.json();
       if(data.resp.error_code ==="0"){
         onSuspectCallSelected(suspectContacts);
-        onNext(12);
-        onQuestion("13");
+        onNext(13);
+        onQuestion(14);
       }else{
         setError("Failed to push data to API");
       }
@@ -165,8 +165,9 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
     <div className="question">
       <div style={{ display: "flex",flexDirection:'column' }}>
         <div style={{ display: "flex",flexDirection:'column', justifyContent:'center',alignItems:'center' }}>
-          <h2>Fraudster`s calling methods or approaches </h2>
-          <div className="options-list">
+          <h2>Mode of Approach/Communication
+          </h2>
+          <div className="option-list">
             {options.map((option) => (
               <button
                 key={option.id}
@@ -189,7 +190,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
                   >
                     {option.id}
                   </div>
-                  <div className="option-label">{option.label}</div>
+                  <div style={{textAlign:'start'}} className="option-label">{option.label}</div>
                 </div>
                 {suspectContacts.contactValues.includes(option.value) && (
                   <span className="checkmark">&#10003;</span> // Unicode character for checkmark
@@ -198,7 +199,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
             ))}
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center"}} className="call-btn">
+        <div  className="call-btn" style={{zIndex:'1000'}}>
             {showOkButton && (
               <>
                 <button
@@ -208,13 +209,14 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
                 >
                   OK
                 </button>
-                <p className="enter-text">
+                {/* <p className="enter-text">
                   press <strong>Enter ↵</strong>
-                </p>
+                </p> */}
               </>
             )}
-            {error && <div className="error-message">{error}</div>}
+           
           </div>
+          {error && <div className="error-message">{error}</div>}
       </div>
     </div>
   );

@@ -64,7 +64,7 @@ const VictimQualification = ({
     };
 
     fetchQulificationData();
-  }, []);
+  }, [apiKey,app_ver,botToken,vist_id]);
 
   const handleOptionClick = async (option, e) => {
     e.preventDefault();
@@ -83,7 +83,7 @@ const VictimQualification = ({
           api_key: apiKey,
           visitor_token: vist_id,
           qtion_id: "66f6536277ea3",
-          qtion_num: "7",
+          qtion_num: "8",
           qtion_option: option.id,
           option_val: option.value,
           lac_token: botToken,
@@ -101,8 +101,8 @@ const VictimQualification = ({
         setQualification(option.label);
         onVictimQualificationSelected(option.label);
         setShowOkButton(true); // Show the OK button after a successful click
-        onNext(8);
-        onQuestion("9");
+        onNext(9);
+        onQuestion(10);
         localStorage.setItem('qualification', JSON.stringify(option.label));
         setError("");
       }else{
@@ -117,8 +117,8 @@ const VictimQualification = ({
   const handleOkClick = (e) => {
     onVictimQualificationSelected(qualification);
     if (qualification) {
-      onNext(8);
-      onQuestion("9");
+      onNext(9);
+      onQuestion(10);
     } else {
       setError("Please select an option before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
@@ -128,8 +128,8 @@ const VictimQualification = ({
   return (
     <div className="question">
       <div style={{ display: "flex", flexDirection:'column'}}>
-        <div style={{ display: "flex",flexDirection:'column', justifyContent:'center',alignItems:'center' }}>
-          <h2>What is your (victim) educational qualification?</h2>
+        <div style={{ display: "flex",flexDirection:'column' }}>
+          <h2>Educational Qualification </h2>
           <div className="option-list">
             {options.map((option) => (
               <button
@@ -164,7 +164,7 @@ const VictimQualification = ({
             ))}
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center" }} className="btns-ok">
+        <div style={{ display: "flex", alignItems: "center",zIndex:'1000'}} className="btns-ok">
             {showOkButton && (
               <>
                 <button
@@ -174,14 +174,14 @@ const VictimQualification = ({
                 >
                   OK
                 </button>
-                <p className="enter-text">
+                {/* <p className="enter-text">
                   press <strong>Enter ↵</strong>
-                </p>
+                </p> */}
               </>
             )}
           </div>
           {error && <div className="error-message">{error}</div>}
-          {answer[7] && (
+          {answer[8] && (
               <p className="alert-box alert" >
                 Please answer the current question before moving to the next.
               </p>

@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import { useLocation } from "react-router-dom";
 import appVersion from '../../version';
+import CloudComponent from "../CloudComponent";
+import Cloud from "../Cloud";
+import Header from "./Header";
+
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiKey = process.env.REACT_APP_AUTH_TOKEN;
 
@@ -10,33 +14,20 @@ const Login = (onOtpSent) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  //const vist_id = sessionStorage.getItem("visitor_id") ;
-  const vist_id= Cookies.get('visitor_id');
-
+  const vist_id = Cookies.get('visitor_id');
   const app_ver = appVersion.app_ver;
-  // console.log(app_ver)
 
   const location = useLocation();
   const { number } = location.state || {};
 
-
   useEffect(() => {
-     setPhoneNumber(number)
-  }, [number]);
-  
-
-
-  const handleChange = (e) => {
-    const inputValue = e.target.value;
-  
-    // If input is empty, allow new input (first digit must be 6-9)
-    if (inputValue === "" || /^[6-9]\d{0,9}$/.test(inputValue)) {
-      setPhoneNumber(inputValue);
+    if (number) {
+      setPhoneNumber(number);
     }
-  };
+  }, [number]);
 
   const handleSendOtp = async () => {
-    const phoneRegex = /^[0-9]{10}$/; // Adjust regex as needed for your format
+    const phoneRegex = /^[0-9]{10}$/; 
     if (!phoneNumber) {
       setError("Phone number is required.");
       return;
@@ -52,26 +43,16 @@ const Login = (onOtpSent) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ api_key: apiKey, mob: phoneNumber,visitor_token: vist_id,"app_ver":app_ver }),
+        body: JSON.stringify({ api_key: apiKey, mob: phoneNumber, visitor_token: vist_id, "app_ver": app_ver }),
       });
 
       const data = await response.json();
       if (data.resp.error_code === "0") {
-        setError("")
-        // Store visitor_id in session storage
         sessionStorage.setItem("otp_id", data.resp.otp_id);
-        // const expirationDate = new Date();
-        // expirationDate.setMinutes(expirationDate.getMinutes() + 15); 
-        // Cookies.set('visitor_id', data.resp.visitor_id, { path: '/', sameSite: 'Strict', expires: expirationDate });
-        // Cookies.set('otp_id', data.resp.otp_id, { path: '/', sameSite: 'Strict', expires: expirationDate });
-        //console.log("Visitor ID:", data.resp.visitor_id);
-        //console.log("otp_id", data.resp.otp_id);
-
-        // Navigate to OTP page
-        navigate("/otp",{ replace: true });
-      }else {
+        setError("");
+        navigate("/otp", { replace: true });
+      } else {
         setError(data.resp.message);
-        //alert("Failed to send OTP");
       }
     } catch (error) {
       console.error("Error during OTP sending:", error);
@@ -80,25 +61,7 @@ const Login = (onOtpSent) => {
 
   return (
     <div className="login-container">
-      <header>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "colum",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <img src="\images\LOGO-TS2.jpg" alt="csb-ts" className="cst-logo" />
-          <h1
-            className="header-title"
-            style={{ padding: 20, textAlign: "center" }}
-          >
-            1930-Cyber Bot
-          </h1>
-          <img src="\images\LOGO-INDIA.png" alt="csb-ts" className="csi-logo" />
-        </div>
-      </header>
+      <Header />
       <div className="container">
         <h1>Login</h1>
         <p>
@@ -109,7 +72,7 @@ const Login = (onOtpSent) => {
           className="phone_number_input"
           placeholder="Enter The Phone Number"
           value={phoneNumber}
-          onChange={handleChange}
+          readOnly
           autoComplete="off"
           name="number"
           maxLength="10"
@@ -118,6 +81,22 @@ const Login = (onOtpSent) => {
         <button className="phone_number_btn" onClick={handleSendOtp}>
           Send OTP
         </button>
+      </div>
+      <div style={{
+          position: 'fixed',
+          bottom: '0',
+          left: '0',
+           zIndex:'0'
+        }} >
+        <CloudComponent />
+      </div>
+      <div style={{
+          position: 'fixed',
+          bottom: '0',
+          right: '0',
+           zIndex:'0'
+        }} >
+        <Cloud />
       </div>
     </div>
   );

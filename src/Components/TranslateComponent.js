@@ -30,6 +30,7 @@ const TranslateComponent = () => {
             includedLanguages: 'en,te,hi', // English, Telugu, Hindi
             layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
             autoDisplay: false,
+            
           },
           'google_translate_element'
         );
@@ -53,10 +54,16 @@ const TranslateComponent = () => {
     return () => clearInterval(scriptCheckInterval);
   }, []);
 
+  const handleDivClick = (event) => {
+    event.preventDefault(); // Prevent default action
+    console.log("Translation div clicked");
+  };
+
   return (
     <div>
       {loading && <div>Loading translation options...</div>}
-      <div id="google_translate_element" />
+      <div id="google_translate_element" onClick={handleDivClick} />
+      
     </div>
   );
 };

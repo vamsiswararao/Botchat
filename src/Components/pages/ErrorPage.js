@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import Header from "./Header";
 
 const ErrorPage = () => {
   const location = useLocation();
@@ -11,29 +12,11 @@ const ErrorPage = () => {
 
   // Check if visitorData and visitorData.resp exist before accessing message
   const errorMessage =
-    visitorData?.resp?.message || "An error occurred. No details available.";
+    visitorData?.resp?.message || "Bot Not Authorized ";
 
   return (
     <div className="login-container">
-      <header>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "colum",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <img src="\images\LOGO-TS2.jpg" alt="csb-ts" className="cst-logo" />
-          <h1
-            className="header-title"
-            style={{ padding: 20, textAlign: "center" }}
-          >
-            1930-Cyber Bot
-          </h1>
-          <img src="\images\LOGO-INDIA.png" alt="csb-ts" className="csi-logo" />
-        </div>
-      </header>
+     <Header/>
       {/* <h1>Error Message</h1> */}
       <p>{errorMessage}</p>
     </div>

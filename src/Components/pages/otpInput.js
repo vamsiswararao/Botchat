@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie'; 
-import appVersion from '../../version';
+import Cookies from "js-cookie";
+import appVersion from "../../version";
+import CloudComponent from "../CloudComponent";
+import Cloud from "../Cloud";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiKey = process.env.REACT_APP_AUTH_TOKEN;
@@ -14,12 +16,11 @@ const OtpInput = () => {
   const navigate = useNavigate();
   const app_ver = appVersion.app_ver;
 
+
   const otp_id = sessionStorage.getItem("otp_id");
   // const vist_id = sessionStorage.getItem("visitor_id");
 
-  const vist_id= Cookies.get('visitor_id');
-
-  
+  const vist_id = Cookies.get("visitor_id");
 
   const handleChange = (e) => {
     const inputValue = e.target.value;
@@ -54,21 +55,25 @@ const OtpInput = () => {
           otp_code: otp,
           otp_id: otp_id,
           visitor_token: vist_id,
-          "app_ver":app_ver
+          app_ver: app_ver,
         }),
       });
 
       const data = await response.json();
-      //console.log(data);
+      console.log(data);
       if (data.resp.error_code === "0") {
         //setError("")
         // Store visitor_id in session storage
         //sessionStorage.setItem("visitor_id", data.resp.visitor_id);
         sessionStorage.setItem("otp_id", data.resp.otp_id);
         // const expirationDate = new Date();
-        // expirationDate.setMinutes(expirationDate.getMinutes() + 15); 
+        // expirationDate.setMinutes(expirationDate.getMinutes() + 15);
         // Cookies.set('visitor_id', data.resp.visitor_id, { path: '/', sameSite: 'Strict', expires: expirationDate });
-        Cookies.set('bot_token', data.resp.bot_token, { path: '/', sameSite: 'Strict', expires: 7 });
+        Cookies.set("bot_token", data.resp.bot_token, {
+          path: "/",
+          sameSite: "Strict",
+          expires: 7,
+        });
         //console.log("Visitor ID:", data.resp.visitor_id);
         //console.log("otp_id", data.resp.bot_token)
         navigate("/questions", { replace: true }); // Navigate on success
@@ -96,12 +101,12 @@ const OtpInput = () => {
           otp_id: otp_id,
           visitor_token: vist_id,
           type: type,
-          "app_ver":app_ver
+          app_ver: app_ver,
         }),
       });
 
       const data = await response.json();
-      //console.log(data);
+      console.log(data);
       //console.log(data.resp.error_code);
       if (data.resp.error_code === "0") {
         sessionStorage.setItem("otp_id", data.resp.otp_id);
@@ -125,18 +130,15 @@ const OtpInput = () => {
             alignItems: "center",
           }}
         >
-          <img src="\images\LOGO-TS2.jpg" alt="csb-ts" className="cst-logo" />
-          <h1
-            className="header-title"
-            style={{ padding: 20, textAlign: "center" }}
-          >
+          <img src="\images\LOGO-TS3.jpg" alt="csb-ts" className="cst-logo" />
+          <h1 className="header-title" style={{ textAlign: "center" }}>
             1930-Cyber Bot
           </h1>
           <img src="\images\LOGO-INDIA.png" alt="csb-ts" className="csi-logo" />
         </div>
       </header>
       <div className="container">
-        <h1>Enter OTP</h1>
+        <h1>Verify OTP</h1>
         <p>
           We have sent an OTP to your phone number. Please enter it below to
           verify.
@@ -150,8 +152,12 @@ const OtpInput = () => {
           maxLength="6"
           name="otp"
         />
-        
-        {errorMessage ? <p className="error-message">{errorMessage}</p>:<p></p>}
+
+        {errorMessage ? (
+          <p className="error-message">{errorMessage}</p>
+        ) : (
+          <p></p>
+        )}
         {/* Display error message */}
         <button
           onClick={handleVerifyOtp}
@@ -166,15 +172,21 @@ const OtpInput = () => {
         </button>
 
         {countdown <= 0 ? (
-          <div style={{ display: "flex", justifyContent:'center',alignItems:'center' }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <button
               onClick={() => handleResendOtp("SMS")}
               className="resend-btn"
               disabled={resendDisabled} // Disable button if countdown is active
             >
-              Resend OTP 
+              Resend OTP
             </button>
-            <p style={{color:'blue',marginTop:'30px'}}> | </p>
+            <p style={{ color: "blue", marginTop: "30px" }}> | </p>
             <button
               onClick={() => handleResendOtp("Call")}
               className="resend-btn"
@@ -184,8 +196,29 @@ const OtpInput = () => {
             </button>
           </div>
         ) : (
-          <p style={{ color:'rgb(0, 106, 255)' }} >00:{String(countdown).padStart(2, '0')}s</p>
+          <p style={{ color: "rgb(0, 106, 255)" }}>
+            00:{String(countdown).padStart(2, "0")}s
+          </p>
         )}
+      </div>
+      <div
+        style={{
+          position: "fixed",
+          bottom: "0",
+          left: "0",
+        }}
+      >
+        <CloudComponent />
+      </div>
+
+      <div
+        style={{
+          position: "fixed",
+          bottom: "0",
+          right: "0",
+        }}
+      >
+        <Cloud />
       </div>
     </div>
   );

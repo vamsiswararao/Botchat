@@ -6,11 +6,10 @@ const apiUrl = process.env.REACT_APP_API_URL;
 const customStyles = {
   container: (provided) => ({
     ...provided,
-    width: "340px",
+    width: "480px",
     height: "24px",
-    backgroundColor:"red",
     "@media (max-width: 768px)": {
-      width: "100%",
+      width: "300px",
     },
   }),
   menu: (provided) => ({
@@ -27,7 +26,7 @@ const customStyles = {
   control: (provided) => ({
     ...provided,
     minHeight: "30px",
-    height: "30px",
+    height: "36px",
   }),
   indicatorSeparator: (provided) => ({
     ...provided,
@@ -103,8 +102,6 @@ const indianStates = [
 
 const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answer,botToken,vist_id,app_ver }) => {
   const [address, setAddress] = useState({
-    address1: "",
-    city: "",
     state: { value: "23", label: "Telangana" },
     district: null,
     zip: "",
@@ -117,19 +114,29 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
   //const vist_id = sessionStorage.getItem("visitor_id");
 
   useEffect(() => {
-    const storedDistrict = localStorage.getItem('district');
-    if (storedDistrict) {
-      setAddress((prev) => ({ ...prev, district: JSON.parse(storedDistrict) }));
-    }
-  }, []);
+    const storedDistrict = localStorage.getItem('policeStations');
 
-  useEffect(() => {
-    const storedPoliceStation = localStorage.getItem('policeStation');
-    if (storedPoliceStation) {
-      setAddress((prev) => ({ ...prev, policeStation: JSON.parse(storedPoliceStation) }));
+    
+    if (storedDistrict) {
+      const data = JSON.parse(storedDistrict);
+      onVictimAddressSelected(data);
+      setAddress((prev) => ({
+        ...prev,
+        district: data.district || '',
+        policeStation: data.policeStation || ''
+      }));
     }
-    onVictimAddressSelected(setAddress);
   }, []);
+  
+  
+
+  // useEffect(() => {
+  //   const storedPoliceStation = localStorage.getItem('policeStation');
+  //   if (storedPoliceStation) {
+  //     setAddress((prev) => ({ ...prev, policeStation: JSON.parse(storedPoliceStation) }));
+  //   }
+  //   onVictimAddressSelected(setAddress);
+  // }, []);
 
 
   useEffect(() => {
@@ -223,8 +230,8 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
       policeStation: ""
     }));
     fetchPsData(selectedOption.value);
-    localStorage.setItem('district', JSON.stringify(selectedOption));
-    localStorage.setItem('policeStation', JSON.stringify(null));
+    // localStorage.setItem('district', JSON.stringify(selectedOption));
+    // localStorage.setItem('policeStation', JSON.stringify(null));
     setError("");
     
   };
@@ -234,7 +241,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
       ...prevState,
       policeStation: selectedOption,
     }));
-    localStorage.setItem('policeStation', JSON.stringify(selectedOption));
+    // localStorage.setItem('policeStation', JSON.stringify(selectedOption));
     setError("");
   };
 
@@ -254,7 +261,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
       api_key:apiKey,
       visitor_token:vist_id,
       qtion_id:"67064ae25a10a798740151",
-      qtion_num:"8",
+      qtion_num:"9",
       district: address.district ? address.district.value : null,
       ps: address.policeStation ? address.policeStation.value : null,
       lac_token: botToken,
@@ -264,7 +271,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
 
 
     try {
-      const response = await fetch(`${apiUrl}/v1/ccrim_add_ps`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_ps`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -278,9 +285,11 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
 
       const data = await response.json();
       if(data.resp.error_code ==="0"){
-        onVictimAddressSelected(dataToSubmit);
-        onNext(9);
-        onQuestion(10);
+        localStorage.setItem('policeStations', JSON.stringify(address));
+        onVictimAddressSelected(address);
+        onNext(10);
+        onQuestion(11);
+        setError("");
       }else{
         setError("Failed to push data to API");
       }
@@ -298,7 +307,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
       <div style={{ display: "flex",justifyContent:'center' }}>
         <div style={{ display: "flex",justifyContent:'center' }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <h2>Select the police station?</h2>
+            <h2>Jurisdictional Police Station</h2>
             <div>
             <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="state">
               State
@@ -330,7 +339,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
               style={{ margin: "5px", marginTop: "20px" }}
               htmlFor="policeStation"
             >
-              Nearest police station?<span style={{color:'red'}}>*</span>
+              Police Station?<span style={{color:'red'}}>*</span>
             </h6>
             <div className="select-container">
               <Select
@@ -340,10 +349,8 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
                 options={psOptions}
                 placeholder="Type to search..."
                 aria-label="Police Station"
-                className="dropdown-input"
-                menuPlacement="top" 
+                className="dropdown-input" 
                 styles={customStyles}
-                components={{ DropdownIndicator: CustomDropdownIndicator }}
               />
             </div>
             </div>
@@ -353,19 +360,20 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
                 display: "flex",
                 alignItems: "center",
                 marginTop: "10px",
+                zIndex:"1000"
               }}
             >
               <button type="button" className="ok-btn" onClick={handleOkClick}>
                 OK
               </button>
-              <p className="enter-text">
+              {/* <p className="enter-text">
                 press <strong>Enter ↵</strong>
-              </p>
+              </p> */}
             </div>
             {error && (
               <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
             )}
-                        {answer[2] && (
+                        {answer[9] && (
               <p className="alert-box">
                 Please answer the current question before moving to the next.
               </p>

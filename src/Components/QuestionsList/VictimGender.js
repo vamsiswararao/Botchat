@@ -53,8 +53,8 @@ const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer,apiKey,b
         handleOkClick()
         onVictimGenderSelected(option.label);
         setShowOkButton(true); // Show the OK button after a successful click
-        onNext(6);
-        onQuestion("7")
+        onNext(7);
+        onQuestion(8)
         localStorage.setItem('gender', JSON.stringify(option.label));
         setError("");
       }else{
@@ -122,7 +122,7 @@ const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer,apiKey,b
             ))}
           </div>
 
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center",zIndex:'1000' }}>
               {showOkButton && (
                 <>
                   <button
@@ -132,9 +132,9 @@ const VictimGender = ({ onNext,onVictimGenderSelected,onQuestion,answer,apiKey,b
                   >
                     OK
                   </button>
-                  <p className="enter-text">
+                  {/* <p className="enter-text">
                     press <strong>Enter ↵</strong>
-                  </p>
+                  </p> */}
                 </>
               )}
               {error && <div className="error-message">{error}</div>}

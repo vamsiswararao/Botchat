@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from "react";
+import CloudComponent from "../CloudComponent";
+import Cloud from "../Cloud";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_id,app_ver }) => {
+const Time = ({
+  onNext,
+  onTimeSelected,
+  onQuestion,
+  answer,
+  apiKey,
+  botToken,
+  vist_id,
+  app_ver,
+}) => {
   const [timeId, setTimeId] = useState(null);
   const [time, setTime] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
@@ -9,7 +20,7 @@ const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_
   //const vist_id = sessionStorage.getItem("visitor_id");
 
   useEffect(() => {
-    const storedData = localStorage.getItem('time');
+    const storedData = localStorage.getItem("time");
     if (storedData) {
       setTimeId(JSON.parse(storedData));
       setTime(JSON.parse(storedData));
@@ -17,7 +28,6 @@ const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_
     }
   }, []);
 
-  
   const handleOptionClick = async (option, e) => {
     e.preventDefault();
     try {
@@ -34,24 +44,24 @@ const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_
           qtion_option: option.id,
           option_val: option.value,
           lac_token: botToken,
-          "app_ver":app_ver
+          app_ver: app_ver,
         }),
       });
       const data = await response.json();
       // console.log(data)
-      if(data.resp.error_code ==="0"){
+      if (data.resp.error_code === "0") {
         setTimeId(option.id);
         setTime(option.id);
         onTimeSelected(option.id);
-        localStorage.setItem('time', JSON.stringify(option.id));
+        localStorage.setItem("time", JSON.stringify(option.id));
         onNext(2);
         onQuestion(3);
         setShowOkButton(true); // Hide the OK button after successful click
         setError("");
-      }else{
+      } else {
         setError("Failed to push data to API");
       }
-     
+
       if (!response.ok) {
         throw new Error("Failed to push data to API");
       }
@@ -73,14 +83,14 @@ const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_
   };
 
   const options = [
-    { id: "A", value: "66ed1e0468ff6", label: "In less than 24 hours" },
-    { id: "B", value: "66ed1e2bc8090", label: "Between 24 hours to 48 hours" },
-    { id: "C", value: "66ed1e4820de2", label: "Between 48 hours to 72 hours" },
+    { id: "A", value: "66ed1e0468ff6", label: " Within 24 hours" },
+    { id: "B", value: "66ed1e2bc8090", label: "Between 24 - 48 hours" },
+    { id: "C", value: "66ed1e4820de2", label: "Between 48 - 72 hours" },
     { id: "D", value: "66ed1e62ab153", label: "Above 72 hours" },
   ];
 
   return (
-    <div  className="question">
+    <div className="question" >
       <div>
         <div>
           <h2>When did you lose the amount? </h2>
@@ -97,8 +107,7 @@ const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_
                   <div
                     className="option"
                     style={{
-                      backgroundColor:
-                        timeId === option.id ? "#000" : "#fff",
+                      backgroundColor: timeId === option.id ? "#000" : "#fff",
                       color: timeId === option.id ? "#fff" : "#000",
                     }}
                   >
@@ -123,9 +132,9 @@ const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_
                   >
                     OK
                   </button>
-                  <p className="enter-text">
+                  {/* <p className="enter-text">
                     press <strong>Enter ↵</strong>
-                  </p>
+                  </p> */}
                 </>
               )}
               {error && <div className="error-message">{error}</div>}
@@ -137,6 +146,27 @@ const Time = ({ onNext, onTimeSelected, onQuestion, answer,apiKey,botToken,vist_
             </div>
           </div>
         </div>
+      </div>
+      <div
+        style={{
+          position: "fixed",
+          bottom: "0",
+          left: "0",
+           zIndex:'0'
+        }}
+      >
+        <CloudComponent />
+      </div>
+
+      <div
+        style={{
+          position: "fixed",
+          bottom: "0",
+          right: "0",
+          zIndex:'0'
+        }}
+      >
+        <Cloud />
       </div>
     </div>
   );

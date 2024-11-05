@@ -46,7 +46,7 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id,app
     e.preventDefault();
     onHowLossSelected(howLoss);
     try {
-      const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_text`, {
+      const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_submit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,6 +92,16 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id,app
           "phoneNumber",
           "formSuspectData",
           "formVictimData",
+          "address",
+          "policeStations",
+          "support",
+          "victim",
+          "SuspectBank",
+          "victimBank",
+          "BankFile",
+          "bankForms",
+          "radio",
+          "victimGender"
         ];
 
         // Loop through the keys and remove them from localStorage
@@ -124,11 +134,11 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id,app
   };
 
   return (
-    <div className="question">
-      <div style={{ display: "flex" }}>
+    <div className="question"  >
+      <div style={{ display: "flex" ,marginLeft:'20px'}}>
         <div>
-          <h2 htmlFor="lose-money">Can you explain how you lost the money?</h2>
-          <p>Write in detail about how you lost the money.</p>
+          <h2 htmlFor="lose-money">How did you lose the money? Explain.</h2>
+          <p style={{width:'320px'}}>Write in detail about how you lost the money.</p>
           <textarea
             value={howLoss}
             onChange={handleChange}
@@ -141,19 +151,19 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id,app
             maxLength="500"
           />
           <p style={{ color: "red" }}>Maximum of 500 Characters</p>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center",zIndex:'1000' }}>
             {showOkButton && (
               <>
                 <button
                   type="button"
-                  className="ok-btn"
+                  className="ok-btn-text"
                   onClick={handleOkClick}
                 >
                   OK
                 </button>
-                <p className="enter-text">
+                {/* <p className="enter-text">
                   press <strong>Enter ↵</strong>
-                </p>
+                </p> */}
               </>
             )}
             {error && <div className="error-message">{error}</div>}

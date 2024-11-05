@@ -11,27 +11,35 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
   const [error, setError] = useState("");
 
   // const vist_id = sessionStorage.getItem("visitor_id");
+  // useEffect(() => {
+  //   const storedDistrict = localStorage.getItem('address1');
+  //   if (storedDistrict) {
+  //     setAddress((prev) => ({ ...prev, address1: JSON.parse(storedDistrict) }));
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   const storedPoliceStation = localStorage.getItem('city');
+  //   if (storedPoliceStation) {
+  //     setAddress((prev) => ({ ...prev, city: JSON.parse(storedPoliceStation) }));
+  //   }
+  // }, []);
+  // useEffect(() => {
+  //   const storedPoliceStation = localStorage.getItem('zip');
+  //   if (storedPoliceStation) {
+  //     setAddress((prev) => ({ ...prev, zip: JSON.parse(storedPoliceStation) }));
+  //   }
+  //   onVictimAddressSelected(setAddress);
+  // }, []);
+
+
   useEffect(() => {
-    const storedDistrict = localStorage.getItem('address1');
+    const storedDistrict = localStorage.getItem('address');
     if (storedDistrict) {
-      setAddress((prev) => ({ ...prev, address1: JSON.parse(storedDistrict) }));
+      setAddress(JSON.parse(storedDistrict));
+      onVictimAddressSelected(JSON.parse(storedDistrict))
     }
   }, []);
-
-  useEffect(() => {
-    const storedPoliceStation = localStorage.getItem('city');
-    if (storedPoliceStation) {
-      setAddress((prev) => ({ ...prev, city: JSON.parse(storedPoliceStation) }));
-    }
-  }, []);
-  useEffect(() => {
-    const storedPoliceStation = localStorage.getItem('zip');
-    if (storedPoliceStation) {
-      setAddress((prev) => ({ ...prev, zip: JSON.parse(storedPoliceStation) }));
-    }
-    onVictimAddressSelected(setAddress);
-  }, []);
-
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -45,9 +53,10 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
           [id]: value,
         }));
         setError(""); // Reset error if input is valid
-      } else {
-        setError("Input can only contain letters, numbers, spaces, hyphens, underscores, and slashes, and must be less than 100 characters.");
-      }
+      } 
+      // else {
+      //   setError("Input can only contain letters, numbers, spaces, hyphens, underscores, and slashes, and must be less than 100 characters.");
+      // }
     } else if (id === 'zip') {
       // Allow only numbers for zip
       if (/^\d*$/.test(value)) {
@@ -56,9 +65,10 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
           [id]: value,
         }));
         setError(""); // Reset error if input is valid
-      } else {
-        setError("Zip code can only contain numbers.");
-      }
+      } 
+      // else {
+      //   setError("Please Enter the valid pin code.");
+      // }
     } else {
       // Handle other fields if necessary
       setAddress((prevState) => ({
@@ -78,7 +88,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
       api_key:apiKey,
       visitor_token:vist_id,
       qtion_id:"66f65376898d6",
-      qtion_num:"9",
+      qtion_num:"10",
       address: address.address1,
       village: address.city,
       post_cod: address.zip,
@@ -86,16 +96,34 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
       "app_ver":app_ver
     };
 
-    if( address.address1 || address.city || address.zip){
+    if (!address.city) {
+      setError("Please enter the city.");
+      return;
+    } 
+    if (!address.zip ) {
+      setError("Please enter the pin code.");
+      return;
+    }
 
-      // if (!address.address1) {
-      //   setError("Please Enter the address.");
-      //   return;
-      // }
-      // if (!address.city) {
-      //   setError("Please Enter the city.");
-      //   return;
-      // }
+    if(address.city || address.zip){
+
+
+      if (!address.city) {
+        setError("Please enter the city.");
+        return;
+      }
+      if ((address.city.length)<2) {
+        setError("Please enter The valid city.");
+        return;
+      }
+      if (!address.zip ) {
+        setError("Please enter the pin code.");
+        return;
+      }
+      if ((address.zip.length)!==6 ) {
+        setError("Please enter the valid pin code.");
+        return;
+      }
     try {
       const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_addrs`, {
         method: 'POST',
@@ -110,11 +138,12 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
       }
 
       const data = await response.json();
-
+     console.log(data)
       if(data.resp.error_code ==="0"){
-        onVictimAddressSelected(dataToSubmit);
-        onNext(10);
-        onQuestion(11);
+        onVictimAddressSelected(address);
+        onNext(11);
+        onQuestion(12);
+        setError("")
       }else{
         setError("Failed to push data to API");
       }
@@ -122,17 +151,15 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
 
 
       // Perform any additional actions after successful save
-      onVictimAddressSelected(dataToSubmit);
-      onNext(10);
-      onQuestion(11);
+      localStorage.setItem('address', JSON.stringify(address));
+      onVictimAddressSelected(address);
+
 
     } catch (error) {
       console.error('Error saving data:', error);
       setError('Failed to save address data');
     }
   }
-  onNext(10);
-  onQuestion(11);
   };
 
 
@@ -141,42 +168,42 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
       <div style={{ display: "flex" ,justifyContent:'center'}}>
         <div style={{ display: "flex",justifyContent:'center' }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <h2>Fill your (victim) current full address?</h2>
+            <h2>Present Address</h2>
             <div >
-            <h6 style={{ margin: "5px", marginTop: "20px"}} htmlFor="address1">
+            <p style={{ margin: "5px", marginTop: "5px"}} htmlFor="address1">
               Address  
-            </h6>
+            </p>
             <input
               className="text-input"
               value={address.address1}
               onChange={handleChange}
-              placeholder="Type your answer here..."
+              placeholder="Type your address..."
               id="address1"
               autoComplete="off" 
               name="address1"
             />
 
-            <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="city">
-              Village/City/Town 
-            </h6> 
+            <p style={{ margin: "5px", marginTop: "5px" }} htmlFor="city">
+              Village/City/Town <span style={{ color: "red" }}>*</span>
+            </p> 
             <input
               className="text-input"
               value={address.city}
               onChange={handleChange}
-              placeholder="Type your answer here..."
+              placeholder="Type your village/city/town..."
               id="city"
               autoComplete="off"
               name="city"
             />
 
-            <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="zip">
-              Zip/Post code
-            </h6>
+            <p style={{ margin: "5px", marginTop: "5px" }} htmlFor="zip">
+              Pin Code <span style={{ color: "red" }}>*</span>
+            </p>
             <input
               className="text-input"
               value={address.zip}
               onChange={handleChange}
-              placeholder="Type your answer here..."
+              placeholder="Type your pin code..."
               id="zip"
               autoComplete="off"
               name="zip"
@@ -189,14 +216,15 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
                 display: "flex",
                 alignItems: "center",
                 marginTop: "10px",
+                zIndex:'1000'
               }}
             >
               <button type="button" className="ok-btn" onClick={handleOkClick}>
                 OK
               </button>
-              <p className="enter-text">
+              {/* <p className="enter-text">
                 press <strong>Enter ↵</strong>
-              </p>
+              </p> */}
             </div>
             {error && (
               <p className="bank-error">{error}</p>

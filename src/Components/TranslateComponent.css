@@ -30,3 +30,21 @@
     }
   }
   
+
+  /* #google_translate_element .goog-logo-link,
+#google_translate_element .goog-te-gadget-simple > div {
+  display: none !important;
+} */
+
+
+/* #google_translate_element .goog-logo-link,
+#google_translate_element .goog-te-gadget span {
+  display: none !important;
+} */
+
+/* Align the dropdown properly after hiding the branding */
+/* #google_translate_element .goog-te-gadget {
+  display: inline-block;
+  font-size: 50px;
+} */
+

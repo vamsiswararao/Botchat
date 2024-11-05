@@ -19,8 +19,8 @@ function App() {
         <Routes>
           <Route path="/:id" element={ <First />} />
           {/* <Route path="/" element={<Navigate to="/login" />} /> */}
-          <Route path="/login"  element={<ProtectedRoute><Login /></ProtectedRoute>} />
-          <Route path="/otp" element={<ProtectedRoute> <OtpInput /> </ProtectedRoute>} />
+          <Route path="/login"  element={<Login />} />
+          <Route path="/otp" element={ <OtpInput /> } />
 
           {/* Protected Routes */}
           <Route

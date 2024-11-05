@@ -9,8 +9,7 @@ const customStyles = {
     width: "450px",
     height: "24px",
     "@media (max-width: 768px)": {
-      // Mobile view adjustments
-      width: "90%",
+      width: "300px",
     },
   }),
   menu: (provided) => ({
@@ -86,10 +85,6 @@ const SuspectBank = ({
     transferType: "",
     bank: "",
     acc_no: "",
-    Wallet: "",
-    trans_id: "",
-    date: "",
-    amt: "",
   });
 
   const [bankOption, setBankOptions] = useState([]);
@@ -97,25 +92,28 @@ const SuspectBank = ({
   const [walletOption, setWalletOptions] = useState([]);
   const [pageCount, setPageCount] = useState(1);
   const [error, setError] = useState("");
-  //const vist_id = sessionStorage.getItem("visitor_id");
 
-  const parseDate = (formattedDateTime) => {
-    const [date, time] = formattedDateTime.split("T");
-    const [year, month, day] = date.split("-");
-    return `${day}-${month}-${year} ${time}`;
-  };
-  const handleDateChange = (event) => {
-    const { name, value } = event.target;
-    setSuspectFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+
+  // useEffect(() => {
+  //   const storedDistrict = localStorage.getItem('formSuspectData');
+  //   if (storedDistrict) {
+  //     setSuspectFormData(JSON.parse(storedDistrict));
+  //   }
+  // }, []);
+
 
   useEffect(() => {
-    const storedDistrict = localStorage.getItem('formSuspectData');
+    const storedDistrict = localStorage.getItem('SuspectBank');
+    
     if (storedDistrict) {
-      setSuspectFormData((prev) => ({ ...prev, ...JSON.parse(storedDistrict) }));
+      const data = JSON.parse(storedDistrict);
+      console.log(data.transferType);
+      setSuspectFormData((prev) => ({
+        ...prev,
+        bank: data.bank || '',
+        acc_no: data.acc_no || '',
+        transferType: data.transferType ||"",
+      }));
     }
   }, []);
 
@@ -237,7 +235,7 @@ const SuspectBank = ({
       ...prev,
       [id]: selectedOption ? selectedOption.value : "",
     };
-    localStorage.setItem("formSuspectData", JSON.stringify(updatedFormData)); // Save to localStorage
+    // localStorage.setItem("formSuspectData", JSON.stringify(updatedFormData)); // Save to localStorage
     return updatedFormData;
   });
   };
@@ -257,19 +255,19 @@ const SuspectBank = ({
           [id]: value,
         };
         setSuspectFormData(updatedFormData);
-        localStorage.setItem("formSuspectData", JSON.stringify(updatedFormData));
-        if (value.length < 10) {
+        // localStorage.setItem("formSuspectData", JSON.stringify(updatedFormData));
+        // if (value.length < 10) {
 
-          setError("Account number must be at least 10 characters long.");
-        } else {
-          setError(""); // Reset error if input is valid
-        }
+        //   setError("Account number must be at least 10 characters long.");
+        // } else {
+        //   setError(""); // Reset error if input is valid
+        // }
       } else {
         if (value.length > 50) {
-          setError("Account number must be less than 50 characters.");
+          setError("Please enter a valid account number");
         } else {
           setError(
-            "Account number can only contain letters, numbers, and spaces."
+            "Please enter a valid account number"
           );
         }
       }
@@ -281,12 +279,12 @@ const SuspectBank = ({
           [id]: value,
         };
         setSuspectFormData(updatedFormData);
-        localStorage.setItem("formSuspectData", JSON.stringify(updatedFormData));
-        if (value.length < 10) {
-          setError("Transaction number must be at least 10 characters long.");
-        } else {
-          setError(""); // Reset error if input is valid
-        }
+        // localStorage.setItem("formSuspectData", JSON.stringify(updatedFormData));
+        // if (value.length < 5) {
+        //   setError("Transaction number must be at least 5 characters long.");
+        // } else {
+        //   setError(""); // Reset error if input is valid
+        // }
       } else {
         if (value.length > 50) {
           setError("Transaction number must be less than 50 characters.");
@@ -304,7 +302,7 @@ const SuspectBank = ({
           [id]: value,
         };
         setSuspectFormData(updatedFormData);
-        localStorage.setItem("formSuspectData", JSON.stringify(updatedFormData));
+        // localStorage.setItem("formSuspectData", JSON.stringify(updatedFormData));
         setError(""); // Reset error if input is valid
       } else {
         setError("Amount can only contain numbers and a decimal point.");
@@ -316,50 +314,18 @@ const SuspectBank = ({
         [id]: value,
       };
       setSuspectFormData(updatedFormData);
-      localStorage.setItem("formSuspectData", JSON.stringify(updatedFormData));
+      // localStorage.setItem("formSuspectData", JSON.stringify(updatedFormData));
       setError(""); // Reset error for other fields
     }
   };
 
+
   const handleOkClick = async (e) => {
-    e.preventDefault();
-    // if (!SuspectFormData.transferType) {
-    //   setError("Please fill in the transferType.");
-    //   return;
-    // }
-    // if (!SuspectFormData.acc_no) {
-    //   setError("Please Enter the AccountNo Bank(Wallet/PG/PA)/Merchant.");
-    //   return;
-    // }
-    // if (!SuspectFormData.amt) {
-    //   setError("Please fill in the Amount.");
-    //   return;
-    // }
-    // if (!SuspectFormData.date) {
-    //   setError("Please select in the date.");
-    //   return;
-    // }
-
-    console.log({
-      api_key: apiKey,
-      visitor_token: vist_id,
-      qtion_id: "66f6545af3d6e",
-      qtion_num: "15",
-      mtfr_uni: SuspectFormData.transferType,
-      bwpa_uni: SuspectFormData.bank,
-      acc_no: SuspectFormData.acc_no,
-      trans_id: SuspectFormData.trans_id,
-      amt: SuspectFormData.amt,
-      trans_dtm: parseDate(SuspectFormData.date),
-      lac_token: botToken,
-      "app_ver":app_ver
-    })
-
-
-
-
-    if( SuspectFormData.transferType && SuspectFormData.acc_no && SuspectFormData.amt && SuspectFormData.date ){
-
+    if( SuspectFormData.transferType && SuspectFormData.acc_no && SuspectFormData.bank  ){
+      if ((SuspectFormData.acc_no.length)<=5 ) {
+        setError("Please Enter the valid account number.");
+        return;
+      }
       try {
         // Send the data to the dummy API
         const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_susp_trans`, {
@@ -371,13 +337,10 @@ const SuspectBank = ({
             api_key: apiKey,
             visitor_token: vist_id,
             qtion_id: "66f6545af3d6e",
-            qtion_num: "15",
+            qtion_num: "16",
             mtfr_uni: SuspectFormData.transferType,
             bwpa_uni: SuspectFormData.bank,
             acc_no: SuspectFormData.acc_no,
-            trans_id: SuspectFormData.trans_id,
-            amt: SuspectFormData.amt,
-            trans_dtm: "10-10-2024 16:21:00",
             lac_token: botToken,
             "app_ver":app_ver 
           }),
@@ -388,92 +351,105 @@ const SuspectBank = ({
         }
   
         const responseData = await response.json();
+        console.log(responseData);
+        if(responseData.resp.error_code !=="0"){
+         setError("Failed to push data to API")
+        
+        }
         console.log("Form data submitted successfully:", responseData);
-  
-        // If successful, add the data to the victimBankData list and show options
-        onNext(16); // Move to the next step
-        onQuestion(17);
+        localStorage.setItem('SuspectBank', JSON.stringify(SuspectFormData));
       } catch (error) {
         console.error("Error submitting form data:", error);
         setError("Failed to submit form data. Please try again.");
       }
       
     }
-    onNext(16); // Move to the next step
-    onQuestion(17);
+    onNext(17); // Move to the next step
+    onQuestion(18);
 
     setError("");
     setSuspectBankData((prevData) => [...prevData, SuspectFormData]);
   };
 
-  const handleAddPageClick = async(e) => {
-    e.preventDefault();
-    handleOkClick()
-    addSuspectBank(pageCount);
-    setPageCount((prevCount) => prevCount + 1); // Add another form
-    setSuspectFormData({
-      transferType: "",
-      bank: "",
-      acc_no: "",
-      merchant: "",
-      Wallet: "",
-      trans_id: "",
-      date: "",
-      amt: "",
-    });
+  // const handleAddPageClick = async(e) => {
+  //   e.preventDefault();
+  //   addSuspectBank(pageCount);
+  //   setPageCount((prevCount) => prevCount + 1); // Add another form
+  //   // setSuspectFormData({
+  //   //   transferType: "",
+  //   //   bank: "",
+  //   //   acc_no: "",
+  //   // });
 
-    if( SuspectFormData.transferType && SuspectFormData.acc_no && SuspectFormData.amt && SuspectFormData.date ){
+  //   if( SuspectFormData.transferType && SuspectFormData.acc_no ){
    
-      try {
-        // Send the data to the dummy API
-        const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_susp_trans`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            api_key: apiKey,
-            visitor_token: vist_id,
-            qtion_id: "66f6545af3d6e",
-            qtion_num: "15",
-            mtfr_uni: SuspectFormData.transferType,
-            bwpa_uni: SuspectFormData.bank,
-            acc_no: SuspectFormData.acc_no,
-            trans_id: SuspectFormData.transaction_no,
-            amt: SuspectFormData.amt,
-            trans_dtm: parseDate(SuspectFormData.date),
-            lac_token: botToken,
-            "app_ver":app_ver
-          }),
-        });
+  //     try {
+  //       // Send the data to the dummy API
+  //       const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_susp_trans`, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           api_key: apiKey,
+  //           visitor_token: vist_id,
+  //           qtion_id: "66f6545af3d6e",
+  //           qtion_num: "15",
+  //           mtfr_uni: SuspectFormData.transferType,
+  //           bwpa_uni: SuspectFormData.bank,
+  //           acc_no: SuspectFormData.acc_no,
+  //           lac_token: botToken,
+  //           "app_ver":app_ver
+  //         }),
+  //       });
   
-        if (!response.ok) {
-          throw new Error("Failed to submit form data.");
-        }
+  //       if (!response.ok) {
+  //         throw new Error("Failed to submit form data.");
+  //       }
   
-        const responseData = await response.json();
-        console.log("Form data submitted successfully:", responseData);
+  //       const responseData = await response.json();
+  //       console.log("Form data submitted successfully:", responseData);
   
-        // If successful, add the data to the victimBankData list and show options
-        onNext(16); // Move to the next step
-        onQuestion(17);
-      } catch (error) {
-        console.error("Error submitting form data:", error);
-        setError("Failed to submit form data. Please try again.");
-      }
-      
-    }
+  //       // If successful, add the data to the victimBankData list and show options
+  //       onNext(16); // Move to the next step
+         
 
-    const isMobile = window.innerWidth <= 768; // Adjust the width breakpoint as per your design
-    const scrollAmount = isMobile
-      ? window.innerHeight
-      : window.innerHeight * 1.3; // Adjust scrolling based on view
-    // Perform smooth scroll
-    window.scrollBy({ top: scrollAmount, behavior: "smooth" });
-  };
+  //       if (responseData.resp.error_code === "0") {
+  //         setSuspectBankData({
+  //           transferType: "",
+  //           bank: "",
+  //           acc_no: "",
+  //         })
+  
+  //         console.log(suspectBankData)
+  
+  //           localStorage.removeItem("formSuspectData");
+  //       }
+         
+  //     } catch (error) {
+  //       console.error("Error submitting form data:", error);
+  //       setError("Failed to submit form data. Please try again.");
+  //     }
+      
+  //   }
+
+  //   setSuspectBankData({
+  //     transferType: "",
+  //     bank: "",
+  //     acc_no: "",
+  //   })
+  //     localStorage.removeItem("formSuspectData");
+  //     console.log(window.innerHeight)
+  //   const isMobile = window.innerWidth <= 768; // Adjust the width breakpoint as per your design
+  //   const scrollAmount = isMobile
+  //     ? window.innerHeight *1.36
+  //     : window.innerHeight * 1.2; // Adjust scrolling based on view
+  //   // Perform smooth scroll
+  //   window.scrollBy({ top: scrollAmount, behavior: "smooth" });
+  // };
 
   return (
-    <div className="question">
+    <div className="question" style={{marginBottom:'150px'}}>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div
           style={{
@@ -491,16 +467,15 @@ const SuspectBank = ({
             }}
           >
             <h2 className="suspect-bank">
-              Please provide creditor/ fraudster’s bank account details(if you
-              have)
+            Fraudster's bank account details.
             </h2>
           </div>
-          <div className="bank-list">
+          <div >
             <p className="bank-para">
-              Money Transfer:<span style={{ color: "red" }}>*</span>
+              Money Transfer:
             </p>
             <Select
-              value={banks.find((bank) => bank.value === SuspectFormData.BankName)}
+              value={banks.find((bank) => bank.value === SuspectFormData.transferType )}
               onChange={(selectedOption) =>
                 handleSelectTypeChange("transferType", selectedOption)
               }
@@ -511,8 +486,7 @@ const SuspectBank = ({
             />
 
             <p className="bank-para" style={{ marginTop: "20px" }}>
-              Bank(Wallet/PG/PA)/Merchant:
-              <span style={{ color: "red" }}>*</span>
+            Select the Bank:
             </p>
             <Select
               value={
@@ -559,8 +533,7 @@ const SuspectBank = ({
             />
 
             <p className="bank-para" style={{ marginTop: "20px" }}>
-              Account No./(Wallet/PG/PA)id/Merchant id:
-              <span style={{ color: "red" }}>*</span>
+            Account No/ Credit/Debit Card No:
             </p>
             <input
               type="text"
@@ -569,72 +542,26 @@ const SuspectBank = ({
               value={SuspectFormData.acc_no}
               onChange={(e) => handleTextChange("acc_no", e.target.value)}
               autoComplete="off"
+              placeholder="Enter Account No/ Credit/Debit Card No"
             />
-            <p className="bank-para">Transaction id/UTR Number:</p>
-            <input
-              type="text"
-              className="text-input account"
-              onChange={(e) => handleTextChange("trans_id", e.target.value)}
-              value={SuspectFormData.trans_id}
-            />
-            <p>
-              Amount:<span style={{ color: "red" }}>*</span>
-            </p>
-            <span className="rupee-symbol">₹</span>
-            <input
-              type="text"
-              value={SuspectFormData.amt}
-              onChange={(e) => handleTextChange("amt", e.target.value)}
-              placeholder="Amount"
-              className="text-input amount"
-              min="0"
-              autoComplete="off"
-            />
-            <div style={{ display: "flex" }}>
-              <p>
-                Transaction Date:<span style={{ color: "red" }}>*</span>
-              </p>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <input
-                  type="text"
-                  placeholder="DD-MM-YYYY"
-                  className="date-time-input"
-                  value={SuspectFormData.date ? parseDate(SuspectFormData.date) : ""}
-                />
-                <input
-                  type="datetime-local"
-                  name="date"
-                  className="date-time-label"
-                  value={SuspectFormData.date}
-                  onChange={(e) => handleDateChange(e)}
-                  autoComplete="off"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          style={{ display: "flex", marginTop: "20px" }}
-          className="suspect-btns"
+                    <div
+          style={{ display: "flex", marginTop: "20px",zIndex:"900" }}
         >
           <button
             type="button"
-            className="next-page-btn"
+            className="ok-btn"
             onClick={handleOkClick}
           >
-            Go To Next Question
+          OK
           </button>
-          <button onClick={handleAddPageClick} className="add-page-btn">
+          {/* <button onClick={handleAddPageClick} className="add-page-btn">
             Add Another Transaction
-          </button>
+          </button> */}
         </div>
-        {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+          </div>
+        </div>
+
+        {error && <p className="error-message">{error}</p>}
       </div>
     </div>
   );

@@ -2,6 +2,16 @@ import React, { useEffect, useState } from "react";
 //import Select from "react-select";
 const apiUrl = process.env.REACT_APP_API_URL;
 
+const options = [
+  {
+    id: "A",
+    value: "66d31c12457c3489795485",
+    label: " Male",
+  },
+  { id: "B", value: "66d31c2486272638130560", label: "Female" },
+  { id: "C", value: "66d31c42bd15f000864236", label: "Others" },
+];
+
 // const customStyles = {
 //   container: (provided) => ({
 //     ...provided,
@@ -62,15 +72,17 @@ const VictimName = ({
   onNext,
   onVictimNameSelected,
   onVictimAgeSelected,
+  onVictimGenderSelected,
   onQuestion,
   answer,
   apiKey,
   botToken,
   vist_id,
-  app_ver
+  app_ver,
 }) => {
   const [victimName, setVictimName] = useState("");
   const [victimAge, setVictimAge] = useState("");
+  const [gender, setGender] = useState(null);
   //const [documentOptions, setDocumentOptions] = useState("");
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState({ name: null, age: null }); // Updated error state
@@ -79,7 +91,7 @@ const VictimName = ({
     const storedData = localStorage.getItem("victimName");
     if (storedData) {
       setVictimName(JSON.parse(storedData));
-      onVictimNameSelected(JSON.parse(storedData))
+      onVictimNameSelected(JSON.parse(storedData));
     }
   }, []);
 
@@ -87,8 +99,20 @@ const VictimName = ({
     const storedData = localStorage.getItem("victimAge");
     if (storedData) {
       setVictimAge(JSON.parse(storedData));
-      onVictimAgeSelected(JSON.parse(storedData))
+      onVictimAgeSelected(JSON.parse(storedData));
     }
+   
+
+  }, []);
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("victimGender");
+    if (storedData) {
+      setGender(JSON.parse(storedData));
+      onVictimGenderSelected(JSON.parse(storedData));
+    }
+   
+
   }, []);
 
   // useEffect(() => {
@@ -106,11 +130,11 @@ const VictimName = ({
   //            }
   //            ),
   //               });
-        
+
   //               if (!documentResponse.ok) {
   //                 throw new Error("Failed to fetch Address options");
   //               }
-        
+
   //               const qulificationData = await documentResponse.json();
   //                setDocumentOptions(
   //                 qulificationData.resp.districts_list.map((address) => ({
@@ -124,14 +148,11 @@ const VictimName = ({
   //     }
   //   };
 
-    
-  
   //   fetchAddressData();
   // }, []);
 
   const handleNameChange = (event) => {
     const inputValue = event.target.value;
-   
 
     // Allow only alphabets and spaces, and enforce min 3 and max 100 characters
     if (/^[a-zA-Z\s]*$/.test(inputValue) && inputValue.length <= 100) {
@@ -143,10 +164,10 @@ const VictimName = ({
         localStorage.setItem("victimName", JSON.stringify(inputValue));
         setError({ ...error, name: null });
       } else {
-        setError({
-          ...error,
-          name: "Name must be at least 3 characters long.",
-        });
+        // setError({
+        //   ...error,
+        //   name: "Name must be at least 3 characters long.",
+        // });
       }
     } else if (!/^[a-zA-Z\s]*$/.test(inputValue)) {
       // Error message for invalid characters
@@ -174,22 +195,22 @@ const VictimName = ({
         inputValue !== "" &&
         (parseInt(inputValue) < 5 || parseInt(inputValue) > 110)
       ) {
-        setError({ ...error, age: "Age must be between 5 and 110." });
-      } else {
-        setError({ ...error, age: "Age can only be a number." });
-      }
+        setError({ ...error, age: "Please enter the proper age" });
+      } 
+      // else {
+      //   setError({ ...error, age: "Age can only be a number." });
+      // }
     }
   };
 
   const handleOkClick = async (e) => {
     e.preventDefault();
 
-
     const age = parseInt(victimAge, 10);
     let valid = true;
 
     // Reset all errors initially
-    let newError = { name: null, age: null };
+    let newError = { name: null, age: null, gender: null };
 
     // Validate name
     if (!victimName) {
@@ -200,6 +221,11 @@ const VictimName = ({
     // Validate age
     if (isNaN(age) || age < 5 || age > 110) {
       newError.age = "Please enter a valid age (5-110).";
+      valid = false;
+    }
+
+    if (!gender) {
+      newError.gender = "Please select the victim gender.";
       valid = false;
     }
 
@@ -216,18 +242,19 @@ const VictimName = ({
             api_key: apiKey,
             visitor_token: vist_id,
             qtion_id: "66f652eaeaef8",
-            qtion_num: "4",
+            qtion_num: "6",
             vict_nm: victimName,
             vict_age: victimAge,
             lac_token: botToken,
-            "app_ver":app_ver
+            app_ver: app_ver,
+            gen_id: gender,
           }),
         });
         const data = await response.json();
 
         if (data.resp.error_code === "0") {
-          onNext(5);
-          onQuestion("6");
+          onNext(7);
+          onQuestion(8);
           setShowOkButton(true);
           setError("");
         } else {
@@ -244,30 +271,39 @@ const VictimName = ({
     }
   };
 
+  const handleOptionClick = async (option, e) => {
+    e.preventDefault();
+    setShowOkButton(true);
+    setGender(option.value); // Notify parent component about the selection
+    localStorage.setItem("victimGender", JSON.stringify(option.value));
+  };
+
+  console.log(answer)
+
   return (
     <div className="question">
-      <div >
-        <div >
-          <h2 htmlFor="victim-name">What is your (victim) name?</h2>
+      <div>
+        <div>
+          <h2 htmlFor="victim-name">Name:<span style={{ color: "red" }}>*</span></h2>
           <input
             type="text"
-            className="text-input"
+            className="text-input name"
             value={victimName}
             onChange={handleNameChange}
-            placeholder="Type your answer here..."
+            placeholder="Type victim name here..."
             id="victim-name"
             autoComplete="off"
           />
           {error.name && <div className="error-message">{error.name}</div>}{" "}
           {/* Individual name error message */}
           <div>
-            <h2 htmlFor="victim-age">What is your (victim) age?</h2>
+            <h2 htmlFor="victim-age">Age:<span style={{ color: "red" }}>*</span></h2>
             <div>
               <input
-                className="text-input"
+                className="text-input name"
                 value={victimAge}
                 onChange={handleAgeChange}
-                placeholder="Type your age here..."
+                placeholder="Type victim age here..."
                 id="victim-age"
                 type="text"
                 min="5"
@@ -275,6 +311,38 @@ const VictimName = ({
                 autoComplete="off"
                 maxLength="3"
               />
+               {error.age && <div className="error-message">{error.age}</div>}
+              <div>
+                <h2>Gender:<span style={{ color: "red" }}>*</span></h2>
+                <div style={{ display: "flex", textAlign:'center'}}>
+                  {options.map((option) => (
+                    <button
+                      key={option.id}
+                      className={`option-gender-button ${
+                        gender === option.value ? "selected" : ""
+                      }`}
+                      style={{ marginRight: "10px" }}
+                      onClick={(e) => handleOptionClick(option, e)}
+                    >
+                      <div className="answer-container">
+                        <div style={{textAlign: "center"}}
+                          className={`gender-text ${
+                            gender === option.value ? "selected" : ""
+                          }`}
+                        >
+                          {option.label}
+                        </div>
+                      </div>
+                      {/* {gender === option.label && (
+                  <span className="checkmark">
+                    &#10003;  */}
+                      {/* Unicode character for checkmark */}
+                      {/* </span>
+                )} */}
+                    </button>
+                  ))}
+                </div>
+              </div>
               {/* <p>Select the victim document proof</p>
               <div style={{display:'flex',alignItems:'center'}}>
               <Select
@@ -298,28 +366,31 @@ const VictimName = ({
             Choose File
           </label>
           </div> */}
-              {error.age && <div className="error-message">{error.age}</div>}{" "}
+              {error.gender && <div className="error-message">{error.gender}</div>}
               {/* Individual age error message */}
             </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div
+            style={{ display: "flex", alignItems: "center", zIndex: "1000" }}
+          >
             {showOkButton && (
               <>
                 <button
                   type="button"
                   className="ok-btn"
                   onClick={handleOkClick}
+                  style={{ marginTop: "30px" }}
                 >
                   OK
                 </button>
-                <p className="enter-text">
+                {/* <p className="enter-text">
                   press <strong>Enter ↵</strong>
-                </p>
+                </p> */}
               </>
             )}
           </div>
-          {(answer[4] || answer[5]) && (
-            <p className="alert-box">
+          {(answer[6]) && (
+            <p className="alert-box" style={{zIndex:'1000'}}>
               Please answer the current question before moving to the next.
             </p>
           )}

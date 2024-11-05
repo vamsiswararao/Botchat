@@ -3,24 +3,24 @@ import React from "react";
 const Suspect = ({ onNext, onQuestion }) => {
   const handleContinue = () => {
     // Call the onNext function passed as a prop to move to the next step
-    onNext(11);
-    onQuestion("12")
+    onNext(12);
+    onQuestion(13)
     localStorage.setItem('support', JSON.stringify('support'));
   };
 
   return (
     <div className="question">
       <div style={{ display: "flex",justifyContent:'center' }}>
-        <div >
-          <h2 htmlFor="lose-money">Fraudster Information</h2>
-          <p>Answer the set of questions about Suspect/Fraudster.</p>
+        <div style={{ display: "flex",flexDirection:'column', alignItems: "center" }}>
+          <h2 htmlFor="lose-money">Fraudster’s Information</h2>
+          <p className="suspect-para">Answer the set of questions about Fraudster/Suspect.</p>
           <div style={{ display: "flex", alignItems: "center" }}>
             <button type="button" className="continue-btn" onClick={handleContinue}>
               Continue
             </button>
-            <p className="enter-text">
+            {/* <p className="enter-text">
               press <strong>Enter ↵</strong>
-            </p>
+            </p> */}
           </div>
         </div>
       </div>

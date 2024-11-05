@@ -2,13 +2,22 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 const apiUrl = process.env.REACT_APP_API_URL;
 
+const cardOptions = [
+  {
+    id: "A",
+    value: "66d31e6e8b6cb953390002",
+    label: "Credit Card",
+  },
+  { id: "B", value: "66d31e6550e23909435696", label: "Debit Card" },
+];
+
 const customStyles = {
   container: (provided) => ({
     ...provided,
     width: "450px",
     height: "24px",
     "@media (max-width: 768px)": {
-      width: "95%",
+      width: "300px",
     },
   }),
   menu: (provided) => ({
@@ -57,15 +66,6 @@ const customStyles = {
   }),
 };
 
-const cardOptions = [
-  {
-    id: "A",
-    value: "66d31e6e8b6cb953390002",
-    label: "Credit Card",
-  },
-  { id: "B", value: "66d31e6550e23909435696", label: "Debit Card" },
-];
-
 const VictimBank = ({
   onNext,
   onSuspectBankSelected,
@@ -75,52 +75,41 @@ const VictimBank = ({
   apiKey,
   botToken,
   vist_id,
-  app_ver
+  app_ver,
 }) => {
   const [victimBankData, setVictimBankData] = useState([]);
+  const [typeOptions, setTypeOptions] = useState([]);
+  const [walletOption, setWalletOptions] = useState([]);
   const [formData, setFormData] = useState({
     sub_cat: "",
     bank_name: "",
-    wallet_list: "",
     acc_no: "",
-    transaction_no:'',
-    payment: "",
-    ref_num: "",
-    trans_dtm: "",
-    amt: "",
-    first_six: "",
-    last_four: "",
-    card_len: "",
     mod_op: "",
+    wallet_list: "",
   });
 
   const [bankOption, setBankOptions] = useState([]);
-  const [typeOptions, setTypeOptions] = useState([]);
-  const [walletOption, setWalletOptions] = useState([]);
   const [pageCount, setPageCount] = useState(1);
   const [error, setError] = useState("");
-  //const vist_id = sessionStorage.getItem("visitor_id");
 
-  const parseDate = (formattedDateTime) => {
-    const [date, time] = formattedDateTime.split("T");
-    const [year, month, day] = date.split("-");
-    const parsedDateTime = `${day}-${month}-${year} ${time}`;
-    return parsedDateTime;
-  };
-
-  const handleDateChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  // useEffect(() => {
+  //   const storedDistrict = localStorage.getItem("victimBank");
+  //   if (storedDistrict) {
+  //     setFormData( JSON.parse(storedDistrict));
+  //   }
+  // }, []);
 
   useEffect(() => {
-    const storedDistrict = localStorage.getItem("formVictimData");
-    //console.log(storedDistrict);
+    const storedDistrict = localStorage.getItem("victimBank");
+
     if (storedDistrict) {
-      setFormData((prev) => ({ ...prev, ...JSON.parse(storedDistrict) }));
+      const data = JSON.parse(storedDistrict);
+      setFormData((prev) => ({
+        ...prev,
+        bank_name: data.bank_name || "",
+        acc_no: data.acc_no || "",
+        sub_cat:data.sub_cat || "",
+      }));
     }
   }, []);
 
@@ -139,7 +128,7 @@ const VictimBank = ({
               visitor_token: vist_id,
               qtion_id: "66f6544451d1f",
               lac_token: botToken,
-              "app_ver":app_ver
+              app_ver: app_ver,
             }),
           }
         );
@@ -162,40 +151,7 @@ const VictimBank = ({
       }
     };
 
-    const fetchWalletData = async () => {
-      try {
-        const BankResponse = await fetch(`${apiUrl}/v1/cy_ma_wlet_pg_pa_list`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            api_key: apiKey,
-            visitor_token: vist_id,
-            qtion_id: "66f6545af3d6e",
-            lac_token: botToken,
-            "app_ver":app_ver
-          }),
-        });
-
-        if (!BankResponse.ok) {
-          throw new Error("Failed to fetch Wallet options");
-        }
-
-        const BankData = await BankResponse.json();
-        setWalletOptions(
-          BankData.resp.wlet_pg_pa_list.map((bank) => ({
-            value: bank.wpa_uniq,
-            label: bank.wpa_nm,
-          })) || []
-        );
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchBankData();
-    fetchWalletData();
   }, []);
 
   useEffect(() => {
@@ -213,7 +169,6 @@ const VictimBank = ({
               visitor_token: vist_id,
               qtion_id: "66f6544451d1f",
               lac_token: botToken,
-              "app_ver":app_ver
             }),
           }
         );
@@ -223,7 +178,7 @@ const VictimBank = ({
         }
 
         const BankData = await BankResponse.json();
-        //console.log(BankData);
+        console.log(BankData);
         setTypeOptions(
           BankData.resp.sub_category_list.map((bank) => ({
             value: bank.subcat_uni,
@@ -236,25 +191,58 @@ const VictimBank = ({
       }
     };
 
+    const fetchWalletData = async () => {
+      try {
+        const BankResponse = await fetch(`${apiUrl}/v1/cy_ma_wlet_pg_pa_list`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            api_key: apiKey,
+            visitor_token: vist_id,
+            qtion_id: "66f6545af3d6e",
+            lac_token: botToken,
+            app_ver: app_ver,
+          }),
+        });
+
+        if (!BankResponse.ok) {
+          throw new Error("Failed to fetch Wallet options");
+        }
+        const BankData = await BankResponse.json();
+        setWalletOptions(
+          BankData.resp.wlet_pg_pa_list.map((bank) => ({
+            value: bank.wpa_uniq,
+            label: bank.wpa_nm,
+          })) || []
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchWalletData();
+
     fetchBankData();
   }, []);
 
   const handleSelectChange = (field, selectedOption) => {
-    console.log(selectedOption);
-
+    console.log(field, selectedOption);
     if (field === "sub_cat") {
       if (selectedOption.value === "66d300879af61335355481") {
-         
         setFormData((prev) => {
           const updatedFormData = {
             ...prev,
             [field]: selectedOption ? selectedOption.value : "",
             wallet_list: "",
+            bank_name:""
           };
-          localStorage.setItem(
-            "formVictimData",
-            JSON.stringify(updatedFormData)
-          ); // Save to localStorage
+          // localStorage.setItem(
+          //   "formVictimData",
+          //   JSON.stringify(updatedFormData)
+          // ); // Save to localStorage
+
+          setFormData(updatedFormData);
           return updatedFormData;
         });
       } else if (selectedOption.value === "66d300879af44537699255") {
@@ -263,10 +251,11 @@ const VictimBank = ({
             ...prev,
             [field]: selectedOption ? selectedOption.value : "",
           };
-          localStorage.setItem(
-            "formVictimData",
-            JSON.stringify(updatedFormData)
-          ); // Save to localStorage
+          // localStorage.setItem(
+          //   "formVictimData",
+          //   JSON.stringify(updatedFormData)
+          // ); // Save to localStorage
+          setFormData(updatedFormData);
           return updatedFormData;
         });
       } else {
@@ -276,37 +265,33 @@ const VictimBank = ({
             [field]: selectedOption ? selectedOption.value : "",
             mod_op: "",
             wallet_list: "",
-            first_six: "",
-            last_four: "",
-            card_len: "",
+            bank_name:""
           };
-          localStorage.setItem(
-            "formVictimData",
-            JSON.stringify(updatedFormData)
-          ); // Save to localStorage
+          // localStorage.setItem(
+          //   "formVictimData",
+          //   JSON.stringify(updatedFormData)
+          // ); // Save to localStorage
+          setFormData(updatedFormData);
           return updatedFormData;
         });
       }
     }
 
-    if(field==="mod_op"){
-      if(selectedOption.value!=="66d31e6e8b6cb953390002"){
+    if (field === "mod_op") {
+      if (selectedOption.value !== "66d31e6e8b6cb953390002") {
         setFormData((prev) => {
           const updatedFormData = {
             ...prev,
             [field]: selectedOption ? selectedOption.value : "",
-            first_six: "",
-            last_four: "",
-            card_len: "",
           };
-          localStorage.setItem(
-            "formVictimData",
-            JSON.stringify(updatedFormData)
-          ); // Save to localStorage
+          // localStorage.setItem(
+          //   "formVictimData",
+          //   JSON.stringify(updatedFormData)
+          // ); // Save to localStorage
+          setFormData(updatedFormData);
           return updatedFormData;
         });
       }
-      
     }
 
     setFormData((prev) => {
@@ -314,7 +299,8 @@ const VictimBank = ({
         ...prev,
         [field]: selectedOption ? selectedOption.value : "",
       };
-      localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+      //localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+      setFormData(updatedFormData);
       return updatedFormData;
     });
   };
@@ -330,20 +316,20 @@ const VictimBank = ({
           [id]: value,
         };
         setFormData(updatedFormData);
-        localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+        //localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
 
-        if (value.length < 10) {
-          setError("Account number must be at least 10 characters long.");
-        } else {
-          setError(""); // Reset error if input is valid
-        }
+        // if (value.length < 10) {
+        //   setError("Account number must be at least 10 characters long.");
+        // } else {
+        //   setError(""); // Reset error if input is valid
+        // }
       } else {
         if (value.length > 50) {
           setError("Account number must be less than 50 characters.");
         } else {
-          setError(
-            "Account number can only contain letters, numbers, and spaces."
-          );
+          // setError(
+          //   "Account number can only contain letters, numbers, and spaces."
+          // );
         }
       }
     } else if (id === "transaction_no") {
@@ -354,7 +340,7 @@ const VictimBank = ({
           [id]: value,
         };
         setFormData(updatedFormData);
-        localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+        //localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
 
         if (value.length < 10) {
           setError("Transaction number must be at least 10 characters long.");
@@ -364,11 +350,12 @@ const VictimBank = ({
       } else {
         if (value.length > 50) {
           setError("Transaction number must be less than 50 characters.");
-        } else {
-          setError(
-            "Transaction number can only contain letters, numbers, and spaces."
-          );
         }
+        // else {
+        //   setError(
+        //     "Transaction number can only contain letters, numbers, and spaces."
+        //   );
+        // }
       }
     } else if (id === "amt") {
       // Allow only numbers and dot (for decimal), validate input before updating state
@@ -378,7 +365,7 @@ const VictimBank = ({
           [id]: value,
         };
         setFormData(updatedFormData);
-        localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+        //localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
         setError(""); // Reset error if input is valid
       } else {
         setError("Amount can only contain numbers and a decimal point.");
@@ -391,21 +378,22 @@ const VictimBank = ({
           [id]: value,
         };
         setFormData(updatedFormData);
-        localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+        //localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
 
-        if (value.length < 10) {
-          setError("Reference number must be at least 10 characters long.");
+        if (value.length < 5) {
+          setError("Reference number must be at least 5 characters long.");
         } else {
           setError(""); // Reset error if input is valid
         }
       } else {
         if (value.length > 50) {
           setError("Reference number must be less than 50 characters.");
-        } else {
-          setError(
-            "Reference number can only contain letters, numbers, and spaces."
-          );
         }
+        // else {
+        //   setError(
+        //     "Reference number can only contain letters, numbers, and spaces."
+        //   );
+        // }
       }
     } else {
       // Handle other fields if necessary
@@ -414,7 +402,7 @@ const VictimBank = ({
         [id]: value,
       };
       setFormData(updatedFormData);
-      localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
+      //localStorage.setItem("formVictimData", JSON.stringify(updatedFormData)); // Save to localStorage
       setError(""); // Reset error for other fields
     }
   };
@@ -445,14 +433,12 @@ const VictimBank = ({
 
     // setError("");
 
-    if (
-      formData.sub_cat ||
-      formData.bank_name ||
-      formData.acc_no ||
-      formData.amt ||
-      formData.date
-    ) {
-      console.log("A")
+    if (formData.sub_cat &&  formData.bank_name && formData.acc_no) {
+      if ((formData.acc_no.length)<=5 ) {
+        setError("Please Enter the valid account number.");
+        return;
+      }
+
       try {
         // Send the data to the dummy API
         const response = await fetch(
@@ -466,103 +452,14 @@ const VictimBank = ({
               api_key: apiKey,
               visitor_token: vist_id,
               qtion_id: "66f6544451d1f",
-              qtion_num: "14",
-              sub_cat: formData.sub_cat,
-              mod_op: formData.mod_op,
+              qtion_num: "3",
               bank_mer: formData.bank_name,
-              wallet_list: formData.wallet_list,
               acc_no: formData.acc_no,
-              trans_id: formData.transaction_no,
-              first_six: formData.first_six,
-              last_four: formData.last_four,
-              card_len: formData.card_len,
-              amt: formData.amt,
-              ref_num: formData.ref_num,
-              trans_dtm: parseDate(formData.date),
               lac_token: botToken,
-              "app_ver":app_ver
-            }),
-          }
-        );
-
-
-        if (!response.ok) {
-          throw new Error("Failed to submit form data.");
-        }
-
-        const responseData = await response.json();
-        console.log(responseData)
-        if (responseData.resp.error_code === "0") {
-          onNext(15); // Move to the next step
-          onQuestion(16);
-
-          // If successful, add the data to the victimBankData list and show options
-          setVictimBankData((prevData) => [...prevData, formData]);
-        }
-      } catch (error) {
-        console.error("Error submitting form data:", error);
-        setError("Failed to submit form data. Please try again.");
-      }
-    }
-    onNext(15); // Move to the next step
-    onQuestion(16);
-  };
-
-  const handleAddPageClick = async (e) => {
-    e.preventDefault();
-    addVictimBank(pageCount);
-    setPageCount((prevCount) => prevCount + 1); // Add another form
-    setFormData({
-      sub_cat: "",
-      bank_name: "",
-      acc_no: "",
-      trans_id: "",
-      payment: "",
-      ref_num: "",
-      trans_dtm: "",
-      amt: "",
-      first_six: "",
-      last_four: "",
-      card_len: "",
-      mod_op: "",
-    });
-
-    if (
-      formData.sub_cat &&
-      formData.bank_name &&
-      formData.acc_no &&
-      formData.acc_no &&
-      formData.amt &&
-      formData.date
-    ) {
-      try {
-        // Send the data to the dummy API
-        console.log(formData.wallet_list)
-        const response = await fetch(
-          `${apiUrl}/v1/ccrim_bot_add_victim_trans`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              api_key: apiKey,
-              visitor_token: vist_id,
-              qtion_id: "66f6544451d1f",
-              qtion_num: "14",
-              sub_cat: formData.sub_cat,
+              app_ver: app_ver,
               mod_op: formData.mod_op,
-              bank_mer: formData.bank_name,
               wallet_list: formData.wallet_list,
-              acc_no: formData.acc_no,
-              trans_id: formData.transaction_no,
-              first_six: formData.first_six,
-              last_four: formData.last_four,
-              card_len: formData.card_len,
-              amt: formData.amt,
-              ref_num: formData.ref_num,
-              trans_dtm: parseDate(formData.date),
-              lac_token: botToken,
+              sub_cat: formData.sub_cat,
             }),
           }
         );
@@ -572,8 +469,12 @@ const VictimBank = ({
         }
 
         const responseData = await response.json();
-    
+        console.log(responseData);
         if (responseData.resp.error_code === "0") {
+          onNext(4); // Move to the next step
+          onQuestion(5);
+          localStorage.setItem("victimBank", JSON.stringify(formData));
+          // onSuspectBankSelected(formData)
           // If successful, add the data to the victimBankData list and show options
           setVictimBankData((prevData) => [...prevData, formData]);
         }
@@ -582,21 +483,84 @@ const VictimBank = ({
         setError("Failed to submit form data. Please try again.");
       }
     }
-
-    const isMobile = window.innerWidth <= 768; // Adjust the width breakpoint as per your design
-    const scrollAmount = isMobile
-      ? window.innerHeight
-      : window.innerHeight * 1.3; // Adjust scrolling based on view
-    // Perform smooth scroll
-    window.scrollBy({ top: scrollAmount, behavior: "smooth" });
-    // const newPageIndex = index + 1;
-    // onNextPage(newPageIndex);
+    onNext(4); // Move to the next step
+    onQuestion(5);
   };
 
-  
+  // const handleAddPageClick = async (e) => {
+  //   e.preventDefault();
+  //   addVictimBank(pageCount);
+  //   setPageCount((prevCount) => prevCount + 1); // Add another form
+  //   setFormData({
+  //     bank_name: "",
+  //     acc_no: "",
+  //     trans_id: "",
+  //     payment: "",
+  //     ref_num: "",
+  //   });
+
+  //   if (formData.bank_name && formData.acc_no) {
+  //     try {
+  //       const response = await fetch(
+  //         `${apiUrl}/v1/ccrim_bot_add_victim_trans`,
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({
+  //             api_key: apiKey,
+  //             visitor_token: vist_id,
+  //             qtion_id: "66f6544451d1f",
+  //             qtion_num: "14",
+  //             bank_mer: formData.bank_name,
+  //             acc_no: formData.acc_no,
+  //             lac_token: botToken,
+  //             app_ver: app_ver,
+  //           }),
+  //         }
+  //       );
+
+  //       if (!response.ok) {
+  //         throw new Error("Failed to submit form data.");
+  //       }
+
+  //       const responseData = await response.json();
+
+  //       if (responseData.resp.error_code === "0") {
+  //         // onSuspectBankSelected(formData)
+  //         setFormData({
+  //           bank_name: "",
+  //           acc_no: "",
+  //         });
+  //           localStorage.removeItem("victimBank");
+  //         //setVictimBankData((prevData) => [...prevData, formData]);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error submitting form data:", error);
+  //       setError("Failed to submit form data. Please try again.");
+  //     }
+  //   }
+
+  //   setFormData({
+  //     bank_name: "",
+  //     acc_no: "",
+  //   });
+
+  //   localStorage.removeItem("victimBank");
+
+  //   const isMobile = window.innerWidth <= 768; // Adjust the width breakpoint as per your design
+  //   const scrollAmount = isMobile
+  //     ? window.innerHeight * 1.36
+  //     : window.innerHeight * 1.2; // Adjust scrolling based on view
+  //   // Perform smooth scroll
+  //   window.scrollBy({ top: scrollAmount, behavior: "smooth" });
+  //   // const newPageIndex = index + 1;
+  //   // onNextPage(newPageIndex);
+  // };
 
   return (
-    <div className="question">
+    <div className="question" >
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div
           style={{
@@ -606,13 +570,12 @@ const VictimBank = ({
             alignItems: "center",
           }}
         >
-          <div style={{ display: "flex" }}>
-            <h2>Please provide debtor/victim bank account details.</h2>
+          <div>
+            <h2>Your Bank details</h2>
           </div>
-          <div className="bank-list">
-            <p className="bank-para">
-              Sub Category:<span style={{ color: "red" }}>*</span>
-            </p>
+
+          <div>
+            <p className="bank-para">Sub Category:</p>
             <Select
               value={typeOptions.find(
                 (bank) => bank.value === formData.sub_cat
@@ -622,15 +585,13 @@ const VictimBank = ({
               }
               options={typeOptions}
               className="dropdown-input"
-              placeholder="Select..."
+              placeholder="Select Bank"
               styles={customStyles}
             />
-
             <p className="bank-para" style={{ marginTop: "20px" }}>
-              Bank(Wallet/PG/PA)/Merchant:
-              <span style={{ color: "red" }}>*</span>
+              Select the Bank:
             </p>
-            <Select
+            {/* <Select
               value={bankOption.find(
                 (Merchant) => Merchant.value === formData.bank_name
               )}
@@ -641,26 +602,41 @@ const VictimBank = ({
               className="dropdown-input"
               placeholder="Select..."
               styles={customStyles} // Apply custom styles
+            /> */}
+
+            <Select
+              value={
+                formData.sub_cat === "66d300879af5f216270004"
+                  ? walletOption.find((Bank) => Bank.value === formData.bank_name) ||
+                    null
+                  : formData.sub_cat !== "66d300879af5f216270004"
+                  ? bankOption.find(
+                      (Wallet) => Wallet.value === formData.bank_name
+                    ) || null
+                  : null // For empty transferType, no value selected
+              }
+              onChange={(selectedOption) => {
+                if (formData.sub_cat === "66d300879af5f216270004") {
+                  handleSelectChange("bank_name", selectedOption);
+                }else{
+                  handleSelectChange("bank_name", selectedOption);
+                }
+              }}
+              options={
+                formData.sub_cat === "66d300879af5f216270004"
+                  ? walletOption
+                  : bankOption
+              }
+              className="dropdown-input"
+              placeholder={
+                formData.sub_cat === ""
+                  ? "Select The Money Transfer First"
+                  : "Select..."
+              }
+              isDisabled={!formData.sub_cat} // Disable if transferType is empty
+              styles={customStyles} // Apply custom styles
             />
-            {formData.sub_cat === "66d300879af44537699255" && (
-              <>
-                <p className="bank-para" style={{ marginTop: "20px" }}>
-                  Wallet/PG/PA List :<span style={{ color: "red" }}>*</span>
-                </p>
-                <Select
-                  value={walletOption.find(
-                    (Merchant) => Merchant.value === formData.wallet_list
-                  )}
-                  onChange={(selectedOption) =>
-                    handleSelectChange("wallet_list", selectedOption)
-                  }
-                  options={walletOption}
-                  className="dropdown-input"
-                  placeholder="Select..."
-                  styles={customStyles} // Apply custom styles
-                />
-              </>
-            )}
+
             {formData.sub_cat === "66d300879af61335355481" && (
               <>
                 <p className="bank-para" style={{ marginTop: "20px" }}>
@@ -680,136 +656,50 @@ const VictimBank = ({
                 />
               </>
             )}
-            {!(formData.mod_op === "66d31e6e8b6cb953390002") && (
+            {formData.sub_cat === "66d300879af44537699255" && (
               <>
                 <p className="bank-para" style={{ marginTop: "20px" }}>
-                  Account No./(Wallet/PG/PA)id/Merchant id:
-                  <span style={{ color: "red" }}>*</span>
+                  Wallet/PG/PA List :
                 </p>
-                <input
-                  type="text"
-                  className="text-input account"
-                  name="acc_no"
-                  onChange={(e) => handleTextChange("acc_no", e.target.value)}
-                  value={formData.acc_no}
-                  autoComplete="off"
+                <Select
+                  value={walletOption.find(
+                    (Merchant) => Merchant.value === formData.wallet_list
+                  )}
+                  onChange={(selectedOption) =>
+                    handleSelectChange("wallet_list", selectedOption)
+                  }
+                  options={walletOption}
+                  className="dropdown-input"
+                  placeholder="Select..."
+                  styles={customStyles} // Apply custom styles
                 />
               </>
             )}
-            <p className="bank-para">Transaction id/UTR Number:</p>
-            <input
-              type="text"
-              className="text-input account"
-              name="transaction_no"
-              value={formData.transaction_no}
-              autoComplete="off"
-              onChange={(e) =>
-                handleTextChange("transaction_no", e.target.value)
-              }
-            />
-            {/* <div
-                style={{
-                  display: "flex"
-                }}
-              > */}
-            {/* </div> */}
-            <p className="bank-para">Reference No:</p>
-            <input
-              type="text"
-              className="text-input account"
-              value={formData.ref_num}
-              // onChange={handleRefChange}
-              onChange={(e) => handleTextChange("ref_num", e.target.value)}
-            />
-            <p>
-              Amount:<span style={{ color: "red" }}>*</span>
+            <p className="bank-para" style={{ marginTop: "20px" }}>
+              Account No/ Credit/Debit Card No:
             </p>
-            <span className="rupee-symbol">₹</span>
             <input
               type="text"
-              value={formData.amt}
-              //onChange={handleAmtChange}
-              onChange={(e) => handleTextChange("amt", e.target.value)}
-              //placeholder="Amount"
-              className="text-input amount"
-              min="0"
+              className="text-input account"
+              name="acc_no"
+              onChange={(e) => handleTextChange("acc_no", e.target.value)}
+              value={formData.acc_no}
               autoComplete="off"
+              placeholder="Enter Account No."
             />
-            {formData.mod_op === "66d31e6e8b6cb953390002" && (
-              <>
-                <p className="bank-para">
-                  First Six Digit:<span style={{ color: "red" }}>*</span>
-                </p>
-                <input
-                  type="text"
-                  className="text-input account"
-                  onChange={(e) =>
-                    handleTextChange("first_six", e.target.value)
-                  }
-                  autoComplete="off"
-                />
-                <p className="bank-para">Last Four Digit:</p>
-                <input
-                  type="text"
-                  className="text-input account"
-                  onChange={(e) =>
-                    handleTextChange("last_four", e.target.value)
-                  }
-                  autoComplete="off"
-                />
-                <p className="bank-para">Card Length:</p>
-                <input
-                  type="text"
-                  className="text-input account"
-                  onChange={(e) => handleTextChange("card_len", e.target.value)}
-                  autoComplete="off"
-                />
-              </>
-            )}
-            <div style={{ display: "flex" }}>
-              <p>
-                Transaction Date:<span style={{ color: "red" }}>*</span>
-              </p>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <input
-                  type="text"
-                  placeholder="DD-MM-YYYY"
-                  className="date-time-input"
-                  value={formData.date ? parseDate(formData.date) : ""}
-                />
-                <input
-                  type="datetime-local"
-                  name="date"
-                  className="date-time-label"
-                  value={formData.date}
-                  onChange={(e) => handleDateChange(e)}
-                />
-              </div>
+
+            <div style={{ display: "flex", marginTop: "20px", zIndex: "1000" }}>
+              <button type="button" className="ok-btn" onClick={handleOkClick}>
+                OK
+              </button>
+              {/* <button onClick={handleAddPageClick} className="add-page-btn">
+            Add Another Transaction
+          </button> */}
+              {/* </div> */}
             </div>
           </div>
         </div>
-        <div
-          style={{ display: "flex", marginTop: "20px" }}
-          className="victim-btns"
-        >
-          <button
-            type="button"
-            className="next-page-btn"
-            onClick={handleOkClick}
-          >
-            Go To Next Question
-          </button>
-          <button onClick={handleAddPageClick} className="add-page-btn">
-            Add Another Transaction
-          </button>
-          {/* </div> */}
-        </div>
+
         {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
       </div>
     </div>

@@ -9,6 +9,7 @@ import First from "./Components/pages/First";
 import NotFound from "./Components/pages/NotFound"; // Import the NotFound component
 import ErrorPage from "./Components/pages/ErrorPage";
 import Success from "./Components/pages/Success";
+import TranslateComponent from "./Components/TranslateComponent";
 
 
 
@@ -16,6 +17,10 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <div className="line">
+        < TranslateComponent />
+        </div>
+      
         <Routes>
           <Route path="/:id" element={ <First />} />
           {/* <Route path="/" element={<Navigate to="/login" />} /> */}

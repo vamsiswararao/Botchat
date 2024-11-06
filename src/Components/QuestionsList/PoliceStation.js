@@ -284,6 +284,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
       }
 
       const data = await response.json();
+      console.log(data)
       if(data.resp.error_code ==="0"){
         localStorage.setItem('policeStations', JSON.stringify(address));
         onVictimAddressSelected(address);
@@ -339,7 +340,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
               style={{ margin: "5px", marginTop: "20px" }}
               htmlFor="policeStation"
             >
-              Police Station?<span style={{color:'red'}}>*</span>
+              Police Station<span style={{color:'red'}}>*</span>
             </h6>
             <div className="select-container">
               <Select

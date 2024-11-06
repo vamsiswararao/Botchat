@@ -16,14 +16,14 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer, apiKey, botTok
 
   // Helper function to format numbers in Indian style with commas
   const formatNumberWithCommas = (number) => {
-    console.log(number)
+    // console.log(number)
     const [integerPart, decimalPart] = number.split(".");
-    console.log(decimalPart)
+    // console.log(decimalPart)
     let lastThreeDigits = integerPart.slice(-3);
     let restDigits = integerPart.slice(0, -3);
     if (restDigits !== "") {
       restDigits = restDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
-      console.log(restDigits)
+      // console.log(restDigits)
       lastThreeDigits = restDigits + "," + lastThreeDigits;
     }
 
@@ -40,7 +40,7 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer, apiKey, botTok
   const handleChange = (event) => {
     event.preventDefault();
     const inputValue = event.target.value;
-    console.log(inputValue)
+    // console.log(inputValue)
     // Only allow numeric values (including decimal points)
     if (/^\d*\.?\d*$/.test(removeCommas(inputValue))) {
       const formattedValue = formatNumberWithCommas(removeCommas(inputValue));
@@ -81,7 +81,7 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer, apiKey, botTok
         }
 
         const data = await response.json();
-        console.log(data)
+        // console.log(data)
         // Check if API response was successful
         if (data.resp.error_code === "0") {
           setError(""); // Clear any previous error messages

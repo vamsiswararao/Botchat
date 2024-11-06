@@ -17,6 +17,7 @@ const SuspectSpeak = ({
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const [speckOptions, setSpeckOptions] = useState([]);
+  const [previousSelected, setPreviousSelected] = useState(null);
   //const vist_id = sessionStorage.getItem("visitor_id");
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const SuspectSpeak = ({
     if (storedSuspectCall) {
       setSelectedOptions(JSON.parse(storedSuspectCall));
       onSuspectSpeakSelected(JSON.parse(storedSuspectCall));
+      setPreviousSelected(storedSuspectCall);
     }
   }, []);
 
@@ -139,6 +141,7 @@ const SuspectSpeak = ({
       }
 
       const data = await response.json();
+      // console.log(data)
       if (data.resp.error_code === "0") {
         onSuspectSpeakSelected(selectedOptions);
         onNext(15);
@@ -155,12 +158,23 @@ const SuspectSpeak = ({
   const handleOkClick = async (e) => {
     e.preventDefault();
 
+    if (
+      JSON.stringify(selectedOptions) !== JSON.stringify(previousSelected)
+    ) {
+
     if (selectedOptions.contactValues.length > 0) {
       await saveDataToAPI(selectedOptions);
+      setPreviousSelected(selectedOptions);
     } else {
       setError("Please select an option before proceeding.");
       setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
     }
+
+  }
+  else{
+    onNext(15);
+    onQuestion(16);
+  }
   };
   return (
     <div className="question">

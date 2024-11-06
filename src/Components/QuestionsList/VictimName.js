@@ -220,7 +220,7 @@ const VictimName = ({
 
     // Validate age
     if (isNaN(age) || age < 5 || age > 110) {
-      newError.age = "Please enter a valid age (5-110).";
+      newError.age = "Please enter the proper  age.";
       valid = false;
     }
 
@@ -275,10 +275,10 @@ const VictimName = ({
     e.preventDefault();
     setShowOkButton(true);
     setGender(option.value); // Notify parent component about the selection
+    onVictimGenderSelected(option.value)
     localStorage.setItem("victimGender", JSON.stringify(option.value));
   };
 
-  console.log(answer)
 
   return (
     <div className="question">

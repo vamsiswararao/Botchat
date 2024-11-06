@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import appVersion from "../../version";
 import CloudComponent from "../CloudComponent";
 import Cloud from "../Cloud";
+import Header from "./Header";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiKey = process.env.REACT_APP_AUTH_TOKEN;
@@ -60,7 +61,6 @@ const OtpInput = () => {
       });
 
       const data = await response.json();
-      console.log(data);
       if (data.resp.error_code === "0") {
         //setError("")
         // Store visitor_id in session storage
@@ -106,7 +106,6 @@ const OtpInput = () => {
       });
 
       const data = await response.json();
-      console.log(data);
       //console.log(data.resp.error_code);
       if (data.resp.error_code === "0") {
         sessionStorage.setItem("otp_id", data.resp.otp_id);
@@ -121,22 +120,7 @@ const OtpInput = () => {
 
   return (
     <div className="otp-container">
-      <header>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "colum",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <img src="\images\LOGO-TS3.jpg" alt="csb-ts" className="cst-logo" />
-          <h1 className="header-title" style={{ textAlign: "center" }}>
-            1930-Cyber Bot
-          </h1>
-          <img src="\images\LOGO-INDIA.png" alt="csb-ts" className="csi-logo" />
-        </div>
-      </header>
+  <Header />
       <div className="container">
         <h1>Verify OTP</h1>
         <p>

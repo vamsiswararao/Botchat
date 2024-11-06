@@ -95,7 +95,7 @@ const BankUpload = ({
           body: formData,
         });
         const fileData = await response.json();
-        console.log(fileData)
+        // console.log(fileData)
   
         if (fileData.resp.error_code === "0") {
           setSuccessfulUploads((prevUploads) => [...prevUploads, { file, uuid }]);
@@ -132,7 +132,7 @@ const BankUpload = ({
           type:'1'
         }),
       });
-
+    //  console.log(uuid)
       const result = await response.json();
       if (result.resp.error_code === "0") {
         setFiles((prevFiles) => prevFiles.filter((file) => file.uuid !== uuid));

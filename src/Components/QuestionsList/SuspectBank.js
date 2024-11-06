@@ -93,6 +93,8 @@ const SuspectBank = ({
   const [pageCount, setPageCount] = useState(1);
   const [error, setError] = useState("");
 
+  const [previousSelectedBank, setPreviousSelectedBank] = useState([]);
+
 
   // useEffect(() => {
   //   const storedDistrict = localStorage.getItem('formSuspectData');
@@ -107,13 +109,19 @@ const SuspectBank = ({
     
     if (storedDistrict) {
       const data = JSON.parse(storedDistrict);
-      console.log(data.transferType);
-      setSuspectFormData((prev) => ({
-        ...prev,
+      // console.log(data.transferType);
+      setSuspectFormData(() => ({
         bank: data.bank || '',
         acc_no: data.acc_no || '',
         transferType: data.transferType ||"",
       }));
+
+      setPreviousSelectedBank({
+        bank: data.bank || '',
+        acc_no: data.acc_no || '',
+        transferType: data.transferType ||"",
+      })
+
     }
   }, []);
 
@@ -321,6 +329,13 @@ const SuspectBank = ({
 
 
   const handleOkClick = async (e) => {
+  //   console.log(JSON.stringify(SuspectFormData))
+  //   console.log(JSON.stringify(previousSelectedBank))
+  //  console.log( JSON.stringify(SuspectFormData) !== JSON.stringify(previousSelectedBank))
+    if (
+      JSON.stringify(SuspectFormData) !== JSON.stringify(previousSelectedBank)
+    ) {
+
     if( SuspectFormData.transferType && SuspectFormData.acc_no && SuspectFormData.bank  ){
       if ((SuspectFormData.acc_no.length)<=5 ) {
         setError("Please Enter the valid account number.");
@@ -349,14 +364,18 @@ const SuspectBank = ({
         if (!response.ok) {
           throw new Error("Failed to submit form data.");
         }
-  
+        setPreviousSelectedBank({
+          bank: SuspectFormData.bank || '',
+          acc_no:SuspectFormData.acc_no || '',
+          transferType: SuspectFormData.transferType ||"",
+        });
         const responseData = await response.json();
-        console.log(responseData);
+        // console.log(responseData);
         if(responseData.resp.error_code !=="0"){
          setError("Failed to push data to API")
         
         }
-        console.log("Form data submitted successfully:", responseData);
+        // console.log("Form data submitted successfully:", responseData);
         localStorage.setItem('SuspectBank', JSON.stringify(SuspectFormData));
       } catch (error) {
         console.error("Error submitting form data:", error);
@@ -364,11 +383,12 @@ const SuspectBank = ({
       }
       
     }
+  }
     onNext(17); // Move to the next step
     onQuestion(18);
 
     setError("");
-    setSuspectBankData((prevData) => [...prevData, SuspectFormData]);
+    setSuspectBankData(() => [SuspectFormData]);
   };
 
   // const handleAddPageClick = async(e) => {

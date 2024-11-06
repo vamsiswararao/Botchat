@@ -5,10 +5,10 @@ import Header from "./Header";
 const ErrorPage = () => {
   const location = useLocation();
   const { visitorData } = location.state || {};
-  console.log(location.state);
-  console.log(visitorData);
-  console.log(visitorData?.resp);
-  console.log(visitorData?.resp?.message);
+  // console.log(location.state);
+  // console.log(visitorData);
+  // console.log(visitorData?.resp);
+  // console.log(visitorData?.resp?.message);
 
   // Check if visitorData and visitorData.resp exist before accessing message
   const errorMessage =

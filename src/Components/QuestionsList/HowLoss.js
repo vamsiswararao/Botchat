@@ -101,7 +101,8 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id,app
           "BankFile",
           "bankForms",
           "radio",
-          "victimGender"
+          "victimGender",
+          "phoneNumber"
         ];
 
         // Loop through the keys and remove them from localStorage
@@ -117,7 +118,7 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id,app
         sessionStorage.removeItem("otp_id");
         setError("");
       } else {
-        setError("Failed to push data to API");
+        setError("Please enter the description");
       }
     } catch (error) {
       console.error("Error saving data:", error);

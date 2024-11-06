@@ -36,7 +36,7 @@ const Support = ({
 
   const handleFileChange = async (event) => {
     const selectedFiles = Array.from(event.target.files);
-    console.log(event.target.files);
+    // console.log(event.target.files);
     if (files.length + selectedFiles.length > apiImage) {
       setErrorMessage(`You can only upload a maximum of ${apiImage} images.`);
       return;
@@ -99,7 +99,7 @@ const Support = ({
           body: formData,
         });
         const fileData = await response.json();
-        console.log(fileData);
+        // console.log(fileData);
         if (fileData.resp.error_code === "0") {
           setSuccessfulUploads((prevUploads) => [
             ...prevUploads,

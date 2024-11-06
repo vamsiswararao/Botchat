@@ -109,7 +109,22 @@ body {
     }
 
 
-
+    .text-mobile-input {
+      border: none;
+      outline: none;
+      border-bottom: 2px solid #3651ac;
+      /* Adjust the color and width as needed */
+      padding: 0px;
+      margin-right: 20px;
+      margin-bottom: 0px;
+      margin-top: 20px;
+      margin-left: 5px;
+      background-color: #ffffff;
+      width: 220px;
+      height: 20px;
+      font-size: 18px;
+      color: #004999;
+    }
 
   
     .question {
@@ -428,9 +443,30 @@ body {
   
   /* Laptop view */
   @media (min-width: 768px) {
-
-    
   
+    .line{
+      position:fixed;
+      top:2vh;
+      z-index:10000;
+      left:46vw;
+    }
+    
+    .text-mobile-input {
+      border: none;
+      outline: none;
+      border-bottom: 2px solid #3651ac;
+      /* Adjust the color and width as needed */
+      padding: 0px;
+      margin-right: 20px;
+      margin-bottom: 0px;
+      margin-top: 38px;
+      margin-left: 5px;
+      background-color: #ffffff;
+      width: 260px;
+      height: 20px;
+      font-size: 18px;
+      color: #004999;
+    }
 
     .options-container {
       margin-top: 10px;
@@ -899,6 +935,27 @@ body {
     font-size: 18px;
     color: #004999;
   }
+
+  text-mobile-input {
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #3651ac;
+    /* Adjust the color and width as needed */
+    padding: 0px;
+    margin-right: 20px;
+    margin-bottom: 0px;
+    margin-top: 20px;
+    margin-left: 5px;
+    background-color: #ffffff;
+    width: 220px;
+    height: 20px;
+    font-size: 18px;
+    color: #004999;
+  }
+
+  /* .text-mobile-input::placeholder {
+    background-color: #3651ac;
+  } */
   
   .option-list {
     overflow-X: auto;
@@ -1021,6 +1078,8 @@ body {
       font-size: 18px;
       color: #004999;
     }
+
+    
   
     .option-list {
       overflow-X: auto;
@@ -1272,6 +1331,13 @@ body {
     .responsive-textarea {
       width: 85%; /* Full width on mobile */
     }
+
+    .line{
+      position:fixed;
+      top:2vh;
+      z-index:10000;
+      left:30vw;
+    }
     header{
       position: fixed;
       top: 0px;
@@ -1352,6 +1418,7 @@ body {
     height:48px;
     border-radius:50px;
     margin-right:20px;
+    margin-top: 8px;
   }
   .translate{
       display: flex;
@@ -1464,13 +1531,14 @@ body {
     border-radius:60px;
     margin-right:50px;
     margin-bottom: 35px;
+    margin-top: 15px;
   }
   .translate{
     display: flex;
     justify-content: center;
     align-items: center;
     position: fixed;
-    top: -1vh;
+    top: 10vh;
     left: 46vw;
     z-index: 1000
   }

@@ -109,6 +109,9 @@ const VictimBank = ({
         bank_name: data.bank_name || "",
         acc_no: data.acc_no || "",
         sub_cat:data.sub_cat || "",
+        mod_op: data.mod_op || "",
+        wallet_list: data.wallet_list,
+
       }));
     }
   }, []);
@@ -178,7 +181,7 @@ const VictimBank = ({
         }
 
         const BankData = await BankResponse.json();
-        console.log(BankData);
+        //console.log(BankData);
         setTypeOptions(
           BankData.resp.sub_category_list.map((bank) => ({
             value: bank.subcat_uni,
@@ -227,7 +230,7 @@ const VictimBank = ({
   }, []);
 
   const handleSelectChange = (field, selectedOption) => {
-    console.log(field, selectedOption);
+    //console.log(field, selectedOption);
     if (field === "sub_cat") {
       if (selectedOption.value === "66d300879af61335355481") {
         setFormData((prev) => {
@@ -469,7 +472,7 @@ const VictimBank = ({
         }
 
         const responseData = await response.json();
-        console.log(responseData);
+        // console.log(responseData);
         if (responseData.resp.error_code === "0") {
           onNext(4); // Move to the next step
           onQuestion(5);
@@ -640,11 +643,11 @@ const VictimBank = ({
             {formData.sub_cat === "66d300879af61335355481" && (
               <>
                 <p className="bank-para" style={{ marginTop: "20px" }}>
-                  Mode Of Payment:<span style={{ color: "red" }}>*</span>
+                  Mode Of Payment:
                 </p>
                 <Select
                   value={cardOptions.find(
-                    (Merchant) => Merchant.value === formData.payment
+                    (Merchant) => Merchant.value === formData.mod_op
                   )}
                   onChange={(selectedOption) =>
                     handleSelectChange("mod_op", selectedOption)
@@ -688,7 +691,7 @@ const VictimBank = ({
               placeholder="Enter Account No."
             />
 
-            <div style={{ display: "flex", marginTop: "20px", zIndex: "1000" }}>
+            <div style={{ display: "flex", marginTop: "20px", zIndex: "900" }}>
               <button type="button" className="ok-btn" onClick={handleOkClick}>
                 OK
               </button>

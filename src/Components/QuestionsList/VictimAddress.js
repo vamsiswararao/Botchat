@@ -138,14 +138,14 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
       }
 
       const data = await response.json();
-     console.log(data)
+    //  console.log(data)
       if(data.resp.error_code ==="0"){
         onVictimAddressSelected(address);
         onNext(11);
         onQuestion(12);
         setError("")
       }else{
-        setError("Failed to push data to API");
+        setError("Enter valid address");
       }
 
 

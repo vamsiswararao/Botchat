@@ -1,23 +1,35 @@
 import React, { useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken,vist_id,app_ver}) => {
+const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion, apiKey, botToken, vist_id, app_ver,onPhoneNumber }) => {
   const [suspectContacts, setSuspectContacts] = useState({
     contactValues: [],
     contactIds: []
   });
-  
-  //const [selectedCalls, setSelectedCalls] = useState([]);
+  const [previousSelectedContacts, setPreviousSelectedContacts] = useState(null);
   const [showOkButton, setShowOkButton] = useState(true);
   const [error, setError] = useState(null);
   const [options, setOptions] = useState([]);
-  //const vist_id = sessionStorage.getItem("visitor_id");
+  const [phoneNumber, setPhoneNumber] = useState([]);
+  const [previousNumber, setPreviousNumber] = useState(null);
 
   useEffect(() => {
-    const storedSuspectCall = localStorage.getItem('suspectCall');
+    const storedSuspectCall = localStorage.getItem("suspectCall");
     if (storedSuspectCall) {
-      setSuspectContacts(JSON.parse(storedSuspectCall));
-      onSuspectCallSelected(JSON.parse(storedSuspectCall))
+      const storedContacts = JSON.parse(storedSuspectCall);
+      setSuspectContacts(storedContacts);
+      onSuspectCallSelected(storedContacts);
+      setPreviousSelectedContacts(storedContacts); // Set initial previous selection
+    }
+  }, []);
+
+  useEffect(() => {
+    const storedSuspectCall = localStorage.getItem("phoneNumber");
+    if (storedSuspectCall) {
+      const storedContacts = JSON.parse(storedSuspectCall);
+      setPhoneNumber(storedContacts);
+      onPhoneNumber(storedContacts);
+      setPreviousNumber(storedContacts); // Set initial previous selection
     }
   }, []);
 
@@ -36,7 +48,7 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
               visitor_token: vist_id,
               qtion_id: "66f653ab73faa",
               lac_token: botToken,
-              "app_ver":app_ver
+              app_ver: app_ver
             }),
           }
         );
@@ -46,7 +58,6 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
         }
 
         const platFormData = await platFormResponse.json();
-        //console.log(platFormData);
         setOptions(
           platFormData.resp.suspect_comncation_list.map((bank, index) => ({
             id: String.fromCharCode(65 + index),
@@ -64,67 +75,52 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
 
   const handleOptionClick = (option, e) => {
     e.preventDefault();
-    if (option.disabled) {
-      return; // Ignore clicks on disabled options
-    }
-  
-    setShowOkButton(true); // Show the OK button after a successful click
+    setShowOkButton(true);
     setError("");
-  
-    // Update contactValues and contactIds
-    setSuspectContacts((prevSelectedCalls) => {
-      // Ensure prevSelectedCalls is always defined
-      const updatedCalls = prevSelectedCalls.contactValues.includes(option.value)
+
+    setSuspectContacts((prevContacts) => {
+      const updatedContacts = prevContacts.contactValues.includes(option.value)
         ? {
-            contactValues: prevSelectedCalls.contactValues.filter(
+            contactValues: prevContacts.contactValues.filter(
               (call) => call !== option.value
             ),
-            contactIds: prevSelectedCalls.contactIds.filter(
-              (id) => id !== option.id
-            ),
+            contactIds: prevContacts.contactIds.filter((id) => id !== option.id),
           }
         : {
-            contactValues: [...prevSelectedCalls.contactValues, option.value],
-            contactIds: [...prevSelectedCalls.contactIds, option.id],
+            contactValues: [...prevContacts.contactValues, option.value],
+            contactIds: [...prevContacts.contactIds, option.id],
           };
-  
-      // Save data after state update
-      onSuspectCallSelected(updatedCalls);
-      localStorage.setItem("suspectCall", JSON.stringify(updatedCalls));
-      return updatedCalls;
+
+      onSuspectCallSelected(updatedContacts);
+      localStorage.setItem("suspectCall", JSON.stringify(updatedContacts));
+      return updatedContacts;
     });
-  
-    // Double-check updating suspectContacts based on option.value and option.id
-    if (suspectContacts.contactValues.includes(option.value)) {
-      setSuspectContacts({
-        contactValues: suspectContacts.contactValues.filter(
-          (contact) => contact !== option.value
-        ),
-        contactIds: suspectContacts.contactIds.filter(
-          (id) => id !== option.id
-        ),
-      });
-    } else {
-      setSuspectContacts({
-        contactValues: [...suspectContacts.contactValues, option.value],
-        contactIds: [...suspectContacts.contactIds, option.id],
-      });
-    }
   };
-  
 
   const handleOkClick = async (e) => {
     e.preventDefault();
-    if (suspectContacts.contactIds.length > 0) {
-      await saveDataToAPI(suspectContacts);
-    } else {
-      setError("Please select an option before proceeding.");
-      setShowOkButton(false); // Hide the OK button after an unsuccessful attempt
+
+
+
+    if (
+      JSON.stringify(suspectContacts) !== JSON.stringify(previousSelectedContacts)  || previousNumber !== phoneNumber 
+    ) {
+      if (suspectContacts.contactIds.length > 0) {
+        await saveDataToAPI(suspectContacts);
+        setPreviousSelectedContacts(suspectContacts); // Update previous selection after API call
+        setPreviousNumber(phoneNumber)
+      } else {
+        setError("Please select an option before proceeding.");
+        setShowOkButton(false);
+      }
+    }else{
+      onNext(13);
+      onQuestion(14);
     }
   };
 
-  // Function to save data to RequestBin API
   const saveDataToAPI = async (selectedContacts) => {
+
     try {
       const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_multichoice`, {
         method: "POST",
@@ -136,22 +132,25 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
           visitor_token: vist_id,
           qtion_id: "66f653ab73faa",
           qtion_num: "12",
-          qtion_option:suspectContacts.contactIds,
-          option_val:  suspectContacts.contactValues,
+          qtion_option: selectedContacts.contactIds,
+          option_val: selectedContacts.contactValues,
           lac_token: botToken,
-          "app_ver":app_ver
+          app_ver: app_ver,
+          sus_mobile:phoneNumber,
         }),
       });
+
       if (!response.ok) {
         throw new Error("Failed to save data");
       }
 
       const data = await response.json();
-      if(data.resp.error_code ==="0"){
+      // console.log(data)
+      if (data.resp.error_code === "0") {
         onSuspectCallSelected(suspectContacts);
         onNext(13);
         onQuestion(14);
-      }else{
+      } else {
         setError("Failed to push data to API");
       }
     } catch (error) {
@@ -160,13 +159,29 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
     }
   };
 
+  const handleChangeMobile = (event) => {
+    event.preventDefault();
+    const inputValue = event.target.value;
+    // Only allow numeric values (including decimal points)
+    if (/^\d*\.?\d*$/.test(inputValue)) {
+      setPhoneNumber(inputValue);
+      onPhoneNumber(inputValue); // Pass the input value without commas to the parent component
+      setError(""); // Clear any previous error messages
+
+      localStorage.setItem("phoneNumber", JSON.stringify(phoneNumber));
+    }
+  };
 
   return (
     <div className="question">
-      <div style={{ display: "flex",flexDirection:'column' }}>
-        <div style={{ display: "flex",flexDirection:'column', justifyContent:'center',alignItems:'center' }}>
-          <h2>Mode of Approach/Communication
-          </h2>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div style={{display:'flex'}}>
+      <h2>Mobile:</h2>
+      <input type="text" value={phoneNumber} className="text-mobile-input"onChange={handleChangeMobile} placeholder="Fraudster's Mobile Number" />
+      </div>
+
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+          <h2>Mode of Approach/Communication</h2>
           <div className="option-list">
             {options.map((option) => (
               <button
@@ -180,43 +195,27 @@ const SuspectCall = ({ onNext, onSuspectCallSelected, onQuestion,apiKey,botToken
                   <div
                     className="option"
                     style={{
-                      backgroundColor: suspectContacts.contactValues.includes(option.value)
-                        ? "#000"
-                        : "#fff",
-                      color: suspectContacts.contactValues.includes(option.value)
-                        ? "#fff"
-                        : "#000",
+                      backgroundColor: suspectContacts.contactValues.includes(option.value) ? "#000" : "#fff",
+                      color: suspectContacts.contactValues.includes(option.value) ? "#fff" : "#000",
                     }}
                   >
                     {option.id}
                   </div>
-                  <div style={{textAlign:'start'}} className="option-label">{option.label}</div>
+                  <div style={{ textAlign: "start" }} className="option-label">{option.label}</div>
                 </div>
                 {suspectContacts.contactValues.includes(option.value) && (
-                  <span className="checkmark">&#10003;</span> // Unicode character for checkmark
+                  <span className="checkmark">&#10003;</span> // Unicode checkmark
                 )}
               </button>
             ))}
           </div>
         </div>
-        <div  className="call-btn" style={{zIndex:'1000'}}>
-            {showOkButton && (
-              <>
-                <button
-                  type="button"
-                  className="ok-btn"
-                  onClick={handleOkClick}
-                >
-                  OK
-                </button>
-                {/* <p className="enter-text">
-                  press <strong>Enter ↵</strong>
-                </p> */}
-              </>
-            )}
-           
-          </div>
-          {error && <div className="error-message">{error}</div>}
+        <div className="call-btn" style={{ zIndex: "900" }}>
+          {showOkButton && (
+            <button type="button" className="ok-btn" onClick={handleOkClick}>OK</button>
+          )}
+        </div>
+        {error && <div className="error-message">{error}</div>}
       </div>
     </div>
   );

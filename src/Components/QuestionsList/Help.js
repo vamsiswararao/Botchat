@@ -28,7 +28,7 @@ const Help = ({ vist_id }) => {
     // console.log(vist_id)
     setShowOkButton(true); // Show the OK button after a successful click
     setError("");
-    console.log(vist_id);
+    // console.log(vist_id);
     try {
       const response = await fetch(`${apiUrl}/v1/ccrim_bot_help_request`, {
         method: "POST",
@@ -49,7 +49,7 @@ const Help = ({ vist_id }) => {
       const data = await response.json();
       //console.log(data.resp)
       setResponseStatus(data);
-      console.log(data);
+      // console.log(data);
       if (!response.ok) {
         throw new Error("Failed to push data to API");
       }
@@ -93,7 +93,7 @@ const Help = ({ vist_id }) => {
     {
       id: "B",
       value: "670fce44708f0764144307",
-      label: "Did not lose money",
+      label: "I did not lose money",
     },
     // { id: "C", label: " Do you want to know the status of the complaint?", disabled: true }, // Option C is disabled
   ];
@@ -109,7 +109,7 @@ const Help = ({ vist_id }) => {
         }}
       >
         <div style={{marginTop:'-180px'}}>
-          <h2 style={{ marginLeft: "12px",textAlign:'center',marginBottom:'-15px' }}>Are You a Cyber Victim? </h2>
+          <h2 style={{ marginLeft: "12px",textAlign:'center',marginBottom:'-15px' }}>Are you a Cyber Victim? </h2>
           <p style={{textAlign:'center',marginBottom:'25px'}}>Select one of these</p>
           <div className="options-container">
             {helpOptions.map((option) => (

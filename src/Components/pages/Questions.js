@@ -120,13 +120,14 @@ const Questions = () => {
     police_station: "",
     suspect_call: "",
     suspect_speak: "",
-    suspect_contact: "",
+    suspect_contact: {"contactValues":[],"contactIds":[]},
     victim_bank: [{ id: 1, data: {} }],
     suspect_bank: [{ id: 1, data: {} }],
     support: "",
     address: "",
     supports: "",
     bank_file: [],
+    phone_number:'',
   });
 
   useEffect(() => {
@@ -236,8 +237,11 @@ const Questions = () => {
   };
 
   const isQuestionAnswered = useCallback((questionIndex) => {
-    // console.log(formData.police_station.district)
-  // console.log(formData.bank_file[0]);
+    //console.log(formData.suspect_call.contactValues[0])
+  //   console.log(questionIndex)
+  // console.log(formData.victim_name ,
+  //   formData.victim_age,
+  //   formData.victim_gender);
     switch (questionIndex) {
       case 0:
         return formData.help !== "";
@@ -310,6 +314,7 @@ const Questions = () => {
     // const scrollAmount = isMobile
     //   ? window.innerHeight *1.36
     //   : window.innerHeight * 1.2;
+  
     if (isQuestionAnswered(currentQuestion)) {
       const updatedAnswers = [...answerQuestion];
       updatedAnswers[currentQuestion] = false; // Mark current question as answered
@@ -672,6 +677,9 @@ const Questions = () => {
             onNext={handleNextClickQuestion}
             onSuspectCallSelected={(value) =>
               handleDataUpdate("suspect_call", value)
+            }
+            onPhoneNumber={(value) =>
+              handleDataUpdate("phone_number", value)
             }
             onQuestion={handleQuestionChange}
             answer={answerQuestion}

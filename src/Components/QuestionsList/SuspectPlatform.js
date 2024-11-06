@@ -18,6 +18,7 @@ const SuspectPlatform = ({
   const [error, setError] = useState(null);
   const [options, setOptions] = useState([]);
   const [isYesSelected, setIsYesSelected] = useState(null);
+  const [previousSelectedContacts, setPreviousSelectedContacts] = useState(null);
 
   useEffect(() => {
     const storedSuspectCall = localStorage.getItem("suspectContact");
@@ -25,6 +26,7 @@ const SuspectPlatform = ({
       const parsedCall = JSON.parse(storedSuspectCall);
       setSuspectContacts(parsedCall);
       onSuspectContactSelected(parsedCall);
+      setPreviousSelectedContacts(parsedCall);
     }
   }, []);
 
@@ -115,6 +117,7 @@ const SuspectPlatform = ({
       }
 
       const data = await response.json();
+      // console.log(data)
       if (data.resp.error_code === "0") {
         onSuspectContactSelected(suspectContacts);
         onNext(16);
@@ -129,13 +132,22 @@ const SuspectPlatform = ({
   };
 
   const handleOkClick = async () => {
+
+    if (
+      JSON.stringify(suspectContacts) !== JSON.stringify(previousSelectedContacts)
+    ) {
     if (suspectContacts.contactValues.length > 0) {
       await saveDataToAPI();
+      setPreviousSelectedContacts(suspectContacts);
     } else {
       setError("Please select an option before proceeding.");
-      console.log("Please select an option before proceeding.");
+      // console.log("Please select an option before proceeding.");
       setShowOkButton(false);
     }
+  }else{
+    onNext(16);
+    onQuestion(17);
+  }
   };
 
   const handleRadioChange = (selection, e) => {

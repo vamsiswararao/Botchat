@@ -17,7 +17,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <div className="line">
+        <div className="translate">
         < TranslateComponent />
         </div>
       

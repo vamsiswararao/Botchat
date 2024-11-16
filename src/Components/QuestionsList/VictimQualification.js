@@ -129,8 +129,8 @@ const VictimQualification = ({
     <div className="question">
       <div style={{ display: "flex", flexDirection:'column'}}>
         <div style={{ display: "flex",flexDirection:'column' }}>
-          <h2>Educational Qualification </h2>
-          <div className="option-list">
+          <h2>Educational Qualification <span style={{ color: "red" }}>*</span> </h2>
+          <div className="option-list"  style={{position :"relative", zIndex:'9'}}>
             {options.map((option) => (
               <button
                 key={option.id}
@@ -163,8 +163,7 @@ const VictimQualification = ({
               </button>
             ))}
           </div>
-        </div>
-        <div style={{ display: "flex", alignItems: "center",zIndex:'1000'}} className="btns-ok">
+          <div style={{ display: "flex",position:'relative', zIndex:'1000'}} >
             {showOkButton && (
               <>
                 <button
@@ -174,13 +173,11 @@ const VictimQualification = ({
                 >
                   OK
                 </button>
-                {/* <p className="enter-text">
-                  press <strong>Enter ↵</strong>
-                </p> */}
               </>
             )}
           </div>
-          {error && <div className="error-message">{error}</div>}
+        </div>
+          {error && <div className="error-message" style={{ position: 'relative', zIndex: '1000' }}>{error}</div>}
           {answer[8] && (
               <p className="alert-box alert" >
                 Please answer the current question before moving to the next.

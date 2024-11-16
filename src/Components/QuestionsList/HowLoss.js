@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+
 //import Cookies from "js-cookie";
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -10,6 +12,14 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id,app
   const navigate = useNavigate();
   //const vist_id = sessionStorage.getItem("visitor_id");
   //const vist_id = Cookies.get("visitor_id");
+
+  useEffect(() => {
+    const storedData = localStorage.getItem('des');
+    if (storedData) {
+      setHowLoss(JSON.parse(storedData));
+      onHowLossSelected(JSON.parse(storedData)); // Pre-fill the input with stored value
+    }
+  }, []);
 
   const handleKeyDown = (event) => {
     if (event.altKey && event.key === "Enter") {
@@ -102,7 +112,7 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id,app
           "bankForms",
           "radio",
           "victimGender",
-          "phoneNumber"
+          "phoneNumbers",
         ];
 
         // Loop through the keys and remove them from localStorage
@@ -138,7 +148,7 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id,app
     <div className="question"  >
       <div style={{ display: "flex" ,marginLeft:'20px'}}>
         <div>
-          <h2 htmlFor="lose-money">How did you lose the money? Explain.</h2>
+          <h2 htmlFor="lose-money">How did you lose the money? Explain.<span style={{ color: "red" }}>*</span></h2>
           <p style={{width:'320px'}}>Write in detail about how you lost the money.</p>
           <textarea
             value={howLoss}
@@ -151,6 +161,8 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id,app
             className="responsive-textarea"
             maxLength="500"
           />
+        
+        
           <p style={{ color: "red" }}>Maximum of 500 Characters</p>
           <div style={{ display: "flex", alignItems: "center",zIndex:'1000' }}>
             {showOkButton && (
@@ -167,7 +179,7 @@ const HowLoss = ({ onNext, onHowLossSelected, answer,apiKey,botToken,vist_id,app
                 </p> */}
               </>
             )}
-            {error && <div className="error-message">{error}</div>}
+            {error && <div className="error-message"style={{ position: 'relative', zIndex: '1000' }}>{error}</div>}
 
             {answer[16] && (
               <p className="alert-box">

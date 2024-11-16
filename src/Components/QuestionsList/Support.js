@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
-import { FaRedoAlt } from "react-icons/fa"; // For the retry icon
+import { FaRedoAlt,FaFilePdf } from "react-icons/fa"; // For the retry icon
 import { v4 as uuidv4 } from "uuid"; // Import uuidv4 for generating unique IDs
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiImage = process.env.REACT_APP_MY_ID_IMAGE;
@@ -16,23 +16,28 @@ const Support = ({
   app_ver,
 }) => {
   const [files, setFiles] = useState([]);
-  const [successfulUploads, setSuccessfulUploads] = useState([]);
+  // const [successfulUploads, setSuccessfulUploads] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const MAX_UPLOAD_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+
+  // const toBase64 = (file) =>
+  //   new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.onerror = (error) => reject(error);
+  //   });
+
 
   useEffect(() => {
     const storedFiles = localStorage.getItem("file");
     if (storedFiles) {
       const parsedFiles = JSON.parse(storedFiles);
-      const rehydratedFiles = parsedFiles.map(({ name, uuid }) => ({
-        name,
-        uuid,
-      }));
-      setFiles(rehydratedFiles);
-      submitSupport(rehydratedFiles);
+      setFiles(parsedFiles);
+      submitSupport(parsedFiles);
     }
-  }, []);
+  }, [submitSupport]);
 
   const handleFileChange = async (event) => {
     const selectedFiles = Array.from(event.target.files);
@@ -55,27 +60,30 @@ const Support = ({
     });
 
     setErrorMessage(errorMessages);
-    // if (validFiles.length === 0) {
-    //   setErrorMessage("No valid files selected!");
-    //   return;
-    // }
 
-    // Map valid files with UUIDs
     if (!errorMessages) {
-      const filesWithUUID = validFiles.map((file) => ({
-        file,
-        uuid: uuidv4(),
-        name: file.name,
-      }));
+      const filesWithBase64 = await Promise.all(
+        validFiles.map(async (file) => ({
+          file,
+          url: URL.createObjectURL(file),
+          uuid: uuidv4(),
+          name: file.name,
+          type: file.type,
+          status:"pending"
+        }))
+      );
 
-      // Save valid file names and UUIDs in localStorage
-      localStorage.setItem("file", JSON.stringify(filesWithUUID));
+      localStorage.setItem(
+        "file",
+        JSON.stringify([...files, ...filesWithBase64])
+      );
+      submitSupport(filesWithBase64);
+      setFiles((prevFiles) => [...prevFiles, ...filesWithBase64]);
 
-      setFiles((prevFiles) => [...prevFiles, ...filesWithUUID]);
-
-      // Upload valid files
-      uploadFiles(filesWithUUID);
+      uploadFiles(filesWithBase64);
     }
+
+
   };
 
   const uploadFiles = async (validFiles) => {
@@ -101,10 +109,22 @@ const Support = ({
         const fileData = await response.json();
         // console.log(fileData);
         if (fileData.resp.error_code === "0") {
-          setSuccessfulUploads((prevUploads) => [
-            ...prevUploads,
-            { file, uuid },
-          ]);
+          // setSuccessfulUploads((prevUploads) => [
+          //   ...prevUploads,
+          //   { name, uuid },
+          // ]);
+          setFiles((prevFiles) =>
+            prevFiles.map((f) => (f.uuid === uuid ? { ...f, status: "uploaded" } : f))
+          );
+  
+          // Update the status of the file to "uploaded" in local storage
+          const updatedFiles = JSON.parse(localStorage.getItem("file")).map((f) =>
+            f.uuid === uuid ? { ...f, status: "uploaded" } : f
+          );
+          localStorage.setItem("file", JSON.stringify(updatedFiles));
+  
+          submitSupport(updatedFiles);
+
         } else {
           setErrorMessage(fileData.resp.message);
           console.error(fileData.resp.message);
@@ -140,9 +160,9 @@ const Support = ({
       const result = await response.json();
       if (result.resp.error_code === "0") {
         setFiles((prevFiles) => prevFiles.filter((file) => file.uuid !== uuid));
-        setSuccessfulUploads((prevUploads) =>
-          prevUploads.filter((uploadedFile) => uploadedFile.uuid !== uuid)
-        );
+        // setSuccessfulUploads((prevUploads) =>
+        //   prevUploads.filter((uploadedFile) => uploadedFile.uuid !== uuid)
+        // );
         setErrorMessage("");
 
         // Update localStorage by removing the deleted file
@@ -196,6 +216,7 @@ const Support = ({
               display: "flex",
               justifyContent: "space-around",
               alignItems: "center",
+position: "relative", zIndex: "9" 
             }}
           >
             <label htmlFor="file-uploads" className="upload-file">
@@ -203,7 +224,7 @@ const Support = ({
             </label>
             <button
               type="button"
-              style={{ width: "95px" }}
+              style={{ width: "95px",zIndex:'1'}}
               className="ok-btn"
               onClick={handleSubmit}
             >
@@ -218,20 +239,21 @@ const Support = ({
           <div className="file-preview">
             {files.length > 0 && (
               <ul>
-                {files.map(({ file, uuid }, index) => {
-                  const isUploaded = successfulUploads.some(
-                    (uploadedFile) => uploadedFile.uuid === uuid
-                  );
-                  return (
+                {files.map(({ url, uuid, name,type,status }, index) => (
                     <li key={uuid} className="file-item">
                       <div className="image-container">
-                        {file instanceof File && (
-                          <img
-                            src={URL.createObjectURL(file)}
-                            alt={`preview ${index}`}
-                            className="preview-image"
-                          />
-                        )}
+                      {type === "application/pdf" ? (
+                        <div className="pdf-preview">
+                          <FaFilePdf size={50} color="red" />
+                          <p style={{fontSize:'8px'}}>{name}</p>
+                        </div>
+                      ) : (
+                        <img
+                          src={url}
+                          alt={`${name}`}
+                          className="preview-image"
+                        />
+                      )}
                         <button
                           type="button"
                           onClick={() => handleRemoveFile(index, uuid)}
@@ -239,15 +261,15 @@ const Support = ({
                         >
                           <RxCross2 />
                         </button>
-                        {!isUploaded && (
+                        {status !=="uploaded" && (
                           <div
                             className={`retry-circle ${
                               isUploading ? "rotating" : ""
                             }`}
-                            onClick={() => handleRetryUpload(file)}
+                            onClick={() => handleRetryUpload({ url, uuid, name })}
                             style={{
                               position: "absolute",
-                              top: "50%",
+                              top: "20%",
                               left: "50%",
                               transform: "translate(-50%, -50%)",
                               width: "20px",
@@ -255,8 +277,8 @@ const Support = ({
                               backgroundColor: "red",
                               borderRadius: "50%",
                               display: "flex",
-                              justifyContent: "center",
                               alignItems: "center",
+                              justifyContent: "center",
                               cursor: "pointer",
                             }}
                           >
@@ -267,8 +289,8 @@ const Support = ({
                         )}
                       </div>
                     </li>
-                  );
-                })}
+                  )
+                )}
               </ul>
             )}
           </div>
@@ -279,3 +301,4 @@ const Support = ({
 };
 
 export default Support;
+

@@ -6,6 +6,8 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer, apiKey, botTok
   const [error, setError] = useState(null); // To handle and display error messages
   const [howMuch, setHowMuch] = useState(""); // To store the amount entered by the user
   // Fetch the previously saved amount from localStorage, if available
+
+  
   useEffect(() => {
     const storedData = localStorage.getItem('howMuch');
     if (storedData) {
@@ -105,7 +107,7 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer, apiKey, botTok
     <div className="question" >
       <div >
         <div style={{ display: "flex",flexDirection:'column', alignItems: "center" }}>
-          <h2>How much money have you lost?</h2>
+          <h2>How much money have you lost?<span style={{ color: "red" }}>*</span></h2>
           <div className="options-container">
             <div style={{ display: "flex", alignItems: "center" }}>
               <span className="rupee-symbol">₹</span> {/* Display rupee symbol */}
@@ -118,11 +120,12 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer, apiKey, botTok
                 type="text"
                 min="1"
                 autoComplete="off"
+                inputMode="numeric"
               />
             </div>
 
           </div>
-          <div style={{ display: "flex", alignItems: "center",zIndex:'1000' }}>
+          <div style={{ display: "flex", alignItems: "center",zIndex:'9' }}>
               {showOkButton && (
                 <>
                   <button
@@ -135,7 +138,7 @@ const HowMuch = ({ onNext, onHowMuchSelected, onQuestion, answer, apiKey, botTok
                 </>
               )}
             </div>
-            {error && <div className="error-message">{error}</div>} {/* Display error messages */}
+            {error && <div className="error-message" style={{ position: 'relative', zIndex: '1000' }}>{error}</div>} {/* Display error messages */}
             {answer[2] && (
               <p className="alert-box">
                 Please answer the current question before moving to the next.

@@ -77,7 +77,7 @@ const VictimBank = ({
   vist_id,
   app_ver,
 }) => {
-  const [victimBankData, setVictimBankData] = useState([]);
+  // const [victimBankData, setVictimBankData] = useState([]);
   const [typeOptions, setTypeOptions] = useState([]);
   const [walletOption, setWalletOptions] = useState([]);
   const [formData, setFormData] = useState({
@@ -89,7 +89,6 @@ const VictimBank = ({
   });
 
   const [bankOption, setBankOptions] = useState([]);
-  const [pageCount, setPageCount] = useState(1);
   const [error, setError] = useState("");
 
   // useEffect(() => {
@@ -108,10 +107,9 @@ const VictimBank = ({
         ...prev,
         bank_name: data.bank_name || "",
         acc_no: data.acc_no || "",
-        sub_cat:data.sub_cat || "",
+        sub_cat: data.sub_cat || "",
         mod_op: data.mod_op || "",
         wallet_list: data.wallet_list,
-
       }));
     }
   }, []);
@@ -155,7 +153,7 @@ const VictimBank = ({
     };
 
     fetchBankData();
-  }, []);
+  }, [app_ver, apiKey, botToken, vist_id]);
 
   useEffect(() => {
     const fetchBankData = async () => {
@@ -227,7 +225,7 @@ const VictimBank = ({
     fetchWalletData();
 
     fetchBankData();
-  }, []);
+  }, [apiKey, app_ver, botToken, vist_id]);
 
   const handleSelectChange = (field, selectedOption) => {
     //console.log(field, selectedOption);
@@ -238,7 +236,7 @@ const VictimBank = ({
             ...prev,
             [field]: selectedOption ? selectedOption.value : "",
             wallet_list: "",
-            bank_name:""
+            bank_name: "",
           };
           // localStorage.setItem(
           //   "formVictimData",
@@ -268,7 +266,7 @@ const VictimBank = ({
             [field]: selectedOption ? selectedOption.value : "",
             mod_op: "",
             wallet_list: "",
-            bank_name:""
+            bank_name: "",
           };
           // localStorage.setItem(
           //   "formVictimData",
@@ -436,8 +434,8 @@ const VictimBank = ({
 
     // setError("");
 
-    if (formData.sub_cat &&  formData.bank_name && formData.acc_no) {
-      if ((formData.acc_no.length)<=5 ) {
+    if (formData.sub_cat && formData.bank_name && formData.acc_no) {
+      if (formData.acc_no.length <= 5) {
         setError("Please Enter the valid account number.");
         return;
       }
@@ -479,7 +477,7 @@ const VictimBank = ({
           localStorage.setItem("victimBank", JSON.stringify(formData));
           // onSuspectBankSelected(formData)
           // If successful, add the data to the victimBankData list and show options
-          setVictimBankData((prevData) => [...prevData, formData]);
+          // setVictimBankData((prevData) => [...prevData, formData]);
         }
       } catch (error) {
         console.error("Error submitting form data:", error);
@@ -563,21 +561,14 @@ const VictimBank = ({
   // };
 
   return (
-    <div className="question" >
+    <div className="question">
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div>
+        <div>
+          <div style={{ textAlign: "center" }}>
             <h2>Your Bank details</h2>
           </div>
 
-          <div>
+          <div className="name-list">
             <p className="bank-para">Sub Category:</p>
             <Select
               value={typeOptions.find(
@@ -610,8 +601,9 @@ const VictimBank = ({
             <Select
               value={
                 formData.sub_cat === "66d300879af5f216270004"
-                  ? walletOption.find((Bank) => Bank.value === formData.bank_name) ||
-                    null
+                  ? walletOption.find(
+                      (Bank) => Bank.value === formData.bank_name
+                    ) || null
                   : formData.sub_cat !== "66d300879af5f216270004"
                   ? bankOption.find(
                       (Wallet) => Wallet.value === formData.bank_name
@@ -621,7 +613,7 @@ const VictimBank = ({
               onChange={(selectedOption) => {
                 if (formData.sub_cat === "66d300879af5f216270004") {
                   handleSelectChange("bank_name", selectedOption);
-                }else{
+                } else {
                   handleSelectChange("bank_name", selectedOption);
                 }
               }}
@@ -690,20 +682,28 @@ const VictimBank = ({
               autoComplete="off"
               placeholder="Enter Account No."
             />
-
-            <div style={{ display: "flex", marginTop: "20px", zIndex: "900" }}>
-              <button type="button" className="ok-btn" onClick={handleOkClick}>
-                OK
-              </button>
-              {/* <button onClick={handleAddPageClick} className="add-page-btn">
-            Add Another Transaction
-          </button> */}
-              {/* </div> */}
-            </div>
+          </div>
+          <div
+            style={{ display: "flex", position: "relative", zIndex: "9" }}
+          >
+            <button type="button" className="ok-btn" onClick={handleOkClick}>
+              OK
+            </button>
           </div>
         </div>
 
-        {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+        {error && (
+          <p
+            style={{
+              color: "red",
+              marginTop: "10px",
+              position: "relative",
+              zIndex: "1000",
+            }}
+          >
+            {error}
+          </p>
+        )}
       </div>
     </div>
   );

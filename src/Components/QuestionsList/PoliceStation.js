@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Select,{components} from "react-select";
-import { IoIosArrowUp } from 'react-icons/io';
+import Select from "react-select";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const customStyles = {
@@ -59,13 +58,7 @@ const customStyles = {
 };
 
 
-const CustomDropdownIndicator = (props) => {
-  return (
-    <components.DropdownIndicator {...props}>
-      <IoIosArrowUp /> {/* Reverse the arrow here */}
-    </components.DropdownIndicator>
-  );
-};
+
 
 
 
@@ -176,7 +169,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
     
   
     fetchAddressData();
-  }, []);
+  }, [apiKey,app_ver,botToken,vist_id]);
 
     const fetchPsData= async ( districtValue) => {
       try {
@@ -284,7 +277,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
       }
 
       const data = await response.json();
-      console.log(data)
+      //console.log(data)
       if(data.resp.error_code ==="0"){
         localStorage.setItem('policeStations', JSON.stringify(address));
         onVictimAddressSelected(address);
@@ -308,7 +301,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
       <div style={{ display: "flex",justifyContent:'center' }}>
         <div style={{ display: "flex",justifyContent:'center' }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <h2>Jurisdictional Police Station</h2>
+            <h2>Jurisdictional Police Station <span style={{ color: "red" }}>*</span></h2>
             <div>
             <h6 style={{ margin: "5px", marginTop: "20px" }} htmlFor="state">
               State
@@ -361,7 +354,8 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
                 display: "flex",
                 alignItems: "center",
                 marginTop: "10px",
-                zIndex:"1000"
+                position:"relative",
+                zIndex:"9"
               }}
             >
               <button type="button" className="ok-btn" onClick={handleOkClick}>
@@ -372,7 +366,7 @@ const PoliceStation = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,answ
               </p> */}
             </div>
             {error && (
-              <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
+              <p style={{ color: "red", marginTop: "10px",position: 'relative', zIndex: '1000' }} >{error}</p>
             )}
                         {answer[9] && (
               <p className="alert-box">

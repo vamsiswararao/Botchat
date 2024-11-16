@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import Header from "./Header";
+// import Record from "../QuestionsList/Record";
 
 const ErrorPage = () => {
   const location = useLocation();
@@ -19,6 +20,7 @@ const ErrorPage = () => {
      <Header/>
       {/* <h1>Error Message</h1> */}
       <p>{errorMessage}</p>
+      {/* <Record/> */}
     </div>
   );
 };

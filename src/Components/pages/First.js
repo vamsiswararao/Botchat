@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./First.css"; // Ensure this path is correct
 import Help from "../QuestionsList/Help";
 import TranslateComponent from "../TranslateComponent";
-import PopupBoxComponent from "../PopupBoxComponent";
 import Cookies from "js-cookie";
 import appVersion from "../../version";
 import Header from "./Header";
@@ -14,9 +13,8 @@ const First = () => {
   const { id } = useParams();
   //console.log(id);
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
   const [visitorID, setVisitorID] = useState(null);
-  const [responseStatus, setResponseStatus] = useState(null);
   const vist_id = Cookies.get("visitor_id");
   const botToken = Cookies.get("bot_token");
   const app_ver = appVersion.app_ver;
@@ -42,7 +40,7 @@ const First = () => {
           throw new Error("Failed to visitor data");
         }
         const vistorData = await visitorResponse.json();
-        console.log(vistorData);
+        //console.log(vistorData);
 
         if (vistorData.resp.error_code === "0") {
           if (vistorData.resp.submitted === 1)  {
@@ -99,7 +97,7 @@ const First = () => {
                   "city",
                   "formData",
                   "district",
-                  "phoneNumber",
+                  "phoneNumbers",
                   "formSuspectData",
                   "formVictimData",
                   "address",
@@ -169,7 +167,7 @@ const First = () => {
               "bankForms",
               "radio",
               "victimGender",
-              "phoneNumber"
+              "phoneNumbers"
             ];
 
             // Loop through the keys and remove them from localStorage
@@ -193,17 +191,11 @@ const First = () => {
       <Header />
       <div className="help-container" >
         <Help vist_id={visitorID} />
-        {error && <div className="error-msg">{error}</div>}
+        {/* {error && <div className="error-msg">{error}</div>} */}
       </div>
       <p className="translate">
         <TranslateComponent />
       </p>
-      {responseStatus &&
-        responseStatus.resp &&
-        responseStatus.resp.error_code === "0" &&
-        responseStatus.resp.submitted === 1 && (
-          <PopupBoxComponent responseStatus={responseStatus} />
-        )}
     </div>
   );
 };

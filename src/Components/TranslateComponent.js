@@ -3,6 +3,7 @@ import './TranslateComponent.css';
 
 const TranslateComponent = () => {
   const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     const addGoogleTranslateScript = () => {

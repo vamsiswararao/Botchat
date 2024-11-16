@@ -4,11 +4,13 @@ const apiUrl = process.env.REACT_APP_API_URL;
 const SuspectPlatform = ({
   onNext,
   onSuspectContactSelected,
+  onSuspectRadio,
   onQuestion,
   apiKey,
   botToken,
   vist_id,
   app_ver,
+  answer
 }) => {
   const [suspectContacts, setSuspectContacts] = useState({
     contactValues: [],
@@ -29,13 +31,12 @@ const SuspectPlatform = ({
       setPreviousSelectedContacts(parsedCall);
     }
   }, []);
-
   useEffect(() => {
     const storedSuspectCall = localStorage.getItem("radio");
     if (storedSuspectCall) {
       const parsedCall = JSON.parse(storedSuspectCall);
       setIsYesSelected(parsedCall);
-      onSuspectContactSelected(parsedCall);
+      onSuspectRadio(parsedCall);
     }
   }, []);
 
@@ -132,13 +133,15 @@ const SuspectPlatform = ({
   };
 
   const handleOkClick = async () => {
-
+    onSuspectContactSelected(suspectContacts);
     if (
       JSON.stringify(suspectContacts) !== JSON.stringify(previousSelectedContacts)
     ) {
+      
     if (suspectContacts.contactValues.length > 0) {
       await saveDataToAPI();
       setPreviousSelectedContacts(suspectContacts);
+      
     } else {
       setError("Please select an option before proceeding.");
       // console.log("Please select an option before proceeding.");
@@ -153,6 +156,7 @@ const SuspectPlatform = ({
   const handleRadioChange = (selection, e) => {
     e.preventDefault();
     localStorage.setItem("radio", JSON.stringify(selection));
+    onSuspectRadio(selection);
     setIsYesSelected(selection);
     if (selection === "no") {
       onNext(16);
@@ -161,15 +165,19 @@ const SuspectPlatform = ({
         contactValues: [],
         contactIds: [],
       });
-      localStorage.setItem("suspectContact", JSON.stringify("suspect"));
-      onSuspectContactSelected("suspectContacts");
+      localStorage.setItem("suspectContact", JSON.stringify({
+        contactValues: [],
+        contactIds: [],
+      }));
+      // localStorage.setItem("suspectContact", JSON.stringify("suspect"));
     }
   };
 
+  //console.log(answer[15],isYesSelected)
   return (
-    <div className="question" style={{ position: 'relative', zIndex: '1000' }}>
+    <div className="question" style={{ position: 'relative', zIndex: '9' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2 className="link">Any links shared?</h2>
+        <h2 className="link">Any links shared?<span style={{ color: "red" }}>*</span></h2>
         <div style={{ display: "flex", marginLeft: '20px' }}>
           <button
             onClick={(e) => handleRadioChange("yes", e)}
@@ -194,11 +202,15 @@ const SuspectPlatform = ({
           </button>
         </div>
       </div>
-
+      {(answer[15] && isYesSelected===null )&& (
+            <p className="alert-box" style={{zIndex:'1000',width:'300px'}}>
+              Please answer the current question before moving to the next.
+            </p>
+          )}
       {isYesSelected === "yes" && (
         <div>
           <h2>What is the platform(s) used by the fraudster</h2>
-          <div className="option-lists" >
+          <div className="call-list" >
             {options.map((option) => (
               <button
                 key={option.id}
@@ -229,11 +241,16 @@ const SuspectPlatform = ({
             ))}
           </div>
           {showOkButton && (
-            <div className="calls-btn" style={{ position: 'relative', zIndex: '1000',marginTop:'-2px' }}>
+            <div  style={{ position: 'relative', zIndex: '1000',marginTop:'-2px' }}>
               <button type="button" className="ok-btn" onClick={handleOkClick}>
                 OK
               </button>
             </div>
+          )}
+                    {(answer[15]) && (
+            <p className="alert-box" style={{zIndex:'1000'}}>
+              Please answer the current question before moving to the next.
+            </p>
           )}
            {error && <div className="error-message"  style={{ position: 'relative', zIndex: '1000' }}>{error}</div>}
         </div>

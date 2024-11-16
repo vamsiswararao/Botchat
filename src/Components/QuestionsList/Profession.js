@@ -48,6 +48,7 @@ const Profession = ({
         }
 
         const qulificationData = await qulificationResponse.json();
+        //console.log(qulificationData)
         if (qulificationData.resp.error_code === "0") {
           setProfessionOptions(
             qulificationData.resp.profesion_list.map((profession, index) => ({
@@ -63,7 +64,7 @@ const Profession = ({
     };
 
     fetchProfessionData();
-  }, []);
+  }, [apiKey,app_ver,botToken,vist_id]);
 
   const handleOptionClick = async (option, e) => {
     e.preventDefault();
@@ -127,8 +128,8 @@ const Profession = ({
     <div className="question">
       <div style={{ display: "flex" }}>
         <div>
-          <h2>Profession/ Occupation </h2>
-          <div className="option-list">
+          <h2>Profession/ Occupation <span style={{ color: "red" }}>*</span></h2>
+          <div className="option-list" style={{position :"relative", zIndex:'9'}}>
             {professionOptions.map((option) => (
               <button
                 key={option.id} 
@@ -161,7 +162,7 @@ const Profession = ({
             ))}
           </div>
 
-          <div style={{ display: "flex", alignItems: "center",zIndex:"1000" }}>
+          <div style={{ display: "flex", alignItems: "center",position:'relative', zIndex:"9" }}>
             {showOkButton && (
               <>
                 <button
@@ -177,7 +178,7 @@ const Profession = ({
               </>
             )}
             </div>
-            {error && <div className="error-message">{error}</div>}
+            {error && <div className="error-message" style={{ position: 'relative', zIndex: '1000' }}>{error}</div>}
             {answer[7] && (
               <p className="alert-box">
                 Please answer the current question before moving to the next.

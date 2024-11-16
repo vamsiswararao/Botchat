@@ -118,16 +118,17 @@ const Questions = () => {
     victim_qualification: "",
     victim_address: "",
     police_station: "",
-    suspect_call: "",
-    suspect_speak: "",
+    suspect_call: {"contactValues":[],"contactIds":[]},
+    suspect_speak: {"contactValues":[],"contactIds":[]},
     suspect_contact: {"contactValues":[],"contactIds":[]},
     victim_bank: [{ id: 1, data: {} }],
     suspect_bank: [{ id: 1, data: {} }],
     support: "",
-    address: "",
+    address: {"address1":"","city":"","zip":""},
     supports: "",
     bank_file: [],
     phone_number:'',
+    radio:"",
   });
 
   useEffect(() => {
@@ -237,7 +238,7 @@ const Questions = () => {
   };
 
   const isQuestionAnswered = useCallback((questionIndex) => {
-    //console.log(formData.suspect_call.contactValues[0])
+    // console.log(formData.suspect_contact.contactValues[0])
   //   console.log(questionIndex)
   // console.log(formData.victim_name ,
   //   formData.victim_age,
@@ -272,19 +273,19 @@ const Questions = () => {
         );
       case 10:
         return (
-          formData.address.zip !== undefined &&
-          formData.address.city !== undefined
+          formData.address.zip !== "" &&
+          formData.address.city !== ""
         );
       case 11:
         return true;
       case 12:
-        return formData.suspect_call !== "";
+        return formData.suspect_call.contactValues[0] !== undefined;
       case 13:
         return true;
       case 14:
-        return formData.suspect_speak !== "";
-      case 15:
-        return formData.suspect_contact !== "";
+        return formData.suspect_speak.contactValues[0] !== undefined;
+        case 15:
+          return (formData.radio === "no") ||( formData.radio === "yes" && formData.suspect_contact.contactValues[0] !== undefined);
       case 16:
         return formData.victim_bank.data !== "";
       case 17:
@@ -498,9 +499,9 @@ const Questions = () => {
       />
 
       {isHeaderVisible && (
-        <div className="victim-header" >
+        <div className="victim-header"  >
           {headerTitle && (
-            <h1 className="header" style={{ textAlign: "center" }}>
+            <h1 className="header" style={{ textAlign: "center", }}>
               {headerTitle}
             </h1>
           )}
@@ -721,6 +722,9 @@ const Questions = () => {
             onNext={handleNextClickQuestion}
             onSuspectContactSelected={(value) =>
               handleDataUpdate("suspect_contact", value)
+            }
+            onSuspectRadio={(value) =>
+              handleDataUpdate("radio", value)
             }
             onQuestion={handleQuestionChange}
             answer={answerQuestion}

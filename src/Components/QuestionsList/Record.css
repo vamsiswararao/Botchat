@@ -1,0 +1,7 @@
+/* Assuming the AudioRecorder button has a unique class */
+.audio-recorder-button {
+    background-color: red !important; /* Set the desired color */
+    border: none; /* Optionally remove any border */
+    color: blue; /* Change text color if needed */
+  }
+  

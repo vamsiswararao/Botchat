@@ -2,7 +2,7 @@ import React, {  useEffect, useState } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 
-const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botToken,vist_id,app_ver}) => {
+const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botToken,vist_id,app_ver,answer}) => {
   const [address, setAddress] = useState({
     address1: "",
     city: "",
@@ -96,6 +96,9 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
       "app_ver":app_ver
     };
 
+    localStorage.setItem('address', JSON.stringify(address));
+    onVictimAddressSelected(address);
+
     if (!address.city) {
       setError("Please enter the city.");
       return;
@@ -104,6 +107,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
       setError("Please enter the pin code.");
       return;
     }
+
 
     if(address.city || address.zip){
 
@@ -169,7 +173,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
         <div style={{ display: "flex",justifyContent:'center' }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <h2>Present Address</h2>
-            <div >
+            <div  style={{position :"relative", zIndex:'9'}}>
             <p style={{ margin: "5px", marginTop: "5px"}} htmlFor="address1">
               Address  
             </p>
@@ -208,6 +212,7 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
               autoComplete="off"
               name="zip"
               maxLength="6"
+              inputMode="numeric"
             />
             </div>
 
@@ -216,7 +221,8 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
                 display: "flex",
                 alignItems: "center",
                 marginTop: "10px",
-                zIndex:'1000'
+                position:'relative',
+                zIndex:'9'
               }}
             >
               <button type="button" className="ok-btn" onClick={handleOkClick}>
@@ -227,8 +233,13 @@ const VictimAddress = ({ onNext, onVictimAddressSelected, onQuestion,apiKey,botT
               </p> */}
             </div>
             {error && (
-              <p className="bank-error">{error}</p>
+              <p className="bank-error" style={{ position: 'relative', zIndex: '1000' }}>{error}</p>
             )}
+                      {(answer[10]) && (
+            <p className="alert-box" style={{zIndex:'1000'}}>
+              Please answer the current question before moving to the next.
+            </p>
+          )}
           </div>
         </div>
       </div>

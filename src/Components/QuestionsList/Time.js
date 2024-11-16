@@ -129,6 +129,7 @@ const Time = ({
                     type="button"
                     className="ok-btn"
                     onClick={handleOkClick}
+                    style={{ position: 'relative',  zIndex: "900" }}
                   >
                     OK
                   </button>
@@ -137,7 +138,7 @@ const Time = ({
                   </p> */}
                 </>
               )}
-              {error && <div className="error-message">{error}</div>}
+              {error && <div className="error-message" style={{ position: 'relative', zIndex: '1000' }}>{error}</div>}
               {answer[1] && (
                 <p className="alert-box">
                   Please answer the current question before moving to the next.

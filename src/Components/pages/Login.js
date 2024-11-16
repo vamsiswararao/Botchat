@@ -6,6 +6,7 @@ import appVersion from '../../version';
 import CloudComponent from "../CloudComponent";
 import Cloud from "../Cloud";
 import Header from "./Header";
+import TranslateComponent from "../TranslateComponent";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const apiKey = process.env.REACT_APP_AUTH_TOKEN;
@@ -83,6 +84,9 @@ const Login = (onOtpSent) => {
           Send OTP
         </button>
       </div>
+      <p className="translate">
+          <TranslateComponent />
+        </p>
       <div style={{
           position: 'fixed',
           bottom: '0',
@@ -95,7 +99,7 @@ const Login = (onOtpSent) => {
           position: 'fixed',
           bottom: '0',
           right: '0',
-           zIndex:'0'
+          zIndex:'0'
         }} >
         <Cloud />
       </div>

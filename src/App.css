@@ -1,17 +1,17 @@
 /* src/styles.css */
 
-
-
-body {
+html,body {
     font-family:'Oxygen' , sans-serif, Arial, sans-serif;
     background-color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100%;
     margin: 0;
     overflow: hidden;
   }
+
+
   
   
   form {
@@ -117,10 +117,9 @@ body {
       padding: 0px;
       margin-right: 20px;
       margin-bottom: 0px;
-      margin-top: 20px;
       margin-left: 5px;
       background-color: #ffffff;
-      width: 220px;
+      width: 200px;
       height: 20px;
       font-size: 18px;
       color: #004999;
@@ -179,6 +178,15 @@ body {
   }
   
   @media only screen and (max-width: 479px) {
+    .questionss {
+      height: 100vh;
+      font-size: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 40vh;
+      width: 60vw;   
+    }
   
     /* Mobile Styles */
     .page {
@@ -188,6 +196,16 @@ body {
     .navigation-buttons {
       bottom: 20px;
       right: 110px;
+    }
+
+    .file-preview ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      overflow-X: auto;
+      height: 150px;
+      width: 280px;
     }
   
     .navigation-buttons button {
@@ -208,7 +226,7 @@ body {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 25vh;
+      margin-top: 28vh;
       width: 60vw;
     }
   
@@ -219,9 +237,6 @@ body {
       margin-left: 12px;
     }
   
-  .btns-ok{
-    margin-left: 0px;
-  }
   
   .call-btn{
     margin-left:8px;
@@ -294,11 +309,11 @@ body {
       header{
         position: fixed;
         top: 0px;
-        padding-top: 10%;
-        padding-bottom: 1%;
         width: 100%;
         height: 8%;
-        background-color: #f8f9fa;
+        background-color: rgb(216, 174, 119);
+        /* background-color: #2655b3; */
+        /* background-color: #bfc567; */
         border-bottom: 1px solid #dee2e6;
         z-index: 1000;
       }
@@ -450,6 +465,26 @@ body {
       z-index:10000;
       left:46vw;
     }
+
+    .file-preview ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      overflow-X: auto;
+      height: 150px;
+      width: 520px;
+    }
+
+    .questionss {
+      height: 100vh;
+      font-size: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50vh;
+      width: 60vw;   
+    }
     
     .text-mobile-input {
       border: none;
@@ -459,10 +494,9 @@ body {
       padding: 0px;
       margin-right: 20px;
       margin-bottom: 0px;
-      margin-top: 38px;
       margin-left: 5px;
       background-color: #ffffff;
-      width: 260px;
+      width: 420px;
       height: 20px;
       font-size: 18px;
       color: #004999;
@@ -541,9 +575,6 @@ body {
       margin-left:60px;
     }
   
-    .btns-ok{
-      margin-left: 80px;
-    }
     .login-container,
     .otp-container {
       padding: 20px;
@@ -733,8 +764,7 @@ body {
     cursor: pointer;
     margin-right: 10px;
     margin-top: 10px;
-    width: 70px;
-    
+    width: 70px; 
   }
   
   .ok-btn:hover {
@@ -944,7 +974,6 @@ body {
     padding: 0px;
     margin-right: 20px;
     margin-bottom: 0px;
-    margin-top: 20px;
     margin-left: 5px;
     background-color: #ffffff;
     width: 220px;
@@ -961,7 +990,14 @@ body {
     overflow-X: auto;
     min-height: 30vh;
     max-width: 100vw;
-    max-height:40vh;
+    max-height:38vh;
+  }
+
+  .call-list {
+    overflow-X: auto;
+    min-height: 30vh;
+    max-width: 100vw;
+    max-height:34vh;
   }
 
   .option-lists {
@@ -1086,6 +1122,14 @@ body {
       height: 40vh;
       width: 600px;
     }
+
+
+    .call-list {
+      overflow-X: auto;
+      height: 40vh;
+      width: 600px;
+    }
+    
   
     .options-list {
       overflow-X: auto;
@@ -1173,14 +1217,7 @@ body {
   
   
   
-  .file-preview ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    overflow-X: auto;
-    height: 150px;
-  }
+
   
   .file-preview li {
     margin: 10px;
@@ -1199,6 +1236,8 @@ body {
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   }
+
+  
   
   .remove-button {
     position: absolute;
@@ -1309,7 +1348,7 @@ body {
       padding-top: 5px;
       margin-left: 10px;
       padding-left: 10px;
-      z-index: 90;
+      z-index: 900;
     }
     
   }
@@ -1341,11 +1380,12 @@ body {
     header{
       position: fixed;
       top: 0px;
-      padding-top: 10%;
-      padding-bottom: 1%;
       width: 100%;
-      height: 8%;
-      background-color: #f8f9fa;
+      height: 90px;
+      /* background-color: rgb(77, 48, 11); */
+      background-color: rgb(216, 174, 119);
+      /* background-color: #2655b3; */
+      /* background-color: #bfc567; */
       border-bottom: 1px solid #dee2e6;
       z-index: 999;
     }
@@ -1362,21 +1402,20 @@ body {
   
     .victim-header{
       position: fixed;
-      top: 13%;
+      top: 15%;
       height:20px;
       width: 100%;
       z-index:1000;
       /* background-color: #f8f9fa;
       border-bottom: 1px solid #dee2e6; */
     }
-    /* .header-title{
-      font-size: 12px;
-    } */
+
   
     .header-title{
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 300;
       letter-spacing: 0.75px;
+      margin-top: 28px;
     }
   
     .header{
@@ -1407,26 +1446,38 @@ body {
   }
   
   .cst-logo{
+    width:80px;
+    height:80px;
+    border-radius:80px;
+    margin-left:20px;
+    margin-right: 0px;
+    margin-top: 5px;
+  }
+
+  cst-logo{
     width:60px;
     height:60px;
     border-radius:80px;
     margin-left:20px;
+    margin-right: 10px;
+    margin-top: 15px;
   }
   
   .csi-logo{
-    width:48px;
-    height:48px;
+    width:60px;
+    height:60px;
     border-radius:50px;
     margin-right:20px;
-    margin-top: 8px;
+    margin-left:5px;
+    margin-top: 15px;
   }
   .translate{
       display: flex;
       justify-content: center;
       align-items: center;
       position: fixed;
-      top: -1vh;
-      left: 40vw;
+      top: 13.5%;
+      right: 8vw;
       z-index: 1000;
       width: 20%;
   }
@@ -1458,16 +1509,19 @@ body {
       top: 0px;
       width: 100%;
       height:100px;
-      background-color: #ffffff;
+      background-color: rgb(216, 174, 119);
+      /* background-color: rgb(234, 137, 9); */
       border-bottom: 1px solid #dee2e6;
-      z-index: 1000;
-      padding-top: 2%;
+      z-index: 1001;
+      padding-top: 1%;
+      display: flex;
+      flex-direction: column;
     }
 
 
     .bar-text{
       position: fixed;
-      top: 27vh;
+      top: 25vh;
       width: 100%;
       z-index: 1000; 
       text-align: center;
@@ -1476,7 +1530,7 @@ body {
   
     .bar-line{
       position: fixed;
-      top: 29vh;
+      top: 26vh;
       right: 35%;
       width: 30%;
       background-color: #ddd;
@@ -1492,12 +1546,13 @@ body {
       height:10px;
       width: 100%;
       padding: 20px;
-      margin-top: 5px;
+      margin-top: -0.2%;
     }
     .header-title{
       font-size: 38px;
       font-weight: 300;
       letter-spacing: 0.75px;
+      margin-top: 18px;
     }
   
     .account{
@@ -1519,28 +1574,28 @@ body {
     height: 38px;
   }
   .cst-logo{
-    width:90px;
-    height:90px;
-    border-radius:80px;
-    margin-left: 20px;
-    margin-bottom: 35px;
+    width:120px;
+    height:120px;
+    border-radius:90px;
+    margin-right: 10px;
+    margin-top: -14px;
   }
   .csi-logo{
-    width:75px;
-    height:75px;
+    width:90px;
+    height:90px;
     border-radius:60px;
-    margin-right:50px;
-    margin-bottom: 35px;
-    margin-top: 15px;
+   margin-left: 10px;
+
+
   }
   .translate{
     display: flex;
     justify-content: center;
     align-items: center;
     position: fixed;
-    top: 10vh;
-    left: 46vw;
-    z-index: 1000
+    top: 16vh;
+    Right: 5vw;
+    z-index: 1002;
   }
   
   .translate-help{
@@ -1588,7 +1643,7 @@ body {
       font-size: 9px;
       background-color: rgb(224, 197, 197);
       height: 16px;
-      width: 80%;
+      width: 90%;
       padding-top: 5px;
       margin-left: 10px;
       padding-left: 10px;
@@ -1659,8 +1714,174 @@ body {
 
   
   
+  @media only screen and (max-width: 375px) and (max-height: 660px) {
+  
+    /* Mobile Styles */
+    /* html, body {
+      overflow: hidden;
+      height: 100%;
+      
+    } */
+     
+
+    .responsive-textarea {
+      width: 100%;
+      max-width: 280px; /* Limit the width on larger screens */
+      padding: 10px;
+      font-size: 1rem;
+      color:#000;
+      border: 2px solid  #8b9ef4;
+      height: 60px;
+    }
+
+    .option-list {
+      overflow-X: auto;
+      min-height: 30vh;
+      max-width: 100vw;
+      max-height:35vh;
+    }
+
+    
+
+    .call-list {
+      overflow-X: auto;
+      min-height: 20vh;
+      max-width: 100vw;
+      max-height:25vh;
+    }
+
+    .name-list{
+      overflow-X: auto;
+      min-height: 30vh;
+      max-width: 100vw;
+      max-height:33vh;
+    }
+
+    .ok-btns{
+      margin-left: -200px;
+    }
+  
+   
+    .text-input {
+      border: none;
+      outline: none;
+      border-bottom: 2px solid #3651ac;
+      /* Adjust the color and width as needed */
+      padding: 8px;
+      margin-top: 0px;
+      margin-right: 20px;
+      margin-bottom: 0px;
+      background-color: #ffffff;
+      width: 260px;
+      height: 20px;
+      font-size: 18px;
+      color: #004999;
+    }
+
+    .navigation-buttons {
+      bottom: 18px;
+      right: 110px;
+    }
+  
+    .navigation-buttons button {
+      padding: 5px;
+      font-size: 26px;
+  
+    }
+  
+    .cst-logo{
+      width:50px;
+      height:50px;
+      border-radius:80px;
+      margin-left:20px;
+    }
+
+    .csi-logo{
+      width:40px;
+      height:40px;
+      border-radius:50px;
+      margin-right:20px;
+    }
+
+    .question {
+      height: 100vh;
+      font-size: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 28vh;
+      width: 60vw;
+      
+    }
+
+    .questionss {
+      height: 100vh;
+      font-size: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 25vh;
+      width: 60vw;
+      
+    }
+
+    .questions {
+      height: 100vh;
+      font-size: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 23vh;
+      width: 60vw;
+    }
+
+    
+  
+    .help{
+      margin-bottom:320px;
+    }
+    .suspect_contact{
+      margin-left: 12px;
+    }
   
   
+  .call-btn{
+    margin-left:8px;
+  }
+
+  .bar-text{
+    position: fixed;
+    top: 24vh;
+    width: 100%;
+    z-index: 1000; 
+    text-align: center;
+  }
+
+
+  .bar-line{
+    position: fixed;
+    top: 25vh;
+    right: 35%;
+    width: 30%;
+    background-color: #ddd;
+    padding: 0px;
+    z-index: 1000;
+  }
+  
+  }
+
+
+  .pdf-preview{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+
+  input.error {
+    border-color: red;
+    background-color: #ffe6e6;
+  }
   
   
   

@@ -161,7 +161,7 @@ const VictimName = ({
       if (inputValue.length >= 3) {
         setShowOkButton(true);
         // Reset name error on valid change
-        localStorage.setItem("victimName", JSON.stringify(inputValue));
+       // localStorage.setItem("victimName", JSON.stringify(inputValue));
         setError({ ...error, name: null });
       } else {
         // setError({
@@ -187,7 +187,7 @@ const VictimName = ({
       setVictimAge(inputValue);
       onVictimAgeSelected(inputValue);
       setShowOkButton(true);
-      localStorage.setItem("victimAge", JSON.stringify(inputValue));
+      //localStorage.setItem("victimAge", JSON.stringify(inputValue));
       setError({ ...error, age: null }); // Reset age error on change
     } else {
       // Set error message if the input is invalid
@@ -232,6 +232,9 @@ const VictimName = ({
     setError(newError); // Update the error state
 
     if (valid) {
+      localStorage.setItem("victimName", JSON.stringify(victimName));
+      localStorage.setItem("victimAge", JSON.stringify(victimAge));
+      localStorage.setItem("victimGender", JSON.stringify(gender));
       try {
         const response = await fetch(`${apiUrl}/v1/ccrim_bot_add_victim_data`, {
           method: "POST",
@@ -276,18 +279,20 @@ const VictimName = ({
     setShowOkButton(true);
     setGender(option.value); // Notify parent component about the selection
     onVictimGenderSelected(option.value)
-    localStorage.setItem("victimGender", JSON.stringify(option.value));
+    setError({ ...error, gender: null });
+    //localStorage.setItem("victimGender", JSON.stringify(option.value));
   };
 
 
   return (
     <div className="question">
       <div>
-        <div>
+        <div className="name-list">
           <h2 htmlFor="victim-name">Name:<span style={{ color: "red" }}>*</span></h2>
           <input
             type="text"
             className="text-input name"
+            // className={errors.name ? "error text-input name" : "text-input name"}
             value={victimName}
             onChange={handleNameChange}
             placeholder="Type victim name here..."
@@ -310,6 +315,7 @@ const VictimName = ({
                 max="110"
                 autoComplete="off"
                 maxLength="3"
+                inputMode="numeric"
               />
                {error.age && <div className="error-message">{error.age}</div>}
               <div>
@@ -370,8 +376,10 @@ const VictimName = ({
               {/* Individual age error message */}
             </div>
           </div>
-          <div
-            style={{ display: "flex", alignItems: "center", zIndex: "1000" }}
+
+        </div>
+        <div
+            style={{ display: "flex", alignItems: "center", position :"relative", zIndex:'9' }}
           >
             {showOkButton && (
               <>
@@ -390,11 +398,10 @@ const VictimName = ({
             )}
           </div>
           {(answer[6]) && (
-            <p className="alert-box" style={{zIndex:'1000'}}>
+            <p className="alert-box" style={{ position :"relative", zIndex:'1000'}}>
               Please answer the current question before moving to the next.
             </p>
           )}
-        </div>
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ const SuspectSpeak = ({
   botToken,
   vist_id,
   app_ver,
+  answer
 }) => {
   const [selectedOptions, setSelectedOptions] = useState({
     contactValues: [],
@@ -65,7 +66,7 @@ const SuspectSpeak = ({
     };
 
     fetchProfessionData();
-  }, []);
+  }, [apiKey,app_ver,botToken,vist_id]);
 
   const handleOptionClick = (option, e) => {
     e.preventDefault();
@@ -186,8 +187,8 @@ const SuspectSpeak = ({
             justifyContent: "flex-end",
           }}
         >
-          <h2>Languages Used</h2>
-          <div className="option-list">
+          <h2>Languages Used<span style={{ color: "red" }}>*</span></h2>
+          <div className="option-list" style={{ position: "relative", zIndex: "9" }}>
             {speckOptions.map((option) => (
               <button
                 key={option.id}
@@ -226,7 +227,7 @@ const SuspectSpeak = ({
               </button>
             ))}
           </div>
-          <div className="call-btn" style={{zIndex:'1000' }} >
+          <div  style={{position :"relative",zIndex:'9' }} >
             {showOkButton && (
               <>
                 <button
@@ -242,7 +243,12 @@ const SuspectSpeak = ({
               </>
             )}
           </div>
-          {error && <div className="error-message">{error}</div>}
+          {(answer[14]) && (
+            <p className="alert-box" style={{ position :"relative", zIndex:'1000'}}>
+              Please answer the current question before moving to the next.
+            </p>
+          )}
+          {error && <div className="error-message"style={{ position: 'relative', zIndex: '1000' }}>{error}</div>}
         </div>
       </div>
     </div>

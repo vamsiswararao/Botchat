@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PopupBoxComponent from "../PopupBoxComponent";
-import Cookies from "js-cookie";
 import appVersion from "../../version";
 import CloudComponent from "../CloudComponent";
 import Cloud from "../Cloud";
@@ -49,7 +48,7 @@ const Help = ({ vist_id }) => {
       const data = await response.json();
       //console.log(data.resp)
       setResponseStatus(data);
-      // console.log(data);
+      //console.log(data);
       if (!response.ok) {
         throw new Error("Failed to push data to API");
       }
@@ -99,7 +98,7 @@ const Help = ({ vist_id }) => {
   ];
 
   return (
-    <div >
+    <div className="questionss">
       <div
         style={{
           display: "flex",
@@ -108,7 +107,7 @@ const Help = ({ vist_id }) => {
           justifyContent: "center",
         }}
       >
-        <div style={{marginTop:'-180px'}}>
+        <div style={{marginTop:'60px'}}>
           <h2 style={{ marginLeft: "12px",textAlign:'center',marginBottom:'-15px' }}>Are you a Cyber Victim? </h2>
           <p style={{textAlign:'center',marginBottom:'25px'}}>Select one of these</p>
           <div className="options-container">
